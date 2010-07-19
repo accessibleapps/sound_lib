@@ -56,3 +56,4 @@ def test_sound_input (filename=r"c:\users\q\test.wav"):
  i = BassSoundInput()
  r = FileRecording(filename=filename)
  r.start()
+ return r

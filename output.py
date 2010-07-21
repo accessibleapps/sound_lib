@@ -8,7 +8,9 @@ class BassSoundOutput (object):
   BASS_Init(device, frequency, flags, window, clsid)
 
  def get_volume (self):
-  return bass_call(BASS_GetConfig, BASS_CONFIG_GVOL_STREAM) / 100.0
+  vol = BASS_GetConfig(BASS_CONFIG_GVOL_STREAM)
+  vol and vol = vol / 100.0
+  return vol
 
  def set_volume (self, volume):
   #Pass in a float 0.0 to 100.0 and watch the volume magically change

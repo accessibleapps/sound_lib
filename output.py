@@ -2,12 +2,19 @@ from pybass import *
 from ctypes import WINFUNCTYPE
 from __main__ import bass_call
 
-
 class BassSoundOutput (object):
 
  def __init__ (self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
   BASS_Init(device, frequency, flags, window, clsid)
 
+ def get_volume (self):
+  return bass_call(BASS_GetConfig, BASS_CONFIG_GVOL_STREAM) / 100.0
+
+ def set_volume (self, volume):
+  #Pass in a float 0.0 to 100.0 and watch the volume magically change
+  bass_call(BASS_SetConfig, BASS_CONFIG_GVOL_STREAM, int(round(volume*100, 2)))
+
+ volume = property(get_volume, set_volume)
 
 class Sound (object):
 

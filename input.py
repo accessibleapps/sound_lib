@@ -52,7 +52,7 @@ class FileRecording (SoundRecording):
   self.file.setframerate(self.frequency/self.channels)
 
 
-def test_sound_input (filename=r"c:\users\q\test.wav"):
+def test_sound_input (filename="test.wav"):
  i = BassSoundInput()
  r = FileRecording(filename=filename)
  r.start()

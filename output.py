@@ -1,5 +1,5 @@
 from pybass import *
-
+from ctypes import WINFUNCTYPE
 from __main__ import bass_call
 
 
@@ -15,9 +15,9 @@ class Sound (object):
   self.filename = filename
   self.flags = flags
 
- def play (self):
+ def play (self, restart=False):
   self.create_stream()
-  bass_call(BASS_ChannelPlay, self.stream, False)
+  bass_call(BASS_ChannelPlay, self.stream, restart)
   return self.stream
 
  def stop (self):
@@ -39,6 +39,25 @@ class Sound (object):
   bass_call(BASS_StreamFree, self.stream)
   self.stream = None
 
+
+class StreamingSound (Sound):
+
+ def __init__ (self, filename, flags=BASS_STREAM_AUTOFREE):
+  super(StreamingSound, self).__init__(filename, flags=flags)
+  self.callback = DOWNLOADPROC(self._callback)
+
+ def _callback (*args):
+  return 0
+
+ def _create_stream (self, filename, flags):
+  return bass_call(BASS_StreamCreateURL, filename, 0, flags, self.callback, None)
+
+ def play (self, restart=True):
+  super(StreamingSound, self).play(restart=restart)
+
+ def stop (self):
+  super(StreamingSound, self).stop()
+  self.stream = None
 
 
 def test_sound_output (filename=r"c:\windows\media\tada.wav"):

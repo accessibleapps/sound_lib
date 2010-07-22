@@ -26,6 +26,7 @@ class SoundRecording(object):
 
  def stop (self):
   self.is_recording = False
+  bass_call(BASS_ChannelStop, self.stream)
 
 class FileRecording (SoundRecording):
 

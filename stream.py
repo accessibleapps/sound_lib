@@ -15,3 +15,12 @@ class FileStream(Channel):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
   handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
   super(FileStream, self).__init__(handle)
+
+class URLStream(BaseStream):
+ def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None):
+  
+
+ def _callback(*args):
+  #Stub it out as otherwise it'll crash, hard.
+  return 0
+

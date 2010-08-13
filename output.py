@@ -1,6 +1,8 @@
 from pybass import *
 from ctypes import WINFUNCTYPE
-from __main__ import bass_call
+
+from main import bass_call
+from channel import Channel
 
 class BassSoundOutput (object):
 
@@ -19,7 +21,7 @@ class BassSoundOutput (object):
 
  volume = property(get_volume, set_volume)
 
-class Sound (object):
+class Sound (Channel):
 
  def __init__ (self, filename, flags=0):
   self.filename = filename

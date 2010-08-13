@@ -2,7 +2,10 @@ from channel import Channel
 from main import bass_call
 from pybass import *
 
-class Stream(Channel):
+class BaseStream(Channel):
+ pass
+
+class Stream(BaseStream):
 
  def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None):
   self.proc = STREAMPROC(proc)

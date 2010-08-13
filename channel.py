@@ -6,7 +6,7 @@ class Channel (object):
  def __init__ (self, handle):
   self.handle = handle
 
-  def play (self, restart=False):
+ def play (self, restart=False):
   return bass_call(BASS_ChannelPlay, self.handle, restart)
 
  def pause (self):

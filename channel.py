@@ -7,6 +7,7 @@ class Channel (object):
   self.handle = handle
 
  def play (self, restart=False):
+  """Starts (or resumes) playback of a sample, stream, MOD music, or recording."""
   return bass_call(BASS_ChannelPlay, self.handle, restart)
 
  def pause (self):
@@ -22,7 +23,7 @@ class Channel (object):
 
  def set_position (self, pos, mode=BASS_POS_BYTE):
   """Sets the playback position of a sample, MOD music, or stream."""
-  return bass_call(BASS_ChannelSetPosition, pos, mode)
+  return bass_call(BASS_ChannelSetPosition, self.handle, pos, mode)
 
  position = property(get_position, set_position)
 

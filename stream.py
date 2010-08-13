@@ -18,7 +18,7 @@ class FileStream(Channel):
 
 class URLStream(BaseStream):
  def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None):
-  
+  pass
 
  def _callback(*args):
   #Stub it out as otherwise it'll crash, hard.

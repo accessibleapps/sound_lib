@@ -60,7 +60,7 @@ if platform.system().lower() == 'windows':
 	bass_module = ctypes.WinDLL(os.path.join(module_path(), 'bass'))
 	func_type = ctypes.WINFUNCTYPE
 else:
-	bass_module = ctypes.CDLL(os.path.join(module_path(), 'bass'))
+	bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.dylib'))
 	func_type = ctypes.CFUNCTYPE
 
 QWORD = ctypes.c_int64

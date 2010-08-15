@@ -3,7 +3,7 @@ import wave
 
 from pybass import *
 
-from __main__ import bass_call
+from main import bass_call
 
 class BassSoundInput (object):
  def __init__ (self, device=-1):

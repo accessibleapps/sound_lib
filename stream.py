@@ -20,8 +20,12 @@ class FileStream(Channel):
   super(FileStream, self).__init__(handle)
 
 class URLStream(BaseStream):
+
  def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None):
-  pass
+  self._downloadproc = downloadproc or self._callback #we *must hold on to this
+  self.downloadproc = DOWNLOADPROC(self._downloadproc)
+  handle = bass_call(BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user)
+  super(URLStream, self).__init__(handle)
 
  def _callback(*args):
   #Stub it out as otherwise it'll crash, hard.

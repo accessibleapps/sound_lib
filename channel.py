@@ -48,3 +48,7 @@ class Channel (object):
   bass_call(BASS_ChannelSetDevice, self.handle, device)
 
  device = property(get_device, set_device)
+
+ def set_fx(self, type, priority=0):
+  """Sets an effect on a stream, MOD music, or recording channel."""
+  return SoundEffect(bass_call(BASS_ChannelSetFX, type, priority))

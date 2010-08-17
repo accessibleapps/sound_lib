@@ -1,5 +1,5 @@
 from pybass import *
-from main import bass_call
+from main import bass_call, bass_call_0
 
 class Channel (object):
 
@@ -15,11 +15,11 @@ class Channel (object):
 
  def is_active (self):
   "Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
-  return bass_call(BASS_ChannelIsActive, self.handle)
+  return bass_call_0(BASS_ChannelIsActive, self.handle)
 
  def get_position (self, mode=BASS_POS_BYTE):
   """Retrieves the playback position of a sample, stream, or MOD music. Can also be used with a recording channel."""
-  return bass_call(BASS_ChannelGetPosition, self.handle, mode)
+  return bass_call_0(BASS_ChannelGetPosition, self.handle, mode)
 
  def set_position (self, pos, mode=BASS_POS_BYTE):
   """Sets the playback position of a sample, MOD music, or stream."""
@@ -36,12 +36,12 @@ class Channel (object):
   return bass_call(BASS_ChannelUpdate, self.handle, length)
 
  def get_length (self, mode=BASS_POS_BYTE):
-  return bass_call(BASS_ChannelGetLength, self.handle, mode)
+  return bass_call_0(BASS_ChannelGetLength, self.handle, mode)
  __len__ = get_length
 
  def get_device(self):
   """Retrieves the device that a channel is using."""
-  return bass_call( BASS_ChannelGetDevice, self.handle)
+  return bass_call_0( BASS_ChannelGetDevice, self.handle)
 
  def set_device (self, device):
   """Changes the device that a stream, MOD music or sample is using."""
@@ -56,4 +56,4 @@ class Channel (object):
  def bytes_to_seconds(self, position=None):
   """Translates a byte position into time (seconds), based on a channel's format."""
   position = position or self.position
-  return bass_call(BASS_ChannelBytes2Seconds, self.handle, position)
+  return bass_call_0(BASS_ChannelBytes2Seconds, self.handle, position)

@@ -52,3 +52,8 @@ class Channel (object):
  def set_fx(self, type, priority=0):
   """Sets an effect on a stream, MOD music, or recording channel."""
   return SoundEffect(bass_call(BASS_ChannelSetFX, type, priority))
+
+ def bytes_to_seconds(self, position=None):
+  """Translates a byte position into time (seconds), based on a channel's format."""
+  position = position or self.position
+  return bass_call(BASS_ChannelBytes2Seconds, self.handle, position)

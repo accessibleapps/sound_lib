@@ -1,5 +1,6 @@
 from pybass import *
 from main import bass_call, bass_call_0
+from ctypes import pointer, c_float, POINTER
 
 class Channel (object):
 
@@ -57,3 +58,11 @@ class Channel (object):
   """Translates a byte position into time (seconds), based on a channel's format."""
   position = position or self.position
   return bass_call_0(BASS_ChannelBytes2Seconds, self.handle, position)
+
+ def get_attribute(self, attribute):
+  value = pointer(c_float())
+  val = bass_call(BASS_ChannelGetAttribute, self.handle, attribute, value)
+  return value.contents.value
+
+
+

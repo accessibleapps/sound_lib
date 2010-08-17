@@ -60,9 +60,15 @@ class Channel (object):
   return bass_call_0(BASS_ChannelBytes2Seconds, self.handle, position)
 
  def get_attribute(self, attribute):
+  """Retrieves the value of a channel's attribute."""
   value = pointer(c_float())
   val = bass_call(BASS_ChannelGetAttribute, self.handle, attribute, value)
   return value.contents.value
 
+ def set_attribute(self, attribute, value):
+  """Sets the value of a channel's attribute."""
+  return bass_call(BASS_ChannelSetAttribute, self.handle, attribute, value)
 
-
+ def slide_attribute(self, attribute, value, time):
+  """Slides a channel's attribute from its current value to a new value."""
+  return bass_call(BASS_ChannelSlideAttribute, self.handle, attribute, value, time)

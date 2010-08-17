@@ -38,6 +38,7 @@ class Channel (object):
 
  def get_length (self, mode=BASS_POS_BYTE):
   return bass_call_0(BASS_ChannelGetLength, self.handle, mode)
+
  __len__ = get_length
 
  def get_device(self):
@@ -59,10 +60,14 @@ class Channel (object):
   position = position or self.position
   return bass_call_0(BASS_ChannelBytes2Seconds, self.handle, position)
 
+ def seconds_to_bytes(self, position):
+  """Translates a time (seconds) position into bytes, based on a channel's format."""
+  return bass_call_0(BASS_ChannelSeconds2Bytes, position)
+
  def get_attribute(self, attribute):
   """Retrieves the value of a channel's attribute."""
   value = pointer(c_float())
-  val = bass_call(BASS_ChannelGetAttribute, self.handle, attribute, value)
+  bass_call(BASS_ChannelGetAttribute, self.handle, attribute, value)
   return value.contents.value
 
  def set_attribute(self, attribute, value):
@@ -72,3 +77,4 @@ class Channel (object):
  def slide_attribute(self, attribute, value, time):
   """Slides a channel's attribute from its current value to a new value."""
   return bass_call(BASS_ChannelSlideAttribute, self.handle, attribute, value, time)
+

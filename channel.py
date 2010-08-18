@@ -111,3 +111,9 @@ class Channel (object):
  def set_3d_attributes(self, mode=-1, min=0.0, max=0.0, iangle=-1, oangle=-1, outvol=-1):
   """Sets the 3D attributes of a sample, stream, or MOD music channel with 3D functionality."""
   return bass_call(BASS_ChannelSet3DAttributes, self.handle, mode, min, max, iangle, oangle, outvol)
+
+ def get_3d_position(self):
+  """Retrieves the 3D position of a sample, stream, or MOD music channel with 3D functio  nality."""
+  answer = dict(position=BASS_3DVECTOR(), orientation=BASS_3DVECTOR(), velocity=BASS_3DVECTOR())
+  bass_call(BASS_ChannelGet3DPosition, self.handle, pointer(answer['position']), pointer(answer['orientation']), pointer(answer['velocity']))
+  return answer

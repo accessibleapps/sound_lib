@@ -6,7 +6,7 @@ from channel import Channel
 
 class BassSoundOutput (object):
 
- def __init__ (self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
+ def __init__ (self, device=-1, frequency=44100, flags=BASS_DEVICE_3D, window=0, clsid=None):
   BASS_Init(device, frequency, flags, window, clsid)
 
  def get_volume (self):
@@ -20,6 +20,7 @@ class BassSoundOutput (object):
   bass_call(BASS_SetConfig, BASS_CONFIG_GVOL_STREAM, int(round(volume*100, 2)))
 
  volume = property(get_volume, set_volume)
+
 
 class Sound (Channel):
 

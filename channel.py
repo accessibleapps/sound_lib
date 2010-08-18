@@ -78,3 +78,24 @@ class Channel (object):
   """Slides a channel's attribute from its current value to a new value."""
   return bass_call(BASS_ChannelSlideAttribute, self.handle, attribute, value, time)
 
+ def is_sliding (self, attribute=None):
+  """Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding."""
+  return bass_call_0(BASS_ChannelIsSliding, self.handle, attribute)
+
+ def get_info(self):
+  """Retrieves information on a channel."""
+  value = pointer(BASS_CHANNELINFO())
+  bass_call(BASS_ChannelGetInfo, self.handle, value)
+  return value[0]
+
+ def get_level(self):
+  """Retrieves the level (peak amplitude) of a stream, MOD music or recording channel."""
+  return bass_call_0(BASS_ChannelGetLevel, self.handle)
+
+ def lock(self):
+  """Locks a stream, MOD music or recording channel to the current thread."""
+  return bass_call(BASS_ChannelLock, self.handle, True)
+
+ def unlock(self):
+  """Unlocks a stream, MOD music or recording channel from the current thread."""
+  return bass_call(BASS_ChannelLock, self.handle, False)

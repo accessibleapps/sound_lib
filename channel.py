@@ -62,7 +62,7 @@ class Channel (object):
 
  def seconds_to_bytes(self, position):
   """Translates a time (seconds) position into bytes, based on a channel's format."""
-  return bass_call_0(BASS_ChannelSeconds2Bytes, position)
+  return bass_call_0(BASS_ChannelSeconds2Bytes, self.handle, position)
 
  def get_attribute(self, attribute):
   """Retrieves the value of a channel's attribute."""

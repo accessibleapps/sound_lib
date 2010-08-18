@@ -1,6 +1,6 @@
 from pybass import *
 from main import bass_call, bass_call_0
-from ctypes import pointer, c_float, POINTER
+from ctypes import pointer, c_float, c_long, c_ulong
 
 class Channel (object):
 
@@ -99,3 +99,15 @@ class Channel (object):
  def unlock(self):
   """Unlocks a stream, MOD music or recording channel from the current thread."""
   return bass_call(BASS_ChannelLock, self.handle, False)
+
+ def get_3d_attributes(self):
+  """Retrieves the 3D attributes of a sample, stream, or MOD music channel with 3D functionality."""
+  answer = dict(mode=c_ulong(), min=c_float(), max=c_float(), iangle=c_ulong(), oangle=c_ulong(), outvol=c_float())
+  bass_call(BASS_ChannelGet3DAttributes, self.handle, pointer(answer['mode']), pointer(answer['min']), pointer(answer['max']), pointer(answer['iangle']), pointer(answer['oangle']), pointer(answer['outvol']))
+  for k in answer:
+   answer[k] = answer[k].value()
+  return answer
+
+ def set_3d_attributes(self, mode=-1, min=0.0, max=0.0, iangle=-1, oangle=-1, outvol=-1):
+  """Sets the 3D attributes of a sample, stream, or MOD music channel with 3D functionality."""
+  return bass_call(BASS_ChannelSet3DAttributes, self.handle, mode, min, max, iangle, oangle, outvol)

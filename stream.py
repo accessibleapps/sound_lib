@@ -14,7 +14,7 @@ class Stream(BaseStream):
   handle = bass_call(BASS_StreamCreate, freq, chans, flags, self.proc, user)
   super(Stream, self).__init__(handle)
 
-class FileStream(Channel):
+class FileStream(BaseStream):
 
  def __init__(self, mem=False, file=None, offset=0, length=0, flags=0):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""

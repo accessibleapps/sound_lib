@@ -117,3 +117,9 @@ class Channel (object):
   answer = dict(position=BASS_3DVECTOR(), orientation=BASS_3DVECTOR(), velocity=BASS_3DVECTOR())
   bass_call(BASS_ChannelGet3DPosition, self.handle, pointer(answer['position']), pointer(answer['orientation']), pointer(answer['velocity']))
   return answer
+
+ def set_3d_position(self, position=None, orientation=None, velosity=None):
+  position = BASS_3DVECTOR(position)
+  orientation = BASS_3DVECTOR(orientation)
+  velocity = BASS_3DVECTOR(velocity)
+  return bass_call(BASS_ChannelSet3DPosition, self.handle, pointer(position), pointer(orientation), pointer(velocity))

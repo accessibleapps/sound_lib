@@ -1,4 +1,4 @@
-# Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
+# copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
 
@@ -39,7 +39,7 @@ Main Features
   flexible recording system, with support for multiple devices
 * Decode without playback
   streams and MOD musics can be outputted in any way you want
-* Speaker assignment
+* speaker assignment
   assign streams and MOD musics to specific speakers
 * High precision synchronization
   synchronize events in your software to the streams and MOD musics
@@ -338,7 +338,7 @@ BASS_MUSIC_POSRESETEX = 0x400000# stop all notes and reset bmp/etc when moving p
 BASS_MUSIC_STOPBACK = 0x80000# stop the music on a backwards jump effect
 BASS_MUSIC_NOSAMPLE = 0x100000# don't load the samples
 
-# Speaker assignment flags
+# speaker assignment flags
 BASS_SPEAKER_FRONT = 0x1000000# front speakers
 BASS_SPEAKER_REAR = 0x2000000# rear/side speakers
 BASS_SPEAKER_CENLFE = 0x3000000# center & LFE speakers (5.1)

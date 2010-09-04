@@ -3,11 +3,13 @@ from main import bass_call
 from pybass import *
 
 class BaseStream(Channel):
- pass
+ 
+ def free(self):
+  return bass_call(BASS_StreamFree, self.handle)
 
 class Stream(BaseStream):
 
- def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None):
+ def __init__(self, freq=44100, chans=2, flags=BASS_SAMPLE_3D, proc=None, user=None):
   self.proc = STREAMPROC(proc)
   handle = bass_call(BASS_StreamCreate, freq, chans, flags, self.proc, user)
   super(Stream, self).__init__(handle)

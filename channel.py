@@ -3,6 +3,7 @@ from main import bass_call, bass_call_0, update_3d_system
 from ctypes import pointer, c_float, c_long, c_ulong
 
 class Channel (object):
+ """A "channel" can be a sample playback channel (HCHANNEL), a sample stream (HSTREAM), a MOD music (HMUSIC), or a recording (HRECORD). Each "Channel" function can be used with one or more of these channel types."""
 
  def __init__ (self, handle):
   self.handle = handle
@@ -32,7 +33,7 @@ class Channel (object):
   """Stops a sample, stream, MOD music, or recording."""
   return bass_call(BASS_ChannelStop, self.handle)
 
- def update (self, length):
+ def update (self, length=0):
   """Updates the playback buffer of a stream or MOD music."""
   return bass_call(BASS_ChannelUpdate, self.handle, length)
 

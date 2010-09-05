@@ -1,5 +1,6 @@
 from pybass import *
 from ctypes import *
+from functools import update_wrapper
 
 class BassError (Exception): pass
 
@@ -19,3 +20,10 @@ def bass_call_0(function, *args):
   raise BassError(code, get_error_description(code))
  return res
 
+def update_3d_system(func):
+ def update_3d_system_wrapper(*args, **kwargs):
+  val = func(*args, **kwargs)
+  bass_call( BASS_Apply3D)
+  return val
+ update_wrapper(update_3d_system_wrapper, func)
+ return update_3d_system_wrapper

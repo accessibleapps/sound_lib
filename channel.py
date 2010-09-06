@@ -118,8 +118,26 @@ class Channel (object):
   bass_call(BASS_ChannelGet3DPosition, self.handle, pointer(answer['position']), pointer(answer['orientation']), pointer(answer['velocity']))
   return answer
 
- def set_3d_position(self, position=None, orientation=None, velosity=None):
-  position = BASS_3DVECTOR(position)
-  orientation = BASS_3DVECTOR(orientation)
-  velocity = BASS_3DVECTOR(velocity)
+ def set_3d_position(self, position=None, orientation=None, velocity=None):
+  #position = BASS_3DVECTOR(position)
+  #orientation = BASS_3DVECTOR(orientation)
+  #velocity = BASS_3DVECTOR(velocity)
   return bass_call(BASS_ChannelSet3DPosition, self.handle, pointer(position), pointer(orientation), pointer(velocity))
+
+ def set_link(self, handle):
+  """Links two MOD music or stream channels together."""
+  bass_call(BASS_ChannelSetLink, self.handle, handle)
+
+ def remove_link(self, handle):
+  """Removes a link between two MOD music or stream channels."""
+  return bass_call(BASS_ChannelRemoveLink, self.handle, handle)
+
+ def __iadd__(self, other):
+  """Convenience method to link this channel to another.  Calls set_link on the passed in item's handle"""
+  self.set_link(other.handle)
+  return self
+
+ def __isub__(self, other):
+  """Convenience method to unlink this channel from another.  Calls remove_link on the passed in item's handle"""
+  self.remove_link(other.handle)
+  return self

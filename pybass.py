@@ -57,7 +57,10 @@ import os, sys, ctypes, platform
 from module_path import module_path
 
 if platform.system().lower() == 'windows':
-	bass_module = ctypes.WinDLL(os.path.join(module_path(), 'bass'))
+	try:
+		bass_module = ctypes.LibraryLoader(ctypes.WinDLL).bass
+	except WindowsError:
+		bass_module = ctypes.WinDLL(os.path.join(module_path(), 'bass'))
 	func_type = ctypes.WINFUNCTYPE
 else:
 	bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.dylib'))

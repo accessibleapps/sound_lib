@@ -149,6 +149,14 @@ class Channel (object):
   self.remove_link(other.handle)
   return self
 
+ def get_frequency(self):
+  return self.get_attribute(BASS_ATTRIB_FREQ )
+
+ def set_frequency(self, frequency):
+  self.set_attribute(BASS_ATTRIB_FREQ, frequency)
+
+ frequency = property(fget=get_frequency, fset=set_frequency)
+
  def get_pan(self):
   return self.get_attribute(BASS_ATTRIB_PAN)
 

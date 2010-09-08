@@ -149,6 +149,14 @@ class Channel (object):
   self.remove_link(other.handle)
   return self
 
+ def get_pan(self):
+  return self.get_attribute(BASS_ATTRIB_PAN)
+
+ def set_pan(self, pan):
+  return self.set_attribute(BASS_ATTRIB_PAN, pan)
+
+ pan = property(fget=get_pan, fset=set_pan)
+
  def get_volume(self):
   return self.get_attribute(BASS_ATTRIB_VOL)
 

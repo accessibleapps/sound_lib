@@ -122,10 +122,14 @@ class Channel (object):
 
  @update_3d_system
  def set_3d_position(self, position=None, orientation=None, velocity=None):
-  #position = BASS_3DVECTOR(position)
-  #orientation = BASS_3DVECTOR(orientation)
-  #velocity = BASS_3DVECTOR(velocity)
-  return bass_call(BASS_ChannelSet3DPosition, self.handle, pointer(position), pointer(orientation), pointer(velocity))
+  """Sets the 3D position of a sample, stream, or MOD music channel with 3D functionality."""
+  if position:
+   position = pointer(position)
+  if orientation:
+   orientation = pointer(orientation)
+  if velocity:
+   velocity = pointer(velocity)
+  return bass_call(BASS_ChannelSet3DPosition, self.handle, position, orientation, velocity)
 
  def set_link(self, handle):
   """Links two MOD music or stream channels together."""
@@ -144,3 +148,11 @@ class Channel (object):
   """Convenience method to unlink this channel from another.  Calls remove_link on the passed in item's handle"""
   self.remove_link(other.handle)
   return self
+
+ def get_volume(self):
+  return self.get_attribute(BASS_ATTRIB_VOL)
+
+ def set_volume(self, volume):
+  self.set_attribute(BASS_ATTRIB_VOL, volume)
+
+ volume = property(fget=get_volume, fset=set_volume)

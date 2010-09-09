@@ -62,7 +62,7 @@ if platform.system() == 'Windows':
 	except WindowsError:
 		bass_module = ctypes.WinDLL(os.path.join(module_path(), 'bass'))
 	func_type = ctypes.WINFUNCTYPE
-elif sys.platform() == 'Linux2':
+elif platform.system() == 'Linux':
 	bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.so'))
 	func_type = ctypes.CFUNCTYPE
 else:

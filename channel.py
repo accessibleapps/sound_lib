@@ -172,3 +172,18 @@ class Channel (object):
   self.set_attribute(BASS_ATTRIB_VOL, volume)
 
  volume = property(fget=get_volume, fset=set_volume)
+
+#This is less and less of a one-to-one mapping,
+#But I feel that it's better to be consistent with ourselves
+#Than with the library.  We won't punish ourselves
+#For their bad decisions
+
+ def get_looping(self):
+  = return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, 0)
+
+ def set_looping(self, looping):
+  if looping:
+   return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP)
+  return bass_call_0(BASS_ChannelFlags, self.handle, 0, BASS_SAMPLE_LOOP)
+
+ looping = property(fget=get_looping, fset=set_looping)

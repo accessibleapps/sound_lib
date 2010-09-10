@@ -67,7 +67,7 @@ elif platform.system() == 'Linux':
 		bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.so'))
 	except OSError:
 		bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.so64'))
-			func_type = ctypes.CFUNCTYPE
+	func_type = ctypes.CFUNCTYPE
 else:
 	bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.dylib'))
 	func_type = ctypes.CFUNCTYPE

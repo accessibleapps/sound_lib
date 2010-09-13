@@ -1,4 +1,5 @@
 from pybass import *
+import platform
 
 
 from main import bass_call
@@ -7,6 +8,8 @@ from channel import Channel
 class BassSoundOutput (object):
 
  def __init__ (self, device=-1, frequency=44100, flags=BASS_DEVICE_3D, window=0, clsid=None):
+  if platform.system() == 'Linux' and device == -1: #Bass wants default device set to 1 on linux
+   device = 1
   BASS_Init(device, frequency, flags, window, clsid)
 
  def get_volume (self):

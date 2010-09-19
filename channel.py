@@ -19,6 +19,15 @@ class Channel (object):
   "Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
   return bass_call_0(BASS_ChannelIsActive, self.handle)
 
+ def is_playing(self):
+  return self.is_active() == BASS_ACTIVE_PLAYING
+
+ def is_paused(self):
+  return self.is_active() == BASS_ACTIVE_PAUSED
+
+ def is_stopped(self):
+  return self.is_active() == BASS_ACTIVE_STOPPED
+
  def get_position (self, mode=BASS_POS_BYTE):
   """Retrieves the playback position of a sample, stream, or MOD music. Can also be used with a recording channel."""
   return bass_call_0(BASS_ChannelGetPosition, self.handle, mode)

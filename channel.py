@@ -45,7 +45,7 @@ class Channel (object):
   """Stops a sample, stream, MOD music, or recording."""
   return bass_call(BASS_ChannelStop, self.handle)
 
- def update(self, length=0):
+ def update (self, length=0):
   """Updates the playback buffer of a stream or MOD music."""
   return bass_call(BASS_ChannelUpdate, self.handle, length)
 

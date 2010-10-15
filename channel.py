@@ -199,3 +199,9 @@ class Channel (object):
   return bass_call_0(BASS_ChannelFlags, self.handle, 0, BASS_SAMPLE_LOOP)
 
  looping = property(fget=get_looping, fset=set_looping)
+
+ def __del__(self):
+  try:
+   self.free()
+  except:
+   pass

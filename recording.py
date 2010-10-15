@@ -16,6 +16,9 @@ class Recording(Channel):
   handle = bass_call(BASS_RecordStart, frequency, channels, flags, self.callback, user)
   super(Recording, self).__init__(handle)
 
+ def free(self):
+  return bass_call(BASS_RecordFree)
+
 class WaveRecording(Recording):
 
  def __init__(self, filename=None, proc=None, *args, **kwargs):

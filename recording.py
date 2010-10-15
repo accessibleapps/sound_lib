@@ -44,4 +44,3 @@ class WaveRecording(Recording):
 
  def stop(self, *args, **kwargs):
   super(WaveRecording, self).stop(*args, **kwargs)
-  self.file.close()

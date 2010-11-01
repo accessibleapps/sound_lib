@@ -2,7 +2,15 @@ from pybass import *
 from ctypes import *
 from functools import update_wrapper
 
-class BassError (Exception): pass
+class BassError (Exception):
+ """Error that is raised when there is a problem with a Bass call."""
+
+ def __init__(self, code, description):
+  self.code = code
+  self.description = description
+
+ def __str__(self):
+  return '%d, %s' % (self.code, self.description)
 
 def bass_call(function, *args):
  """Makes a call to bass and raises an exception if it fails."""

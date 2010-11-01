@@ -9,7 +9,7 @@ class BaseStream(Channel):
 
 class Stream(BaseStream):
 
- def __init__(self, freq=44100, chans=2, flags=BASS_SAMPLE_3D, proc=None, user=None):
+ def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None):
   self.proc = STREAMPROC(proc)
   handle = bass_call(BASS_StreamCreate, freq, chans, flags, self.proc, user)
   super(Stream, self).__init__(handle)

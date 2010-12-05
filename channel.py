@@ -191,7 +191,7 @@ class Channel (object):
 #For their bad decisions
 
  def get_looping(self):
-  return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, 0)
+  return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, 0) == 20
 
  def set_looping(self, looping):
   if looping:

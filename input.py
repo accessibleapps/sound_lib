@@ -5,7 +5,7 @@ from pybass import *
 
 from main import bass_call
 
-class BassSoundInput (object):
+class Input (object):
  def __init__ (self, device=-1):
   bass_call(BASS_RecordInit, device)
 #  self.RECORDPROC = WINFUNCTYPE(c_bool, HRECORD, c_void_p, c_ulong, c_void_p)

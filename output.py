@@ -44,3 +44,20 @@ class ThreeDOutput(Output):
 
  def __init__(self, flags=BASS_DEVICE_3D, *args, **kwargs):
   super(ThreeDOutput, self).__init__(flags=flags, *args, **kwargs)
+
+def get_device_names():
+ """Convenience method that returns a list of device names that are considered
+ valid by bass.
+	
+ Parameters: none.
+ returns: list of devices, 0-indexed.
+ """
+ result = [] # empty list to start.
+ info = BASS_DEVICEINFO()
+ count = 1
+ while BASS_GetDeviceInfo(count, ctypes.byref(info)):
+  if info.flags & BASS_DEVICE_ENABLED: result.append(info.name)
+  count += 1
+  
+ return result
+

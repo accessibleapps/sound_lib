@@ -60,16 +60,16 @@ if platform.system() == 'Windows':
 	try:
 		bass_module = ctypes.LibraryLoader(ctypes.WinDLL).bass
 	except WindowsError:
-		bass_module = ctypes.WinDLL(os.path.join(module_path(), 'bass'))
+		bass_module = ctypes.WinDLL(os.path.join(module_path(), '..', 'lib', 'bass'))
 	func_type = ctypes.WINFUNCTYPE
 elif platform.system() == 'Linux':
 	try:
-		bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.so'))
+		bass_module = ctypes.CDLL(os.path.join(module_path(), '..', 'lib', 'libbass.so'))
 	except OSError:
-		bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.so64'))
+		bass_module = ctypes.CDLL(os.path.join(module_path(), '..', 'lib', 'libbass.so64'))
 	func_type = ctypes.CFUNCTYPE
 else:
-	bass_module = ctypes.CDLL(os.path.join(module_path(), 'libbass.dylib'))
+	bass_module = ctypes.CDLL(os.path.join(module_path(), '..', 'lib', 'libbass.dylib'))
 	func_type = ctypes.CFUNCTYPE
 
 QWORD = ctypes.c_int64

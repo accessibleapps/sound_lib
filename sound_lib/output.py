@@ -5,7 +5,10 @@ from main import bass_call, bass_call_0
 
 class Output (object):
 
- def __init__ (self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
+ def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
+  self.init_device(device=device, frequency=frequency, flags=0, window=0, clsid=None)
+
+ def init_device(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
   if platform.system() == 'Linux' and device == -1: #Bass wants default device set to 1 on linux
    device = 1
   bass_call(BASS_Init, device, frequency, flags, window, clsid)
@@ -39,25 +42,30 @@ class Output (object):
 
  volume = property(get_volume, set_volume)
 
+ def free(self):
+  return bass_call(BASS_Free)
+
+ @staticmethod
+ def get_device_names():
+  """Convenience method that returns a list of device names that are considered
+ valid by bass.
+	
+  Parameters: none.
+  returns: list of devices, 0-indexed.
+  """
+  result = [] # empty list to start.
+  info = BASS_DEVICEINFO()
+  count = 1
+  while BASS_GetDeviceInfo(count, ctypes.byref(info)):
+   if info.flags & BASS_DEVICE_ENABLED:
+    result.append(info.name)
+   count += 1
+  return result
+
+
 
 class ThreeDOutput(Output):
 
  def __init__(self, flags=BASS_DEVICE_3D, *args, **kwargs):
   super(ThreeDOutput, self).__init__(flags=flags, *args, **kwargs)
-
-def get_device_names():
- """Convenience method that returns a list of device names that are considered
- valid by bass.
-	
- Parameters: none.
- returns: list of devices, 0-indexed.
- """
- result = [] # empty list to start.
- info = BASS_DEVICEINFO()
- count = 1
- while BASS_GetDeviceInfo(count, ctypes.byref(info)):
-  if info.flags & BASS_DEVICE_ENABLED: result.append(info.name)
-  count += 1
-  
- return result
 

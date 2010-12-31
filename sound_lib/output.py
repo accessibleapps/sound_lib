@@ -6,7 +6,7 @@ from main import bass_call, bass_call_0
 class Output (object):
 
  def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
-  self.init_device(device=device, frequency=frequency, flags=0, window=0, clsid=None)
+  self.init_device(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
 
  def init_device(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
   if platform.system() == 'Linux' and device == -1: #Bass wants default device set to 1 on linux

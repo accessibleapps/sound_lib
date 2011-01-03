@@ -1,5 +1,6 @@
 from pybass import *
 import platform
+from ctypes import c_char_p, pointer, string_at
 
 from main import bass_call, bass_call_0
 
@@ -7,6 +8,7 @@ class Output (object):
 
  def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
   self.init_device(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
+  self.proxy = None
 
  def init_device(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
   if platform.system() == 'Linux' and device == -1: #Bass wants default device set to 1 on linux
@@ -44,6 +46,14 @@ class Output (object):
 
  def free(self):
   return bass_call(BASS_Free)
+
+ def get_proxy(self):
+  ptr = bass_call(BASS_GetConfigPtr, BASS_CONFIG_NET_PROXY)
+  return string_at(ptr)
+
+ def set_proxy(self, proxy):
+  self.proxy = c_char_p(proxy)
+  return bass_call(BASS_SetConfigPtr, BASS_CONFIG_NET_PROXY, self.proxy)
 
  @staticmethod
  def get_device_names():

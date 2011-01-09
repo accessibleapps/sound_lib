@@ -197,6 +197,7 @@ BASS_CONFIG_DEV_BUFFER = 27
 # BASS_SetConfigPtr options
 BASS_CONFIG_NET_AGENT = 16
 BASS_CONFIG_NET_PROXY = 17
+BASS_CONFIG_DEV_DEFAULT = 36
 
 # Initialization flags
 BASS_DEVICE_8BITS = 1# use 8 bit resolution, else 16 bit

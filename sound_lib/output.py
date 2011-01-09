@@ -7,6 +7,7 @@ from main import bass_call, bass_call_0
 class Output (object):
 
  def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
+  self.use_default_device()
   self.init_device(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
   self.proxy = None
 
@@ -54,6 +55,9 @@ class Output (object):
  def set_proxy(self, proxy):
   self.proxy = c_char_p(proxy)
   return bass_call(BASS_SetConfigPtr, BASS_CONFIG_NET_PROXY, self.proxy)
+
+ def use_default_device(self, use=True):
+  return bass_call(BASS_SetConfig, BASS_CONFIG_DEV_DEFAULT, use)
 
  @staticmethod
  def get_device_names():

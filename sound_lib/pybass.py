@@ -60,7 +60,7 @@ if platform.system() == 'Windows':
 	try:
 		bass_module = ctypes.LibraryLoader(ctypes.WinDLL).bass
 	except WindowsError:
-		bass_module = ctypes.WinDLL(os.path.join(module_path(), 'lib', 'bass'))
+		bass_module = ctypes.WinDLL(os.path.join(module_path(), '..', 'lib',  'bass'))
 	func_type = ctypes.WINFUNCTYPE
 elif platform.system() == 'Linux':
 	try:

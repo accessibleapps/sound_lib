@@ -3,10 +3,6 @@ from glob import glob
 import sys
 
 
-data_files = [['lib', glob('lib/*')]]
-if len(sys.argv) > 1 and (sys.argv[1] == 'bdist_wininst' or sys.argv[1] == 'bdist_msi'):
- for file in data_files:
-  file[0] = '\\PURELIB\\sound_lib\\%s' % file[0]
 
 setup(
  name = 'sound_lib',
@@ -18,7 +14,7 @@ setup(
  #long_description = open('README.txt').read(),
  package_dir = {'sound_lib':'sound_lib'},
  packages = find_packages(),
- data_files = data_files,
+ package_data = {"sound_lib": ["lib/*"]},
  classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Developers',

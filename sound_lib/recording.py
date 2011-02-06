@@ -34,8 +34,8 @@ class WaveRecording(Recording):
  def setup_file(self):
   self.file = wave.open(self.filename, 'w')
   self.file.setnchannels(self._channels)
-  self.file.setsampwidth(4)
-  self.file.setframerate(self._frequency/self._channels)
+  self.file.setsampwidth(2)
+  self.file.setframerate(self._frequency)
 
  def play(self, *args, **kwargs):
   if not self.is_playing():

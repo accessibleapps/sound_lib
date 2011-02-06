@@ -3,6 +3,10 @@ from main import bass_call
 from pybass import *
 
 class BaseStream(Channel):
+
+ def _callback(*args):
+  #Stub it out as otherwise it'll crash, hard.  Used for stubbing download procs
+  return 0
  
  def free(self):
   return bass_call(BASS_StreamFree, self.handle)
@@ -28,8 +32,4 @@ class URLStream(BaseStream):
   self.downloadproc = DOWNLOADPROC(self._downloadproc)
   handle = bass_call(BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user)
   super(URLStream, self).__init__(handle)
-
- def _callback(*args):
-  #Stub it out as otherwise it'll crash, hard.
-  return 0
 

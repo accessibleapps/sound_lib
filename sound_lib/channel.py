@@ -103,7 +103,7 @@ class Channel (object):
 
  def slide_attribute(self, attribute, value, time):
   """Slides a channel's attribute from its current value to a new value."""
-  return bass_call(BASS_ChannelSlideAttribute, self.handle, ATTRIBUTE_MAPPING[attribute], value, time)
+  return bass_call(BASS_ChannelSlideAttribute, self.handle, ATTRIBUTE_MAPPING[attribute], value, time*1000)
 
  def is_sliding (self, attribute=None):
   """Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding."""

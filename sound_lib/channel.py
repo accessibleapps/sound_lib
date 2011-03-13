@@ -26,6 +26,11 @@ class Channel (object):
   """Starts (or resumes) playback of a sample, stream, MOD music, or recording."""
   return bass_call(BASS_ChannelPlay, self.handle, restart)
 
+ def play_blocking(self, restart=False):
+  self.play(restart=restart)
+  while self.is_playing:
+   pass
+
  def pause (self):
   return bass_call(BASS_ChannelPause, self.handle)
 
@@ -33,15 +38,19 @@ class Channel (object):
   "Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
   return bass_call_0(BASS_ChannelIsActive, self.handle)
 
+ @property
  def is_playing(self):
   return self.is_active() == BASS_ACTIVE_PLAYING
 
+ @property
  def is_paused(self):
   return self.is_active() == BASS_ACTIVE_PAUSED
 
+ @property
  def is_stopped(self):
   return self.is_active() == BASS_ACTIVE_STOPPED
 
+ @property
  def is_stalled(self):
   return self.is_active() == BASS_ACTIVE_STALLED
 

@@ -2,6 +2,20 @@ from pybass import *
 from main import bass_call, bass_call_0, update_3d_system
 from ctypes import pointer, c_float, c_long, c_ulong
 
+ATTRIBUTE_MAPPING = {
+ 'eaxmix': BASS_ATTRIB_EAXMIX,
+ 'frequency': BASS_ATTRIB_FREQ,
+ 'music_amplify': BASS_ATTRIB_MUSIC_AMPLIFY,
+ 'music_bpm': BASS_ATTRIB_MUSIC_BPM,
+ 'music_pansep': BASS_ATTRIB_MUSIC_PANSEP,
+ 'music_speed': BASS_ATTRIB_MUSIC_SPEED,
+ 'music_vol_chan': BASS_ATTRIB_MUSIC_VOL_CHAN,
+ 'music_vol_global': BASS_ATTRIB_MUSIC_VOL_GLOBAL,
+ 'music_vol_inst': BASS_ATTRIB_MUSIC_VOL_INST,
+ 'pan': BASS_ATTRIB_PAN,
+ 'volume': BASS_ATTRIB_VOL
+}
+
 class Channel (object):
  """A "channel" can be a sample playback channel (HCHANNEL), a sample stream (HSTREAM), a MOD music (HMUSIC), or a recording (HRECORD). Each "Channel" function can be used with one or more of these channel types."""
 
@@ -89,7 +103,7 @@ class Channel (object):
 
  def slide_attribute(self, attribute, value, time):
   """Slides a channel's attribute from its current value to a new value."""
-  return bass_call(BASS_ChannelSlideAttribute, self.handle, attribute, value, time)
+  return bass_call(BASS_ChannelSlideAttribute, self.handle, ATTRIBUTE_MAPPING[attribute], value, time)
 
  def is_sliding (self, attribute=None):
   """Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding."""

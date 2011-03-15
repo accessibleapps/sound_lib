@@ -228,3 +228,33 @@ class Channel (object):
    self.free()
   except:
    pass
+
+ def get_x(self):
+  return self.get_3d_position()['position'].x
+
+ def set_x(self, val):
+  pos = self.get_3d_position()
+  pos['position'].x = val
+  self.set_3d_position(**pos)
+
+ x = property(fget=get_x, fset=set_x)
+
+ def get_y(self):
+  return self.get_3d_position()['position'].y
+
+ def set_y(self, val):
+  pos = self.get_3d_position()
+  pos['position'].y = val
+  self.set_3d_position(**pos)
+
+ y = property(fget=get_y, fset=set_y)
+
+ def get_z(self):
+  return self.get_3d_position()['position'].z
+
+ def set_z(self, val):
+  pos = self.get_3d_position()
+  pos['position'].z = val
+  self.set_3d_position(**pos)
+
+ z = property(fget=get_z, fset=set_z)

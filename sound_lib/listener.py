@@ -72,12 +72,43 @@ class Listener(object):
  z = property(fget=get_z, fset=set_z)
 
  def get_velocity(self):
-  return self.get_3d_position['velocity']
+  return self.get_3d_position()['velocity']
 
  def set_velocity(self, velocity):
   self.set_3d_position(velocity=velocity)
 
  velocity = property(fget=get_velocity, fset=set_velocity)
+
+ def get_x_velocity(self):
+  return self.velocity.x
+
+ def set_x_velocity(self, val):
+  old = self.velocity
+  old.x = val
+  self.velocity = old
+
+ x_velocity = property(fget=get_x_velocity, fset=set_x_velocity)
+
+ def get_y_velocity(self):
+  return self.velocity.y
+
+ def set_y_velocity(self, val):
+  old = self.velocity
+  old.y = val
+  self.velocity = old
+
+ y_velocity = property(fget=get_y_velocity, fset=set_y_velocity)
+
+ def get_z_velocity(self):
+  return self.velocity.z
+
+ def set_z_velocity(self, val):
+  old = self.velocity
+  old.z = val
+  self.velocity = old
+
+ z_velocity = property(fget=get_z_velocity, fset=set_z_velocity)
+
 
  def get_front(self):
   return self.get_3d_position()['front']

@@ -4,7 +4,7 @@ from pybass import *
 
 class BaseStream(Channel):
  @staticmethod
- def flags_for(three_d=False, autofree=False, decode=False):
+ def flags_for(three_d=False, autofree=False, decode=False, mono=False):
   flags = 0
   if three_d:
    flags = flags | BASS_SAMPLE_3D
@@ -12,6 +12,8 @@ class BaseStream(Channel):
    flags = flags | BASS_STREAM_AUTOFREE
   if decode:
    flags = flags | BASS_STREAM_DECODE
+  if mono:
+   flags = flags | BASS_SAMPLE_MONO
   return flags
 
  def _callback(*args):
@@ -31,9 +33,9 @@ class Stream(BaseStream):
 
 class FileStream(BaseStream):
 
- def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, autofree=False, decode=False):
+ def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, mono=False, autofree=False, decode=False):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
-  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, mono=mono, decode=decode)
   handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
   super(FileStream, self).__init__(handle)
 

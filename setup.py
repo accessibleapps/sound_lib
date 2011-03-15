@@ -8,7 +8,7 @@ setup(
  name = 'sound_lib',
  author = 'Christopher Toth',
  author_email = 'q@qwitter-client.net',
- version = '0.5.6',
+ version = '0.5.7',
  url = 'http://www.qwitter-client.net',
  description = 'Pythonic wrapper to the Bass sound library',
  #long_description = open('README.txt').read(),

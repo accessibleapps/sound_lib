@@ -1,4 +1,4 @@
-ifrom setuptools import setup, find_packages
+from setuptools import setup, find_packages
 from glob import glob
 import sys
 

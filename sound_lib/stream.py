@@ -3,6 +3,16 @@ from main import bass_call
 from pybass import *
 
 class BaseStream(Channel):
+ @staticmethod
+ def flags_for(three_d=False, autofree=False, decode=False):
+  flags = 0
+  if three_d:
+   flags = flags | BASS_SAMPLE_3D
+  if autofree:
+   flags = flags | BASS_STREAM_AUTOFREE
+  if decode:
+   flags = flags | BASS_STREAM_DECODE
+  return flags
 
  def _callback(*args):
   #Stub it out as otherwise it'll crash, hard.  Used for stubbing download procs
@@ -13,15 +23,17 @@ class BaseStream(Channel):
 
 class Stream(BaseStream):
 
- def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None):
+ def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None, three_d=False, autofree=False, decode=False):
   self.proc = STREAMPROC(proc)
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
   handle = bass_call(BASS_StreamCreate, freq, chans, flags, self.proc, user)
   super(Stream, self).__init__(handle)
 
 class FileStream(BaseStream):
 
- def __init__(self, mem=False, file=None, offset=0, length=0, flags=0):
+ def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, autofree=False, decode=False):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
   handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
   super(FileStream, self).__init__(handle)
 

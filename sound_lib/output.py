@@ -1,8 +1,12 @@
 from pybass import *
+from functools import partial
 import platform
-from ctypes import c_char_p, pointer, string_at
+from ctypes import c_char_p, c_float, pointer, string_at
 
-from main import bass_call, bass_call_0
+from main import bass_call, bass_call_0, update_3d_system
+
+_getter = lambda func, key, obj: func(obj)[key]
+_setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})
 
 class Output (object):
 
@@ -86,3 +90,28 @@ class ThreeDOutput(Output):
  def __init__(self, flags=BASS_DEVICE_3D, *args, **kwargs):
   super(ThreeDOutput, self).__init__(flags=flags, *args, **kwargs)
 
+ def get_3d_factors(self):
+  res = {
+   'distance_factor': c_float(),
+   'rolloff': c_float(),
+   'doppler_factor': c_float()
+  }
+  bass_call(BASS_Get3DFactors, pointer(res['distance_factor']), pointer(res['rolloff']), pointer(res['doppler_factor']))
+  return {k: res[k].value for k in res}
+
+ @update_3d_system
+ def set_3d_factors(self, distance_factor=-1, rolloff=-1, doppler_factor=-1):
+  conversions = {
+   'meters': 1.0,
+   'yards': 0.9144,
+   'feet': 0.3048
+  }
+  if distance_factor in conversions:
+   distance_factor = conversions[distance_factor]
+  return bass_call(BASS_Set3DFactors, distance_factor, rolloff, doppler_factor)
+
+ distance_factor = property(fget=partial(_getter, get_3d_factors, 'distance_factor'), fset=partial(_setter, set_3d_factors, 'distance_factor'))
+
+ rolloff = property(fget=partial(_getter, get_3d_factors, 'rolloff'), fset=partial(_setter, set_3d_factors, 'rolloff'))
+
+ doppler_factor = property(fget=partial(_getter, get_3d_factors, 'doppler_factor'), fset=partial(_setter, set_3d_factors, 'doppler_factor'))

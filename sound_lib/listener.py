@@ -1,6 +1,16 @@
 from ctypes import pointer
+from functools import partial
+from operator import itemgetter
 from main import bass_call, update_3d_system
 from pybass import *
+
+def _getter(base_prop, attr, obj):
+ return getattr(getattr(obj, base_prop), attr)
+
+def _setter(base_prop, subattr, obj, val):
+ old = getattr(obj, base_prop)
+ setattr(old, subattr, val)
+ setattr(obj, base_prop, old)
 
 class Listener(object):
 
@@ -40,36 +50,11 @@ class Listener(object):
 
  position = property(fget=get_position, fset=set_position)
 
- def get_x(self):
-  return self.position.x
+ x = property(fget=partial(_getter, 'position', 'x'), fset=partial(_setter, 'position', 'x'))
 
- def set_x(self, val):
-  old = self.position
-  old.x = val
-  self.position = old
+ y = property(fget=partial(_getter, 'position', 'y'), fset=partial(_setter, 'position', 'y'))
 
-
- x = property(fget=get_x, fset=set_x)
-
- def get_y(self):
-  return self.position.y
-
- def set_y(self, val):
-  old = self.position
-  old.y = val
-  self.set_position(old)
-
- y = property(fget=get_y, fset=set_y)
-
- def get_z(self):
-  return self.position.z
-
- def set_z(self, val):
-  old = self.position
-  old.z = val
-  self.set_position(old)
-
- z = property(fget=get_z, fset=set_z)
+ z = property(fget=partial(_getter, 'position', 'z'), fset=partial(_setter, 'position', 'z'))
 
  def get_velocity(self):
   return self.get_3d_position()['velocity']
@@ -79,36 +64,11 @@ class Listener(object):
 
  velocity = property(fget=get_velocity, fset=set_velocity)
 
- def get_x_velocity(self):
-  return self.velocity.x
+ x_velocity = property(fget=partial(_getter, 'velocity', 'x'), fset=partial(_setter, 'velocity', 'x'))
 
- def set_x_velocity(self, val):
-  old = self.velocity
-  old.x = val
-  self.velocity = old
+ y_velocity = property(fget=partial(_getter, 'velocity', 'y'), fset=partial(_setter, 'velocity', 'y'))
 
- x_velocity = property(fget=get_x_velocity, fset=set_x_velocity)
-
- def get_y_velocity(self):
-  return self.velocity.y
-
- def set_y_velocity(self, val):
-  old = self.velocity
-  old.y = val
-  self.velocity = old
-
- y_velocity = property(fget=get_y_velocity, fset=set_y_velocity)
-
- def get_z_velocity(self):
-  return self.velocity.z
-
- def set_z_velocity(self, val):
-  old = self.velocity
-  old.z = val
-  self.velocity = old
-
- z_velocity = property(fget=get_z_velocity, fset=set_z_velocity)
-
+ z_velocity = property(fget=partial(_getter, 'velocity', 'z'), fset=partial(_setter, 'velocity', 'z'))
 
  def get_front(self):
   return self.get_3d_position()['front']
@@ -118,6 +78,12 @@ class Listener(object):
 
  front = property(fget=get_front, fset=set_front)
 
+ front_x = property(fget=partial(_getter, 'front', 'x'), fset=partial(_setter, 'front', 'x'))
+
+ front_y = property(fget=partial(_getter, 'front', 'y'), fset=partial(_setter, 'front', 'y'))
+
+ front_z = property(fget=partial(_getter, 'front', 'z'), fset=partial(_setter, 'front', 'z'))
+
  def get_top(self):
   return self.get_3d_position()['top']
 
@@ -125,3 +91,9 @@ class Listener(object):
   self.set_3d_position(top=top)
 
  top = property(fget=get_top, fset=set_top)
+
+ top_x = property(fget=partial(_getter, 'front', 'x'), fset=partial(_setter, 'front', 'x'))
+
+ top_y = property(fget=partial(_getter, 'front', 'y'), fset=partial(_setter, 'front', 'y'))
+
+ top_z = property(fget=partial(_getter, 'front', 'z'), fset=partial(_setter, 'front', 'z'))

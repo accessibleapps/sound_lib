@@ -1,6 +1,5 @@
 from ctypes import pointer
 from functools import partial
-from operator import itemgetter
 from main import bass_call, update_3d_system
 from pybass import *
 

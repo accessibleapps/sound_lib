@@ -1,9 +1,8 @@
-from pybass import *
 from functools import partial
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
-
-from main import bass_call, bass_call_0, update_3d_system
+from pybass import *
+from main import bass_call, bass_call_0, EAX_ENVIRONMENTS, update_3d_system
 
 _getter = lambda func, key, obj: func(obj)[key]
 _setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})
@@ -115,3 +114,16 @@ class ThreeDOutput(Output):
  rolloff = property(fget=partial(_getter, get_3d_factors, 'rolloff'), fset=partial(_setter, set_3d_factors, 'rolloff'))
 
  doppler_factor = property(fget=partial(_getter, get_3d_factors, 'doppler_factor'), fset=partial(_setter, set_3d_factors, 'doppler_factor'))
+
+ def set_eax_parameters(self, environment=None, volume=None, decay=None, damp=None):
+  def convert_arg(arg):
+   if arg is None:
+    arg = -1
+   return arg
+  environment = convert_arg(environment)
+  if isinstance(environment, basestring) and environment in EAX_ENVIRONMENTS:
+   environment = EAX_ENVIRONMENTS[environment]
+  volume = convert_arg(volume)
+  decay = convert_arg(decay)
+  damp = convert_arg(damp)
+  bass_call(BASS_SetEAXParameters, environment, volume, decay, damp)

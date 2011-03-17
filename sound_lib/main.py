@@ -2,6 +2,35 @@ from pybass import *
 from ctypes import *
 from functools import update_wrapper
 
+EAX_ENVIRONMENTS = {
+ 'generic': EAX_ENVIRONMENT_GENERIC,
+ 'padded_cell': EAX_ENVIRONMENT_PADDEDCELL,
+ 'room': EAX_ENVIRONMENT_ROOM,
+ 'bathroom': EAX_ENVIRONMENT_BATHROOM,
+ 'living_room': EAX_ENVIRONMENT_LIVINGROOM,
+ 'stone_room': EAX_ENVIRONMENT_STONEROOM,
+ 'auditorium': EAX_ENVIRONMENT_AUDITORIUM,
+ 'concert_hall': EAX_ENVIRONMENT_CONCERTHALL,
+ 'cave': EAX_ENVIRONMENT_CAVE,
+ 'arena': EAX_ENVIRONMENT_ARENA,
+ 'hanger': EAX_ENVIRONMENT_HANGAR,
+  'carpeted_hallway': EAX_ENVIRONMENT_CARPETEDHALLWAY,
+ 'hallway':  EAX_ENVIRONMENT_HALLWAY,
+ 'stone_corridor': EAX_ENVIRONMENT_STONECORRIDOR,
+ 'alley': EAX_ENVIRONMENT_ALLEY,
+ 'forest': EAX_ENVIRONMENT_FOREST,
+ 'city': EAX_ENVIRONMENT_CITY,
+ 'mountains': EAX_ENVIRONMENT_MOUNTAINS,
+ 'quarry': EAX_ENVIRONMENT_QUARRY,
+ 'plain': EAX_ENVIRONMENT_PLAIN,
+ 'parking_lot':  EAX_ENVIRONMENT_PARKINGLOT,
+ 'sewer_pipe': EAX_ENVIRONMENT_SEWERPIPE,
+ 'underwater':  EAX_ENVIRONMENT_UNDERWATER,
+ 'drugged':  EAX_ENVIRONMENT_DRUGGED,
+ 'dizzy': EAX_ENVIRONMENT_DIZZY,
+ 'psychotic':  EAX_ENVIRONMENT_PSYCHOTIC
+}
+
 class BassError (Exception):
  """Error that is raised when there is a problem with a Bass call."""
 

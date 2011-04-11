@@ -38,7 +38,7 @@ class WaveRecording(Recording):
   self.file.setframerate(self._frequency)
 
  def play(self, *args, **kwargs):
-  if not self.is_playing():
+  if not self.is_playing:
    self.setup_file()
   super(WaveRecording, self).play(*args, **kwargs)
 

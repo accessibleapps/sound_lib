@@ -848,12 +848,9 @@ BASS_SetConfig = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_ulong)(('BASS
 #DWORD BASSDEF(BASS_GetConfig)(DWORD option);
 BASS_GetConfig = func_type(ctypes.c_ulong, ctypes.c_ulong)(('BASS_GetConfig', bass_module))
 #BOOL BASSDEF(BASS_SetConfigPtr)(DWORD option, void *value);
-try:
- BASS_SetConfigPtr = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_void_p)(('BASS_SetConfigPtr', bass_module))
- #void *BASSDEF(BASS_GetConfigPtr)(DWORD option);
- BASS_GetConfigPtr = func_type(ctypes.c_void_p, ctypes.c_ulong)(('BASS_GetConfigPtr', bass_module))
-except AttributeError:
- pass
+BASS_SetConfigPtr = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_void_p)(('BASS_SetConfigPtr', bass_module))
+#void *BASSDEF(BASS_GetConfigPtr)(DWORD option);
+BASS_GetConfigPtr = func_type(ctypes.c_void_p, ctypes.c_ulong)(('BASS_GetConfigPtr', bass_module))
 #DWORD BASSDEF(BASS_GetVersion)();
 BASS_GetVersion = func_type(ctypes.c_ulong)(('BASS_GetVersion', bass_module))
 #int BASSDEF(BASS_ErrorGetCode)();

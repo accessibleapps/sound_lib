@@ -127,3 +127,17 @@ class ThreeDOutput(Output):
   decay = convert_arg(decay)
   damp = convert_arg(damp)
   bass_call(BASS_SetEAXParameters, environment, volume, decay, damp)
+
+ def get_3d_algorithm(self):
+  return BASS_GetConfig(BASS_CONFIG_3DALGORITHM)
+
+ def set_3d_algorithm(self, algo):
+  replacements = {
+   'default': BASS_3DALG_DEFAULT,
+   'off': BASS_3DALG_OFF,
+   'full': BASS_3DALG_FULL,
+   'light': BASS_3DALG_LIGHT,
+  }
+  if algo in replacements:
+   algo = replacements[algo]
+  return BASS_SetConfig(BASS_CONFIG_3DALGORITHM, algo)

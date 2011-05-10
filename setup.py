@@ -2,13 +2,15 @@ from setuptools import setup, find_packages
 from glob import glob
 import sys
 
-
+__name__ = 'sound_lib'
+__author__ = 'Christopher Toth'
+__version__ = '0.6.1'
 
 setup(
- name = 'sound_lib',
- author = 'Christopher Toth',
+ name = __name__,
+ author = __author__,
  author_email = 'q@qwitter-client.net',
- version = '0.6.0',
+ version = __version__,
  url = 'http://www.qwitter-client.net',
  description = 'Pythonic wrapper to the Bass sound library',
  #long_description = open('README.txt').read(),

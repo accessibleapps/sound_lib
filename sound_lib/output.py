@@ -50,8 +50,9 @@ class Output (object):
   return bass_call(BASS_SetConfig, BASS_CONFIG_GVOL_STREAM, int(round(volume*100, 2)))
 
  volume = property(get_volume, set_volume)
-
- def free(self):
+ 
+ @staticmethod
+ def free():
   return bass_call(BASS_Free)
 
  def get_proxy(self):

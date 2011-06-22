@@ -18,9 +18,9 @@ def load_library(library, lib_path=''):
   return loader.LoadLibrary('%s%s' % (path, ext))
  for n, i in enumerate(ext):
   try:
-   loaded = loader.LoadLibrary('%s%s' % (path, ext))
+   loaded = loader.LoadLibrary('%s%s' % (path, i))
   except OSError:
-   if n < len(ext):
+   if n < len(ext) - 1:
     continue
    else:
     raise

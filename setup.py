@@ -16,7 +16,11 @@ setup(
  #long_description = open('README.txt').read(),
  package_dir = {'sound_lib':'sound_lib'},
  packages = find_packages(),
- package_data = {"sound_lib": ["lib/*"]},
+ package_data = {"sound_lib":
+  [
+   "lib/bass/*",
+  ],
+ },
  classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Developers',

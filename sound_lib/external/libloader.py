@@ -20,7 +20,7 @@ def load_library(library, lib_path=''):
   try:
    loaded = loader.LoadLibrary('%s%s' % (path, i))
   except OSError:
-   if n < len(ext) - 1:
+   if n < len(ext):
     continue
    else:
     raise

@@ -19,6 +19,7 @@ setup(
  package_data = {"sound_lib":
   [
    "lib/bass/*",
+   "lib/bassflac/*",
   ],
  },
  classifiers = [

@@ -4,7 +4,7 @@ import sys
 
 __name__ = 'sound_lib'
 __author__ = 'Christopher Toth'
-__version__ = '0.6.2'
+__version__ = '0.6.3'
 
 setup(
  name = __name__,

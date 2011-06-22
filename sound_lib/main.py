@@ -1,4 +1,4 @@
-from pybass import *
+from external.pybass import *
 from ctypes import *
 from functools import update_wrapper
 

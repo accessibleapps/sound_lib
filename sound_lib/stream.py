@@ -1,6 +1,6 @@
 from channel import Channel
 from main import bass_call
-from pybass import *
+from external.pybass import *
 
 class BaseStream(Channel):
  @staticmethod

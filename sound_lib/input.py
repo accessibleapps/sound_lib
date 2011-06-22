@@ -1,7 +1,7 @@
 from ctypes import string_at
 import wave
 
-from pybass import *
+from external.pybass import *
 
 from main import bass_call
 

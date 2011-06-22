@@ -1,6 +1,6 @@
-from pybass import *
+from external.pybass import *
 from main import bass_call, bass_call_0, update_3d_system
-from ctypes import pointer, c_float, c_long, c_ulong
+from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
 
 ATTRIBUTE_MAPPING = {
  'eaxmix': BASS_ATTRIB_EAXMIX,
@@ -207,6 +207,12 @@ class Channel (object):
   self.set_attribute(BASS_ATTRIB_VOL, volume)
 
  volume = property(fget=get_volume, fset=set_volume)
+
+ def get_data(self, length=16384):
+  buf = c_buffer(length)
+  bass_call_0(BASS_ChannelGetData, self.handle, pointer(buf), length)
+  return buf
+
 
 #This is less and less of a one-to-one mapping,
 #But I feel that it's better to be consistent with ourselves

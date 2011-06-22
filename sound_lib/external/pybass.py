@@ -55,22 +55,12 @@ Main Features
 
 import os, sys, ctypes, platform
 from module_path import module_path
+from libloader import get_functype, load_library
 
-if platform.system() == 'Windows':
-	try:
-		bass_module = ctypes.WinDLL(os.path.join(module_path(), 'lib',  'bass'))
-	except WindowsError:
-		bass_module = ctypes.LibraryLoader(ctypes.WinDLL).bass
-	func_type = ctypes.WINFUNCTYPE
-elif platform.system() == 'Linux':
-	try:
-		bass_module = ctypes.CDLL(os.path.join(module_path(), 'lib', 'libbass.so'))
-	except OSError:
-		bass_module = ctypes.CDLL(os.path.join(module_path(), 'lib', 'libbass.so64'))
-	func_type = ctypes.CFUNCTYPE
-else:
-	bass_module = ctypes.CDLL(os.path.join(module_path(), 'lib', 'libbass.dylib'))
-	func_type = ctypes.CFUNCTYPE
+library_path = os.path.join(module_path(), '..', 'lib', 'bass')
+bass_module = load_library('bass', library_path)
+func_type = get_functype()
+
 
 QWORD = ctypes.c_int64
 

@@ -1,5 +1,5 @@
 from channel import Channel
-from pybass import *
+from external.pybass import *
 from ctypes import string_at
 import wave
 from main import bass_call, bass_call_0

@@ -1,7 +1,7 @@
 from ctypes import pointer
 from functools import partial
 from main import bass_call, update_3d_system
-from pybass import *
+from external.pybass import *
 
 def _getter(base_prop, attr, obj):
  return getattr(getattr(obj, base_prop), attr)

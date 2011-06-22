@@ -1,6 +1,13 @@
 from channel import Channel
 from main import bass_call
 from external.pybass import *
+from external.pybassflac import *
+
+
+FILETYPE_HANDLERS = {
+ '.flac': BASS_FLAC_StreamCreateFile,
+}
+
 
 class BaseStream(Channel):
  @staticmethod
@@ -36,10 +43,13 @@ class FileStream(BaseStream):
  def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, mono=False, autofree=False, decode=False):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
   flags = flags | self.flags_for(three_d=three_d, autofree=autofree, mono=mono, decode=decode)
-  if isinstance(file, unicode):
-   file = file.encode('UTF-8')
   self.file = file
-  handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
+  stream_creator = BASS_StreamCreateFile
+  for k in FILETYPE_HANDLERS:
+   if file.lower().endswith(k):
+    stream_creator = FILETYPE_HANDLERS[k]
+    break
+  handle = bass_call(stream_creator, mem, file, offset, length, flags)
   super(FileStream, self).__init__(handle)
 
 class URLStream(BaseStream):

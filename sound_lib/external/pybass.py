@@ -58,7 +58,8 @@ from module_path import module_path
 from libloader import get_functype, load_library
 
 library_path = os.path.join(module_path(), '..', 'lib', 'bass')
-bass_module = load_library('bass', library_path)
+alt_path = os.path.join(module_path(), '..', '..', 'lib', 'bass')
+bass_module = load_library('bass', lib_path=[library_path, alt_path])
 func_type = get_functype()
 
 

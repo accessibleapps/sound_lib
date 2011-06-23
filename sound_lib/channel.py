@@ -1,5 +1,5 @@
 from external.pybass import *
-from main import bass_call, bass_call_0, update_3d_system
+from main import bass_call, bass_call_0, BassError, update_3d_system
 from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
 
 class Channel (object):
@@ -270,5 +270,8 @@ class Channel (object):
   """Retrieves all values of all attributes from this object and displays them in a dictionary whose keys are determined by this object's attribute_mapping"""
   res = {}
   for k in self.attribute_mapping:
-   res[k] = self.get_attribute(k)
+   try:
+    res[k] = self.get_attribute(k)
+   except BassError:
+    pass
   return res

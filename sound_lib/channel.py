@@ -10,13 +10,6 @@ class Channel (object):
   self.attribute_mapping = {
    'eaxmix': BASS_ATTRIB_EAXMIX,
    'frequency': BASS_ATTRIB_FREQ,
-   'music_amplify': BASS_ATTRIB_MUSIC_AMPLIFY,
-   'music_bpm': BASS_ATTRIB_MUSIC_BPM,
-   'music_pansep': BASS_ATTRIB_MUSIC_PANSEP,
-   'music_speed': BASS_ATTRIB_MUSIC_SPEED,
-   'music_vol_chan': BASS_ATTRIB_MUSIC_VOL_CHAN,
-   'music_vol_global': BASS_ATTRIB_MUSIC_VOL_GLOBAL,
-   'music_vol_inst': BASS_ATTRIB_MUSIC_VOL_INST,
    'pan': BASS_ATTRIB_PAN,
    'volume': BASS_ATTRIB_VOL
   }
@@ -272,3 +265,10 @@ class Channel (object):
   self.set_3d_position(**pos)
 
  z = property(fget=get_z, fset=set_z)
+
+ def get_attributes(self):
+  """Retrieves all values of all attributes from this object and displays them in a dictionary whose keys are determined by this object's attribute_mapping"""
+  res = {}
+  for k in self.attribute_mapping:
+   res[k] = self.get_attribute(k)
+  return res

@@ -21,6 +21,14 @@ class Tempo(BaseStream):
  def tempo(self, val):
   self.set_attribute(pybass_fx.BASS_ATTRIB_TEMPO, val)
 
+ @property
+ def pitch(self):
+  return self.get_attribute(pybass_fx.BASS_ATTRIB_TEMPO_PITCH)
+
+ @pitch.setter
+ def pitch(self, val):
+  self.set_attribute(pybass_fx.BASS_ATTRIB_TEMPO_PITCH, val)
+
  @staticmethod
  def flags_for(loop=False, software=False, three_d=False, sample_fx=False, autofree=False, decode=False, free_source=False):
   flags = 0

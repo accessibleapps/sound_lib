@@ -14,7 +14,7 @@ EAX_ENVIRONMENTS = {
  'cave': EAX_ENVIRONMENT_CAVE,
  'arena': EAX_ENVIRONMENT_ARENA,
  'hanger': EAX_ENVIRONMENT_HANGAR,
-  'carpeted_hallway': EAX_ENVIRONMENT_CARPETEDHALLWAY,
+ 'carpeted_hallway': EAX_ENVIRONMENT_CARPETEDHALLWAY,
  'hallway':  EAX_ENVIRONMENT_HALLWAY,
  'stone_corridor': EAX_ENVIRONMENT_STONECORRIDOR,
  'alley': EAX_ENVIRONMENT_ALLEY,
@@ -58,6 +58,7 @@ def bass_call_0(function, *args):
  return res
 
 def update_3d_system(func):
+ """Decorator to automatically update the 3d system after a function call."""
  def update_3d_system_wrapper(*args, **kwargs):
   val = func(*args, **kwargs)
   bass_call( BASS_Apply3D)

@@ -2,25 +2,29 @@ from external.pybass import *
 from main import bass_call, bass_call_0, update_3d_system
 from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
 
-ATTRIBUTE_MAPPING = {
- 'eaxmix': BASS_ATTRIB_EAXMIX,
- 'frequency': BASS_ATTRIB_FREQ,
- 'music_amplify': BASS_ATTRIB_MUSIC_AMPLIFY,
- 'music_bpm': BASS_ATTRIB_MUSIC_BPM,
- 'music_pansep': BASS_ATTRIB_MUSIC_PANSEP,
- 'music_speed': BASS_ATTRIB_MUSIC_SPEED,
- 'music_vol_chan': BASS_ATTRIB_MUSIC_VOL_CHAN,
- 'music_vol_global': BASS_ATTRIB_MUSIC_VOL_GLOBAL,
- 'music_vol_inst': BASS_ATTRIB_MUSIC_VOL_INST,
- 'pan': BASS_ATTRIB_PAN,
- 'volume': BASS_ATTRIB_VOL
-}
-
 class Channel (object):
  """A "channel" can be a sample playback channel (HCHANNEL), a sample stream (HSTREAM), a MOD music (HMUSIC), or a recording (HRECORD). Each "Channel" function can be used with one or more of these channel types."""
 
+ ATTRIBUTE_MAPPING = {
+  'eaxmix': BASS_ATTRIB_EAXMIX,
+  'frequency': BASS_ATTRIB_FREQ,
+  'music_amplify': BASS_ATTRIB_MUSIC_AMPLIFY,
+  'music_bpm': BASS_ATTRIB_MUSIC_BPM,
+  'music_pansep': BASS_ATTRIB_MUSIC_PANSEP,
+  'music_speed': BASS_ATTRIB_MUSIC_SPEED,
+  'music_vol_chan': BASS_ATTRIB_MUSIC_VOL_CHAN,
+  'music_vol_global': BASS_ATTRIB_MUSIC_VOL_GLOBAL,
+  'music_vol_inst': BASS_ATTRIB_MUSIC_VOL_INST,
+  'pan': BASS_ATTRIB_PAN,
+  'volume': BASS_ATTRIB_VOL
+ }
+
  def __init__ (self, handle):
   self.handle = handle
+
+ @classmethod
+ def add_attributes_to_mapping(cls, *attrs):
+  cls.ATTRIBUTE_MAPPING.update(*attrs)
 
  def play (self, restart=False):
   """Starts (or resumes) playback of a sample, stream, MOD music, or recording."""
@@ -103,16 +107,22 @@ class Channel (object):
  def get_attribute(self, attribute):
   """Retrieves the value of a channel's attribute."""
   value = pointer(c_float())
+  if attribute in self.ATTRIBUTE_MAPPING:
+   attribute = self.ATTRIBUTE_MAPPING[attribute]
   bass_call(BASS_ChannelGetAttribute, self.handle, attribute, value)
   return value.contents.value
 
  def set_attribute(self, attribute, value):
   """Sets the value of a channel's attribute."""
+  if attribute in self.ATTRIBUTE_MAPPING:
+   attribute = self.ATTRIBUTE_MAPPING[attribute]
   return bass_call(BASS_ChannelSetAttribute, self.handle, attribute, value)
 
  def slide_attribute(self, attribute, value, time):
   """Slides a channel's attribute from its current value to a new value."""
-  return bass_call(BASS_ChannelSlideAttribute, self.handle, ATTRIBUTE_MAPPING[attribute], value, time*1000)
+  if attribute in self.ATTRIBUTE_MAPPING:
+   attribute = self.ATTRIBUTE_MAPPING[attribute]
+  return bass_call(BASS_ChannelSlideAttribute, self.handle, attribute, value, time*1000)
 
  def is_sliding (self, attribute=None):
   """Checks if an attribute (or any attribute) of a sample, stream, or MOD music is sliding."""

@@ -54,7 +54,7 @@ class FileStream(BaseStream):
   self.file = file
   stream_creator = BASS_StreamCreateFile
   for k in FILETYPE_HANDLERS:
-   if file.lower().endswith(k):
+   if hasattr(file, 'lower') and file.lower().endswith(k):
     stream_creator = FILETYPE_HANDLERS[k]
     break
   handle = bass_call(stream_creator, mem, file, offset, length, flags)

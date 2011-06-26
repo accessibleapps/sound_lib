@@ -8,6 +8,7 @@ class Tempo(BaseStream):
  
  def __init__(self, channel, flags=0, loop=False, software=False, three_d=False, sample_fx=False, autofree=False, decode=False, free_source=False):
   flags = flags | self.flags_for(loop=False, software=False, three_d=False, sample_fx=False, autofree=False, decode=False, free_source=False)
+  self.channel = channel
   if isinstance(channel, Channel):
    channel = channel.handle
   handle = bass_call(pybass_fx.BASS_FX_TempoCreate, channel, flags)
@@ -48,3 +49,11 @@ class Tempo(BaseStream):
   self.flag_mapping.update({
    'free_source': pybass_fx.BASS_FX_FREESOURCE,
   })
+
+ def get_source(self):
+  source = pybass_fx.BASS_FX_TempoGetSource(self.handle)
+  if source == self.channel.handle:
+   source = self.channel
+  return source
+
+ source = property(fget=get_source)

@@ -33,6 +33,6 @@ class I3DL2Reverb(SoundEffect):
  effect_type = pybass.BASS_FX_DX8_I3DL2REVERB
  struct = pybass.BASS_DX8_I3DL2REVERB
 
-class Parameq(SoundEffect):
+class ParamEq(SoundEffect):
  effect_type = pybass.BASS_FX_DX8_PARAMEQ
  struct = pybass.BASS_DX8_PARAMEQ

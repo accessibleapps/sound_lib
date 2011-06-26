@@ -84,14 +84,14 @@ BASS_BFX_CHAN8 = 128
 
 #Echo
 class BASS_BFX_ECHO(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fLevel', ctypes.c_float), #[0....1....n] linear
   ('lDelay', ctypes.c_int), #[1200..30000]
  ]
 
 #Flanger
 class BASS_BFX_FLANGER(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fWetDry', ctypes.c_float), #[0....1....n] linear
   ('fSpeed', ctypes.c_float), #[0......0.09]
   ('lChannel', ctypes.c_int), #BASS_BFX_CHANxxx flag/s
@@ -99,14 +99,14 @@ class BASS_BFX_FLANGER(ctypes.Structure):
 
 #volume
 class BASS_BFX_VOLUME(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('lChannel', ctypes.c_int), #BASS_BFX_CHANxxx flag/s or 0 for global volume control
   ('fVolume', ctypes.c_float), #[0....1....n] linear
  ]
 
 #Peaking Equalizer
 class BASS_BFX_PEAKEQ(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('lBand', ctypes.c_int), #[0...............n] more bands means more memory & cpu usage
   ('fBandwidth', ctypes.c_float), #[0.1...........<10] in octaves - fQ is not in use (Bandwidth has a priority over fQ)
   ('fQ', ctypes.c_float), #[0...............1] the EE kinda definition (linear) (if Bandwidth is not in use)
@@ -117,14 +117,14 @@ class BASS_BFX_PEAKEQ(ctypes.Structure):
 
 #Reverb
 class BASS_BFX_REVERB(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fLevel', ctypes.c_float), #[0....1....n] linear
   ('lDelay', ctypes.c_int), #[1200..10000]
  ]
 
 #Low Pass Filter
 class BASS_BFX_LPF(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fResonance', ctypes.c_float), #[0.01...........10]
   ('fCutOffFreq', ctypes.c_float), #[1Hz...info.freq/2] cutoff frequency
   ('lChannel', ctypes.c_int), #BASS_BFX_CHANxxx flag/s
@@ -132,13 +132,13 @@ class BASS_BFX_LPF(ctypes.Structure):
 
 #Swap, remap and mix
 class BASS_BFX_MIX(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('lChannel', ctypes.c_int), #an array of channels to mix using BASS_BFX_CHANxxx flag/s (lChannel[0] is left channel...)
  ]
 
 #Dynamic Amplification
 class BASS_BFX_DAMP(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fTarget', ctypes.c_float), #target volume level						[0<......1] linear
   ('fQuiet', ctypes.c_float), #quiet  volume level						[0.......1] linear
   ('fRate', ctypes.c_float), #amp adjustment rate						[0.......1] linear
@@ -149,7 +149,7 @@ class BASS_BFX_DAMP(ctypes.Structure):
 
 #Auto WAH
 class BASS_BFX_AUTOWAH(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fDryMix', ctypes.c_float), #dry (unaffected) signal mix				[-2......2]
   ('fWetMix', ctypes.c_float), #wet (affected) signal mix				[-2......2]
   ('fFeedback', ctypes.c_float), #feedback									[-1......1]
@@ -161,7 +161,7 @@ class BASS_BFX_AUTOWAH(ctypes.Structure):
 
 #Echo 2
 class BASS_BFX_ECHO2(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fDryMix', ctypes.c_float), #dry (unaffected) signal mix				[-2......2]
   ('fWetMix', ctypes.c_float), #wet (affected) signal mix				[-2......2]
   ('fFeedback', ctypes.c_float), #feedback									[-1......1]
@@ -171,7 +171,7 @@ class BASS_BFX_ECHO2(ctypes.Structure):
 
 #Phaser
 class BASS_BFX_PHASER(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fDryMix', ctypes.c_float), #dry (unaffected) signal mix				[-2......2]
   ('fWetMix', ctypes.c_float), #wet (affected) signal mix				[-2......2]
   ('fFeedback', ctypes.c_float), #feedback									[-1......1]
@@ -183,7 +183,7 @@ class BASS_BFX_PHASER(ctypes.Structure):
 
 #Echo 3
 class BASS_BFX_ECHO3(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fDryMix', ctypes.c_float), #dry (unaffected) signal mix				[-2......2]
   ('fWetMix', ctypes.c_float), #wet (affected) signal mix				[-2......2]
   ('fDelay', ctypes.c_float), #delay sec								[0<......n]
@@ -192,7 +192,7 @@ class BASS_BFX_ECHO3(ctypes.Structure):
 
 #Chorus
 class BASS_BFX_CHORUS(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fDryMix', ctypes.c_float), #dry (unaffected) signal mix				[-2......2]
   ('fWetMix', ctypes.c_float), #wet (affected) signal mix				[-2......2]
   ('fFeedback', ctypes.c_float), #feedback									[-1......1]
@@ -204,7 +204,7 @@ class BASS_BFX_CHORUS(ctypes.Structure):
 
 #All Pass Filter
 class BASS_BFX_APF(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fGain', ctypes.c_float), #reverberation time						[-1=<..<=1]
   ('fDelay', ctypes.c_float), #delay sec								[0<....<=n]
   ('lChannel', ctypes.c_int), #BASS_BFX_CHANxxx flag/s
@@ -212,7 +212,7 @@ class BASS_BFX_APF(ctypes.Structure):
 
 #Compressor
 class BASS_BFX_COMPRESSOR(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fThreshold', ctypes.c_float), #compressor threshold						[0<=...<=1]
   ('fAttacktime', ctypes.c_float), #attack time ms							[0<.<=1000]
   ('fReleasetime', ctypes.c_float), #release time ms							[0<.<=5000]
@@ -221,7 +221,7 @@ class BASS_BFX_COMPRESSOR(ctypes.Structure):
 
 #Distortion
 class BASS_BFX_DISTORTION(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fDrive', ctypes.c_float), #distortion drive							[0<=...<=5]
   ('fDryMix', ctypes.c_float), #dry (unaffected) signal mix				[-5<=..<=5]
   ('fWetMix', ctypes.c_float), #wet (affected) signal mix				[-5<=..<=5]
@@ -232,7 +232,7 @@ class BASS_BFX_DISTORTION(ctypes.Structure):
 
 #Compressor 2
 class BASS_BFX_COMPRESSOR2(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('fGain', ctypes.c_float), #output gain of signal after compression	[-60....60] in dB
   ('fThreshold', ctypes.c_float), #point at which compression begins		[-60.....0] in dB
   ('fRatio', ctypes.c_float), #compression ratio						[1.......n]
@@ -242,14 +242,14 @@ class BASS_BFX_COMPRESSOR2(ctypes.Structure):
  ]
 
 class BASS_BFX_ENV_NODE(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('pos', ctypes.c_long), #node position in seconds (1st envelope node must be at position 0)
   ('val', ctypes.c_float), #node value
  ]
 
 #Volume envelope
 class BASS_BFX_VOLUME_ENV(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('lChannel', ctypes.c_int), #BASS_BFX_CHANxxx flag/s
   ('lNodeCount', ctypes.c_int), #number of nodes
   ('pNodes', BASS_BFX_ENV_NODE), #the nodes
@@ -259,7 +259,7 @@ class BASS_BFX_VOLUME_ENV(ctypes.Structure):
 #BiQuad Filters
 
 class BASS_BFX_BQF(ctypes.Structure):
- fields = [
+ _fields_ = [
   ('lFilter', ctypes.c_int), #BASS_BFX_BQF_xxx filter types
   ('fCenter', ctypes.c_float), #[1Hz..<info.freq/2] Cutoff (central) frequency in Hz
   ('fGain', ctypes.c_float), #[-15dB...0...+15dB] Used only for PEAKINGEQ and Shelving filters in dB

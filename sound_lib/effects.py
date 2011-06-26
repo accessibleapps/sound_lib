@@ -43,23 +43,8 @@ class Tempo(BaseStream):
  @tempo_freq.setter
  def tempo_freq(self, val):
   self.set_attribute('tempo_freq', val)
-
-
- @staticmethod
- def flags_for(loop=False, software=False, three_d=False, sample_fx=False, autofree=False, decode=False, free_source=False):
-  flags = 0
-  if loop:
-   flags |= pybass.BASS_SAMPLE_LOOP
-  if software:
-   flags |= pybass.BASS_SAMPLE_SOFTWARE
-  if three_d:
-   flags |= pybass.BASS_SAMPLE_3D
-  if sample_fx:
-   flags |= pybass.BASS_SAMPLE_FX
-  if autofree:
-   flags |= pybass.BASS_STREAM_AUTOFREE
-  if decode:
-   flags |= BASS_STREAM_DECODE
-  if free_source:
-   flags |= pybass_fx.BASS_FX_FREESOURCE
-  return flags
+ def setup_flag_mapping(self):
+  super(Tempo, self).setup_flag_mapping()
+  self.flag_mapping.update({
+   'free_source': pybass_fx.BASS_FX_FREESOURCE,
+  })

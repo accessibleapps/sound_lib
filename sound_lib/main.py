@@ -66,3 +66,23 @@ def update_3d_system(func):
  update_wrapper(update_3d_system_wrapper, func)
  return update_3d_system_wrapper
 
+class FlagObject(object):
+ """An object which translates bass flags into human-readable/usable items"""
+
+ def flags_for(self, **flags):
+  res = 0
+  for k, v in flags.iteritems():
+   if v:
+    res |= self.flag_mapping[k]
+  return res
+
+ def setup_flag_mapping(self):
+  self.flag_mapping = {
+   'loop': BASS_SAMPLE_LOOP,
+   'autofree': BASS_STREAM_AUTOFREE,
+   'mono': BASS_SAMPLE_MONO,
+   'software': BASS_SAMPLE_SOFTWARE,
+   'three_d': BASS_SAMPLE_3D,
+   'fx': BASS_SAMPLE_FX,
+   'decode': BASS_STREAM_DECODE,
+  }

@@ -114,7 +114,7 @@ BASS_Encode_Stop = func_type(ctypes.c_byte, ctypes.c_ulong)(('BASS_Encode_Stop',
 BASS_Encode_StopEx = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_byte)
 
 #BOOL BASSENCDEF(BASS_Encode_SetPaused)(DWORD handle, BOOL paused);
-BASS_Encode_SetPaused = func_type(ctypes.c_byte, ctypes.c_byte)(('BASS_Encode_SetPaused', bassenc_module))
+BASS_Encode_SetPaused = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_byte)(('BASS_Encode_SetPaused', bassenc_module))
 
 #BOOL BASSENCDEF(BASS_Encode_Write)(DWORD handle, const void *buffer, DWORD length);
 BASS_Encode_Write = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong)(('BASS_Encode_Write', bassenc_module))

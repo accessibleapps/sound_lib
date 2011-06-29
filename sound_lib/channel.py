@@ -1,8 +1,8 @@
 from external.pybass import *
-from main import bass_call, bass_call_0, BassError, update_3d_system
+from main import bass_call, bass_call_0, BassError, update_3d_system, FlagObject
 from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
 
-class Channel (object):
+class Channel (FlagObject):
  """A "channel" can be a sample playback channel (HCHANNEL), a sample stream (HSTREAM), a MOD music (HMUSIC), or a recording (HRECORD). Each "Channel" function can be used with one or more of these channel types."""
 
  def __init__ (self, handle):

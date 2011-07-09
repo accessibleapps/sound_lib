@@ -22,6 +22,8 @@ setup(
    "lib/bass_fx/*",
    "lib/bassenc/*",
    "lib/bassflac/*",
+   "lib/bassaac/*",
+   "lib/basswma/*",
   ],
  },
  classifiers = [

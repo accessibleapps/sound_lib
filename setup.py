@@ -4,7 +4,7 @@ import sys
 
 __name__ = 'sound_lib'
 __author__ = 'Christopher Toth'
-__version__ = '0.6.5'
+__version__ = '0.6.6'
 
 setup(
  name = __name__,
@@ -12,7 +12,7 @@ setup(
  author_email = 'q@qwitter-client.net',
  version = __version__,
  url = 'http://www.qwitter-client.net',
- description = 'Pythonic wrapper to the Bass sound library',
+ description = 'Pythonic wrapper to the Bass sound library and various add-ons',
  #long_description = open('README.txt').read(),
  package_dir = {'sound_lib':'sound_lib'},
  packages = find_packages(),
@@ -32,6 +32,6 @@ setup(
   #'Operating System :: Microsoft :: Windows',
   'Programming Language :: Python',
   'License :: OSI Approved :: MIT License',
-'Topic :: Software Development :: Libraries'
+  'Topic :: Software Development :: Libraries'
 ],
 )

@@ -44,6 +44,7 @@ class Tempo(BaseStream):
  @tempo_freq.setter
  def tempo_freq(self, val):
   self.set_attribute('tempo_freq', val)
+
  def setup_flag_mapping(self):
   super(Tempo, self).setup_flag_mapping()
   self.flag_mapping.update({
@@ -57,3 +58,8 @@ class Tempo(BaseStream):
   return source
 
  source = property(fget=get_source)
+
+ def get_rate_ratio(self):
+  return bass_call(pybass_fx.BASS_FX_TempoGetRateRatio, self.handle)
+
+ rate_ratio = property(fget=get_rate_ratio)

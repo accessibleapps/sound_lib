@@ -338,3 +338,47 @@ BASS_FX_BPM_MULT2 = 2 #if in use, then will auto multiply bpm by 2 (if BPM < min
  BASS_FX_BPM_TRAN_2PERCENT, #BPM value to Percents
  BASS_FX_BPM_TRAN_PERCENT2	, #Percents to BPM value
 ) = xrange(5)
+
+#typedef void (CALLBACK BPMPROCESSPROC)(DWORD chan, float percent);
+BPMPROCESSPROC = func_type(None, ctypes.c_float)
+
+#typedef void (CALLBACK BPMPROC)(DWORD chan, float bpm, void *user);
+BPMPROC = func_type(None, ctypes.c_long, ctypes.c_float, ctypes.c_void_p)
+
+#float BASS_FXDEF(BASS_FX_BPM_DecodeGet)(DWORD chan, double startSec, double endSec, DWORD minMaxBPM, DWORD flags, BPMPROCESSPROC *proc);
+BASS_FX_BPM_DecodeGet = func_type(ctypes.c_float, ctypes.c_ulong, ctypes.c_double, ctypes.c_double, ctypes.c_ulong, ctypes.c_ulong, BPMPROCESSPROC)(('BASS_FX_BPM_DecodeGet', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_CallbackSet)(DWORD handle, BPMPROC *proc, double period, DWORD minMaxBPM, DWORD flags, void *user);
+BASS_FX_BPM_CallbackSet = func_type(ctypes.c_bool, ctypes.c_ulong, BPMPROC, ctypes.c_double, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p)(('BASS_FX_BPM_CallbackSet', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_CallbackReset)(DWORD handle);
+BASS_FX_BPM_CallbackReset = func_type(ctypes.c_bool, ctypes.c_ulong)(('BASS_FX_BPM_CallbackReset', bass_fx_module))
+
+#float BASS_FXDEF(BASS_FX_BPM_Translate)(DWORD handle, float val2tran, DWORD trans);
+BASS_FX_BPM_Translate = func_type(ctypes.c_float, ctypes.c_ulong, ctypes.c_float, ctypes.c_ulong)(('BASS_FX_BPM_Translate', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_Free)(DWORD handle);
+BASS_FX_BPM_Free = func_type(ctypes.c_bool, ctypes.c_ulong)(('BASS_FX_BPM_Free', bass_fx_module))
+
+""" Beat """
+
+#typedef void (CALLBACK BPMBEATPROC)(DWORD chan, double beatpos, void *user);
+BPMBEATPROC = func_type(None, ctypes.c_ulong, ctypes.c_double, ctypes.c_void_p)
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_BeatCallbackSet)(DWORD handle, BPMBEATPROC *proc, void *user);
+BASS_FX_BPM_BeatCallbackSet = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.c_void_p)(('BASS_FX_BPM_BeatCallbackSet', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_BeatCallbackReset)(DWORD handle);
+BASS_FX_BPM_BeatCallbackReset = func_type(ctypes.c_bool, ctypes.c_ulong)(('BASS_FX_BPM_BeatCallbackReset', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_BeatDecodeGet)(DWORD chan, double startSec, double endSec, DWORD flags, BPMBEATPROC *proc, void *user);
+BASS_FX_BPM_BeatDecodeGet = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.c_double, ctypes.c_double, ctypes.c_ulong, BPMBEATPROC, ctypes.c_void_p)(('BASS_FX_BPM_BeatDecodeGet', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_BeatSetParameters)(DWORD handle, float bandwidth, float centerfreq, float beat_rtime);
+BASS_FX_BPM_BeatSetParameters = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('BASS_FX_BPM_BeatSetParameters', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_BeatGetParameters)(DWORD handle, float *bandwidth, float *centerfreq, float *beat_rtime);
+BASS_FX_BPM_BeatGetParameters = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('BASS_FX_BPM_BeatGetParameters', bass_fx_module))
+
+#BOOL BASS_FXDEF(BASS_FX_BPM_BeatFree)(DWORD handle);
+BASS_FX_BPM_BeatFree = func_type(ctypes.c_bool, ctypes.c_ulong)(('BASS_FX_BPM_BeatFree', bass_fx_module))

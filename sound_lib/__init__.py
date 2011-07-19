@@ -12,7 +12,8 @@ import recording
 import stream
 
 def py2exe_datafiles():
- path = os.path.join(__path__[0], 'lib')
+ import sound_lib
+ path = os.path.join(sound_lib.__path__[0], 'lib')
  results = []
  for d in os.listdir(path):
   dest_dir = os.path.join('lib', d)

@@ -4,7 +4,7 @@ import sys
 
 __name__ = 'sound_lib'
 __author__ = 'Christopher Toth'
-__version__ = '0.6.6'
+__version__ = '0.6.7'
 
 setup(
  name = __name__,
@@ -23,6 +23,7 @@ setup(
    "lib/bassenc/*",
    "lib/bassflac/*",
    "lib/bassaac/*",
+   "lib/bassmix/*",
    "lib/basswma/*",
   ],
  },

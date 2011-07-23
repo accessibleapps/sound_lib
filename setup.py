@@ -27,7 +27,7 @@ setup(
    "lib/basswma/*",
   ],
  },
- requires = [
+ install_requires = [
   'platform_utils',
  ],
  classifiers = [

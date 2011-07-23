@@ -6,8 +6,7 @@ import pybass
 from platform_utils import libloader, paths
 
 library_path = os.path.join(paths.module_path(), '..', 'lib', 'bass_fx')
-alt_path = os.path.join(paths.module_path(), 'lib', 'bass_fx')
-bass_fx_module = libloader.load_library('bass_fx', lib_path=[library_path, alt_path])
+bass_fx_module = libloader.load_library('bass_fx', lib_path=library_path)
 func_type = libloader.get_functype()
 
 

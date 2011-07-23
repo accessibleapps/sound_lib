@@ -31,8 +31,7 @@ BASS_FILEPROCS = pybass.BASS_FILEPROCS
 HWMENCODE = ctypes.c_ulong# WMA encoding handle
 
 library_path = os.path.join(paths.module_path(), '..', 'lib', 'basswma')
-alt_path = os.path.join(paths.module_path(), 'lib', 'basswma')
-basswma_module = libloader.load_library('basswma', lib_path=[library_path, alt_path])
+basswma_module = libloader.load_library('basswma', lib_path=library_path)
 func_type = libloader.get_functype()
 
 # Additional error codes returned by BASS_ErrorGetCode

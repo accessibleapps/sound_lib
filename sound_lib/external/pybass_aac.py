@@ -12,18 +12,17 @@ of Advanced Audio Coding and MPEG-4 streams (http://www.maresweb.de).
 '''
 
 import os, sys, ctypes, pybass
-from libloader import get_functype, load_library
-from module_path import module_path
+from platform_utils import libloader, paths
 
 QWORD = pybass.QWORD
 HSTREAM = pybass.HSTREAM
 DOWNLOADPROC = pybass.DOWNLOADPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
-library_path = os.path.join(module_path(), '..', 'lib', 'bassaac')
-alt_path = os.path.join(module_path(), 'lib', 'bassaac')
-bass_aac_module = load_library('bass_aac', lib_path=[library_path, alt_path])
-func_type = get_functype()
+library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassaac')
+alt_path = os.path.join(paths.module_path(), 'lib', 'bassaac')
+bass_aac_module = libloader.load_library('bass_aac', lib_path=[library_path, alt_path])
+func_type = libloader.get_functype()
 
 # Additional BASS_SetConfig options
 BASS_CONFIG_MP4_VIDEO = 0x10700 # play the audio from MP4 videos

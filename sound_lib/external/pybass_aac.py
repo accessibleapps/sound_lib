@@ -20,8 +20,7 @@ DOWNLOADPROC = pybass.DOWNLOADPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
 library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassaac')
-alt_path = os.path.join(paths.module_path(), 'lib', 'bassaac')
-bass_aac_module = libloader.load_library('bass_aac', lib_path=[library_path, alt_path])
+bass_aac_module = libloader.load_library('bass_aac', lib_path=library_path)
 func_type = libloader.get_functype()
 
 # Additional BASS_SetConfig options

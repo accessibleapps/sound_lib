@@ -20,8 +20,7 @@ DOWNLOADPROC = pybass.DOWNLOADPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
 library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassflac')
-alt_path = os.path.join(paths.module_path(), 'lib', 'bassflac')
-bassflac_module = libloader.load_library('bassflac', lib_path=[library_path, alt_path])
+bassflac_module = libloader.load_library('bassflac', lib_path=library_path)
 func_type = libloader.get_functype()
 
 # BASS_CHANNELINFO type

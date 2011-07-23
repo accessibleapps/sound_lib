@@ -21,8 +21,8 @@ can also be installed separately (WMFDIST.EXE is available from the BASS website
 '''
 
 import os, sys, ctypes, pybass
-from libloader import get_functype, load_library
-from module_path import module_path
+from platform_utils import libloader, paths
+
 
 QWORD = pybass.QWORD
 HSTREAM = pybass.HSTREAM
@@ -30,10 +30,10 @@ BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
 HWMENCODE = ctypes.c_ulong# WMA encoding handle
 
-library_path = os.path.join(module_path(), '..', 'lib', 'basswma')
-alt_path = os.path.join(module_path(), 'lib', 'basswma')
-basswma_module = load_library('basswma', lib_path=[library_path, alt_path])
-func_type = get_functype()
+library_path = os.path.join(paths.module_path(), '..', 'lib', 'basswma')
+alt_path = os.path.join(paths.module_path(), 'lib', 'basswma')
+basswma_module = libloader.load_library('basswma', lib_path=[library_path, alt_path])
+func_type = libloader.get_functype()
 
 # Additional error codes returned by BASS_ErrorGetCode
 BASS_ERROR_WMA_LICENSE = 1000# the file is protected

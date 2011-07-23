@@ -4,13 +4,12 @@ import ctypes
 import os
 import platform
 import pybass
-from module_path import module_path
-from libloader import get_functype, load_library
+from platform_utils import libloader, paths
 
-library_path = os.path.join(module_path(), '..', 'lib', 'bassenc')
-alt_path = os.path.join(module_path(), 'lib', 'bassenc')
-bassenc_module = load_library('bassenc', lib_path=[library_path, alt_path])
-func_type = get_functype()
+library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassenc')
+alt_path = os.path.join(paths.module_path(), 'lib', 'bassenc')
+bassenc_module = libloader.load_library('bassenc', lib_path=[library_path, alt_path])
+func_type = libloader.get_functype()
 
 HENCODE = ctypes.c_ulong #encoder handle
 

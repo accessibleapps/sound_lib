@@ -4,7 +4,7 @@ import sys
 
 __name__ = 'sound_lib'
 __author__ = 'Christopher Toth'
-__version__ = '0.6.7'
+__version__ = '0.6.8'
 
 setup(
  name = __name__,
@@ -27,6 +27,9 @@ setup(
    "lib/basswma/*",
   ],
  },
+ requires = [
+  'platform_utils',
+ ],
  classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Developers',
@@ -34,5 +37,5 @@ setup(
   'Programming Language :: Python',
   'License :: OSI Approved :: MIT License',
   'Topic :: Software Development :: Libraries'
-],
+ ],
 )

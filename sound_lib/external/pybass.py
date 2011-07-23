@@ -54,13 +54,12 @@ Main Features
 '''
 
 import os, sys, ctypes, platform
-from module_path import module_path
-from libloader import get_functype, load_library
+from platform_utils import libloader, paths
 
-library_path = os.path.join(module_path(), '..', 'lib', 'bass')
-alt_path = os.path.join(module_path(), 'lib', 'bass')
-bass_module = load_library('bass', lib_path=[library_path, alt_path])
-func_type = get_functype()
+library_path = os.path.join(paths.module_path(), '..', 'lib', 'bass')
+alt_path = os.path.join(paths.module_path(), 'lib', 'bass')
+bass_module = libloader.load_library('bass', lib_path=[library_path, alt_path])
+func_type = libloader.get_functype()
 
 
 QWORD = ctypes.c_int64

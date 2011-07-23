@@ -12,18 +12,17 @@ enabling the playing of FLAC (Free Lossless Audio Codec) encoded files.
 '''
 
 import os, sys, ctypes, pybass
-from libloader import get_functype, load_library
-from module_path import module_path
+from platform_utils import libloader, paths
 
 QWORD = pybass.QWORD
 HSTREAM = pybass.HSTREAM
 DOWNLOADPROC = pybass.DOWNLOADPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
-library_path = os.path.join(module_path(), '..', 'lib', 'bassflac')
-alt_path = os.path.join(module_path(), 'lib', 'bassflac')
-bassflac_module = load_library('bassflac', lib_path=[library_path, alt_path])
-func_type = get_functype()
+library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassflac')
+alt_path = os.path.join(paths.module_path(), 'lib', 'bassflac')
+bassflac_module = libloader.load_library('bassflac', lib_path=[library_path, alt_path])
+func_type = libloader.get_functype()
 
 # BASS_CHANNELINFO type
 BASS_CTYPE_STREAM_FLAC = 0x10900

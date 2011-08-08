@@ -24,8 +24,10 @@ BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
 from platform_utils import libloader, paths
 
-library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassmix')
-bassmix_module = libloader.load_library('bassmix', lib_path=library_path)
+x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
+x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
+
+bassmix_module = libloader.load_library('bassmix', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
 	
 # additional BASS_SetConfig option

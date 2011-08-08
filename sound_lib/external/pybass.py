@@ -56,9 +56,10 @@ Main Features
 import os, sys, ctypes, platform
 from platform_utils import libloader, paths
 
-library_path = os.path.join(paths.module_path(), '..', 'lib', 'bass')
-#alt_path = os.path.join(paths.module_path(), 'lib', 'bass')
-bass_module = libloader.load_library('bass', lib_path=library_path)
+x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
+x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
+
+bass_module = libloader.load_library('bass', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
 
 

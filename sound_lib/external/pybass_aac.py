@@ -19,8 +19,10 @@ HSTREAM = pybass.HSTREAM
 DOWNLOADPROC = pybass.DOWNLOADPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
-library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassaac')
-bass_aac_module = libloader.load_library('bass_aac', lib_path=library_path)
+x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
+x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
+
+bass_aac_module = libloader.load_library('bass_aac', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
 
 # Additional BASS_SetConfig options

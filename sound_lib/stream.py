@@ -3,13 +3,11 @@ from main import bass_call
 from external.pybass import *
 from external.pybass_aac import *
 from external.pybassflac import *
-from external.pybasswma import *
 
 FILETYPE_HANDLERS = {
  '.aac': BASS_AAC_StreamCreateFile,
  '.flac': BASS_FLAC_StreamCreateFile,
- '.wma': BASS_WMA_StreamCreateFile,
-}
+ 
 
 class BaseStream(Channel):
 

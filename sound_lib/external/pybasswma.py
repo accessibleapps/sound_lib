@@ -35,6 +35,9 @@ x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
 
 basswma_module = libloader.load_library('basswma', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
+#Register the plugin with the Bass plugin system.
+pybass.BASS_PluginLoad(libloader.find_library_path('basswma', x86_path=x86_path, x64_path=x64_path), 0)
+
 
 # Additional error codes returned by BASS_ErrorGetCode
 BASS_ERROR_WMA_LICENSE = 1000# the file is protected

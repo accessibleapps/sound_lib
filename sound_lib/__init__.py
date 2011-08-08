@@ -1,6 +1,7 @@
 from glob import glob
 import os
 from main import BassError
+import external #Trigger plugin loads
 
 import channel
 import effects

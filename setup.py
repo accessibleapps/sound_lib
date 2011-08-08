@@ -18,13 +18,8 @@ setup(
  packages = find_packages(),
  package_data = {"sound_lib":
   [
-   "lib/bass/*",
-   "lib/bass_fx/*",
-   "lib/bassenc/*",
-   "lib/bassflac/*",
-   "lib/bassaac/*",
-   "lib/bassmix/*",
-   "lib/basswma/*",
+   "lib/x86/*",
+   "lib/x64/*",
   ],
  },
  install_requires = [

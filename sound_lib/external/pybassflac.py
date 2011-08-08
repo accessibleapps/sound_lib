@@ -22,7 +22,7 @@ BASS_FILEPROCS = pybass.BASS_FILEPROCS
 x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
 x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
 
-bassflac_module = libloader.load_library('bassflac', x86_path=x86_path, x64_path=x64_path, mode=ctypes.RTLD_GLOBAL)
+bassflac_module = libloader.load_library('bassflac', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
 #Register the plugin with the Bass plugin system.
 pybass.BASS_PluginLoad(libloader.find_library_path('bassflac', x86_path=x86_path, x64_path=x64_path), 0)

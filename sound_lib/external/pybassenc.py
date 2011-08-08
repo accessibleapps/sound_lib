@@ -6,8 +6,10 @@ import platform
 import pybass
 from platform_utils import libloader, paths
 
-library_path = os.path.join(paths.module_path(), '..', 'lib', 'bassenc')
-bassenc_module = libloader.load_library('bassenc', lib_path=library_path)
+x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
+x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
+
+bassenc_module = libloader.load_library('bassenc', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
 
 HENCODE = ctypes.c_ulong #encoder handle

@@ -7,7 +7,7 @@ from external.pybassflac import *
 FILETYPE_HANDLERS = {
  '.aac': BASS_AAC_StreamCreateFile,
  '.flac': BASS_FLAC_StreamCreateFile,
- 
+}
 
 class BaseStream(Channel):
 

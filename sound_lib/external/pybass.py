@@ -59,7 +59,7 @@ from platform_utils import libloader, paths
 x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
 x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
 
-bass_module = libloader.load_library('bass', x86_path=x86_path, x64_path=x64_path)
+bass_module = libloader.load_library('bass', x86_path=x86_path, x64_path=x64_path, mode=ctypes.RTLD_GLOBAL)
 func_type = libloader.get_functype()
 
 

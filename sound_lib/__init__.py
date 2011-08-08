@@ -1,6 +1,7 @@
 from glob import glob
 import os
 from main import BassError
+from external import pybass #Linux workaround.
 
 import channel
 import effects

@@ -28,7 +28,6 @@ setup(
  classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Developers',
-  #'Operating System :: Microsoft :: Windows',
   'Programming Language :: Python',
   'License :: OSI Approved :: MIT License',
   'Topic :: Software Development :: Libraries'

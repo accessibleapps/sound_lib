@@ -15,8 +15,8 @@ func_type = libloader.get_functype()
 HENCODE = ctypes.c_ulong #encoder handle
 
 #Additional error codes returned by BASS_ErrorGetCode
-BASS_ERROR_ACM_CANCEL = 2000
-BASS_ERROR_CAST_DENIED = 2100
+BASS_ERROR_ACM_CANCEL = 2000 #ACM codec selection cancelled
+BASS_ERROR_CAST_DENIED = 2100 #access denied (invalid password)
 
 #Additional BASS_SetConfig options
 BASS_CONFIG_ENCODE_PRIORITY = 0x10300

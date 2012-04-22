@@ -163,7 +163,8 @@ BASS_Encode_CastGetStats = func_type(ctypes.c_char_p, HENCODE, ctypes.c_ulong, c
 #Local audio server
 
 #DWORD BASSENCDEF(BASS_Encode_ServerInit)(HENCODE handle, const char *port, DWORD buffer, DWORD burst, DWORD flags, ENCODECLIENTPROC *proc, void *user);
-BASS_Encode_ServerInit = func_type(ctypes.c_ulong, HENCODE, ctypes.c_char_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ENCODECLIENTPROC, ctypes.c_void_p)
+BASS_Encode_ServerInit = func_type(ctypes.c_ulong, HENCODE, ctypes.c_char_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ENCODECLIENTPROC, ctypes.c_void_p)(('BASS_Encode_ServerInit', bassenc_module))
 
 #BOOL BASSENCDEF(BASS_Encode_ServerKick)(HENCODE handle, const char *client);
-BASS_Encode_ServerKick = func_type(ctypes.c_byte, HENCODE, ctypes.c_char_p)
+BASS_Encode_ServerKick = func_type(ctypes.c_byte, HENCODE, ctypes.c_char_p)(('BASS_Encode_ServerKick', bassenc_module))
+

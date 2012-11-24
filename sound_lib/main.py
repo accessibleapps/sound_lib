@@ -1,5 +1,4 @@
 from external.pybass import *
-from ctypes import *
 from functools import update_wrapper
 
 EAX_ENVIRONMENTS = {

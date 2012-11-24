@@ -25,6 +25,9 @@ setup(
  install_requires = [
   'platform_utils',
  ],
+ dependency_links = [
+  'http://hg.q-continuum.net/platform_utils/archive/tip.tar.gz#platform_utils#egg=platform_utils',
+ ],
  classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Developers',

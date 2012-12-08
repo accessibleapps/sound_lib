@@ -42,10 +42,12 @@ class FileStream(BaseStream):
 
 class URLStream(BaseStream):
 
- def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None):
+ def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None, three_d=False, autofree=False, decode=False):
   self._downloadproc = downloadproc or self._callback #we *must hold on to this
   self.downloadproc = DOWNLOADPROC(self._downloadproc)
   self.url = url
+  self.setup_flag_mapping()
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
   handle = bass_call(BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user)
   super(URLStream, self).__init__(handle)
 

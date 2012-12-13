@@ -13,6 +13,9 @@ class BaseStream(Channel):
  def free(self):
   return bass_call(BASS_StreamFree, self.handle)
 
+ def get_file_position(self, mode):
+  return bass_call(BASS_StreamGetFilePosition, self.handle, mode)
+
 class Stream(BaseStream):
 
  def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None, three_d=False, autofree=False, decode=False):

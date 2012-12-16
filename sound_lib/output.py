@@ -2,6 +2,7 @@ from functools import partial
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
 from external.pybass import *
+import config
 from main import bass_call, bass_call_0, EAX_ENVIRONMENTS, update_3d_system
 
 _getter = lambda func, key, obj: func(obj)[key]
@@ -15,6 +16,7 @@ class Output (object):
   except:
    pass
   self.init_device(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
+  self.config = config.BassConfig()
   self.proxy = None
 
  def init_device(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):

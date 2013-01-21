@@ -5,7 +5,6 @@ def find_datafiles():
  import os
  import sound_lib
  path = os.path.join(sound_lib.__path__[0], 'lib')
- results = []
  system = platform.system()
  if system == 'Windows':
   file_ext = '*.dll'
@@ -13,10 +12,10 @@ def find_datafiles():
   file_ext = '*.dylib'
  else:
   file_ext = '*.so'
-
- for d in os.listdir(path):
-  dest_dir = os.path.join('sound_lib', 'lib', d)
-
-  source = glob(os.path.join(path, d, file_ext))
-  results.append((dest_dir, source))
- return results
+ if platform.architecture()[0] == '32bit':
+  arch = 'x86'
+ else:
+  arch = 'x64'
+ dest_dir = os.path.join('sound_lib', 'lib', arch)
+ source = glob(os.path.join(path, arch, file_ext))
+ return [(dest_dir, source)]

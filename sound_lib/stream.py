@@ -17,13 +17,6 @@ class BaseStream(Channel):
  def get_file_position(self, mode):
   return bass_call(BASS_StreamGetFilePosition, self.handle, mode)
 
-
- def setup_flag_mapping(self):
-  super(BaseStream, self).setup_flag_mapping()
-  self.flag_mapping.update({
-   'unicode': BASS_UNICODE
-  })
-
 class Stream(BaseStream):
 
  def __init__(self, freq=44100, chans=2, flags=0, proc=None, user=None, three_d=False, autofree=False, decode=False):
@@ -47,6 +40,12 @@ class FileStream(BaseStream):
   handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
   super(FileStream, self).__init__(handle)
 
+ def setup_flag_mapping(self):
+  super(FileStream, self).setup_flag_mapping()
+  self.flag_mapping.update({
+   'unicode': BASS_UNICODE
+  })
+
 class URLStream(BaseStream):
 
  def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None, three_d=False, autofree=False, decode=False):
@@ -54,7 +53,7 @@ class URLStream(BaseStream):
   self.downloadproc = DOWNLOADPROC(self._downloadproc)
   self.url = url
   self.setup_flag_mapping()
-  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode, unicode=True)
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
   handle = bass_call(BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user)
   super(URLStream, self).__init__(handle)
 

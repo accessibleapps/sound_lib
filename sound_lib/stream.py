@@ -1,3 +1,4 @@
+import platform
 from channel import Channel
 from main import bass_call
 from external.pybass import *
@@ -29,6 +30,8 @@ class FileStream(BaseStream):
 
  def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, mono=False, autofree=False, decode=False, unicode=True):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
+  if platform.system() == 'Darwin':
+   unicode = False
   self.setup_flag_mapping()
   flags = flags | self.flags_for(three_d=three_d, autofree=autofree, mono=mono, decode=decode, unicode=unicode)
   if unicode and isinstance(file, str):

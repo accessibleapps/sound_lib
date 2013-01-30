@@ -32,6 +32,8 @@ class FileStream(BaseStream):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
   if platform.system() == 'Darwin':
    unicode = False
+   if file is None:
+    file = file.encode('UTF-8')
   self.setup_flag_mapping()
   flags = flags | self.flags_for(three_d=three_d, autofree=autofree, mono=mono, decode=decode, unicode=unicode)
   if unicode and isinstance(file, str):

@@ -15,11 +15,31 @@ class Output (object):
    self.use_default_device()
   except:
    pass
+  self._device = device
+  self.frequency = frequency
+  self.flags = flags
+  self.window = window
+  self.clsid = clsid
   self.init_device(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
   self.config = config.BassConfig()
   self.proxy = None
 
- def init_device(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
+ def init_device(self, device=None, frequency=None, flags=None, window=None, clsid=None):
+  if device is None:
+   device = self._device
+  self._device = device
+  if frequency is None:
+   frequency = self.frequency
+  self.frequency = frequency
+  if flags is None:
+   flags = self.flags
+  self.flags = flags
+  if window is None:
+   window = self.window
+  self.window = window
+  if clsid is None:
+   clsid = self.clsid
+  self.clsid = clsid
   if platform.system() == 'Linux' and device == -1: #Bass wants default device set to 1 on linux
    device = 1
   bass_call(BASS_Init, device, frequency, flags, window, clsid)
@@ -37,6 +57,8 @@ class Output (object):
     return bass_call_0(BASS_GetDevice)
 
  def set_device(self, device):
+  #self.free()
+  self.init_device(device=device)
   return bass_call(BASS_SetDevice, device)
 
  device = property(get_device, set_device)
@@ -85,7 +107,20 @@ class Output (object):
    count += 1
   return result
 
+ def find_device_by_name(self, name):
+  return self.get_device_names().index(name) + 1
 
+ def find_default_device(self):
+  try:
+   return self.get_device_names().index('Default')+1
+  except:
+   return 1
+
+ def find_user_provided_device(self, device_name):
+  try:
+   return self.find_device_by_name(device_name)
+  except ValueError:
+   return self.find_default_device()
 
 class ThreeDOutput(Output):
 

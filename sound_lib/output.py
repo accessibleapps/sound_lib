@@ -57,7 +57,8 @@ class Output (object):
     return bass_call_0(BASS_GetDevice)
 
  def set_device(self, device):
-  #self.free()
+  if device == self.get_device():
+   return
   self.init_device(device=device)
   return bass_call(BASS_SetDevice, device)
 

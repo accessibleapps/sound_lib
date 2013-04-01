@@ -57,12 +57,13 @@ class Output (object):
     return bass_call_0(BASS_GetDevice)
 
  def set_device(self, device):
-  if device == self.get_device():
+  if device == self._device:
    return
+  self.free()
   self.init_device(device=device)
   return bass_call(BASS_SetDevice, device)
 
- device = property(get_device, set_device)
+ device = property(fget=get_device, fset=set_device)
 
  def get_volume (self):
   volume = BASS_GetConfig(BASS_CONFIG_GVOL_STREAM)
@@ -104,7 +105,9 @@ class Output (object):
   count = 1
   while BASS_GetDeviceInfo(count, ctypes.byref(info)):
    if info.flags & BASS_DEVICE_ENABLED:
-    result.append(info.name)
+    retrieved = info.name
+    retrieved = retrieved.replace('(', '').replace(')', '').strip()
+    result.append(retrieved)
    count += 1
   return result
 

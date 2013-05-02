@@ -3,7 +3,8 @@
 import ctypes
 import os
 import pybass
-from platform_utils import libloader, paths
+from platform_utils import paths
+import libloader
 
 x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
 x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')

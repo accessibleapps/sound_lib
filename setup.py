@@ -1,17 +1,13 @@
 from setuptools import setup, find_packages
 from glob import glob
-import sys
 
-__name__ = 'sound_lib'
-__author__ = 'Christopher Toth'
-__version__ = 0.71
+from sound_lib import __author__, __version__
 
 setup(
- name = __name__,
+ name = "sound_lib",
  author = __author__,
- author_email = 'q@qwitter-client.net',
+ author_email = 'q@q-continuum.net',
  version = __version__,
- url = 'http://www.qwitter-client.net',
  description = 'Pythonic wrapper to the Bass sound library and various add-ons',
  #long_description = open('README.txt').read(),
  package_dir = {'sound_lib':'sound_lib'},
@@ -23,6 +19,7 @@ setup(
   ],
  },
  install_requires = [
+  'libloader',
   'platform_utils',
  ],
  classifiers = [

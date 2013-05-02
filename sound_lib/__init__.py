@@ -1,8 +1,11 @@
-import platform
+
+__author__ = 'Christopher Toth'
+__version__ = 0.72
 
 def find_datafiles():
  from glob import glob
  import os
+ import platform
  import sound_lib
  path = os.path.join(sound_lib.__path__[0], 'lib')
  system = platform.system()

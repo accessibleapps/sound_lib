@@ -21,7 +21,8 @@ can also be installed separately (WMFDIST.EXE is available from the BASS website
 '''
 
 import os, sys, ctypes, pybass
-from platform_utils import libloader, paths
+from platform_utils import paths
+import libloader
 
 
 QWORD = pybass.QWORD

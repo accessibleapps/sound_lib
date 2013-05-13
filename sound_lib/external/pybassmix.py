@@ -22,11 +22,8 @@ DOWNLOADPROC = pybass.DOWNLOADPROC
 SYNCPROC = pybass.SYNCPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
-from platform_utils import paths
+from paths import x86_path, x64_path
 import libloader
-
-x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
-x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
 
 bassmix_module = libloader.load_library('bassmix', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()

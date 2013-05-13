@@ -13,11 +13,8 @@ using SF2 soundfonts to provide the sounds.
 '''
 
 import sys, ctypes, platform, os, pybass
-from platform_utils import paths
+from paths import x86_path, x64_path
 import libloader
-
-x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
-x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
 
 bassmidi_module = libloader.load_library('bassmidi', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()

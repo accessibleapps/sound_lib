@@ -4,11 +4,8 @@ import ctypes
 import os
 import platform
 import pybass
-from platform_utils import paths
+from paths import x86_path, x64_path
 import libloader
-
-x86_path = os.path.join(paths.module_path(), '..', 'lib', 'x86')
-x64_path = os.path.join(paths.module_path(), '..', 'lib', 'x64')
 
 bassenc_module = libloader.load_library('bassenc', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()

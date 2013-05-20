@@ -23,8 +23,8 @@ setup(
   'platform_utils',
  ],
  dependency_links = [
-  'http://hg.q-continuum.net/libloader/archive/tip.tar.gz#egg=libloader',
-  'http://hg.q-continuum.net/platform_utils/archive/tip.tar.gz#egg=platform_utils',
+  'http://hg.q-continuum.net/libloader/archive/tip.tar.gz#egg=libloader-dev',
+  'http://hg.q-continuum.net/platform_utils/archive/tip.tar.gz#egg=platform_utils-dev',
  ],
  classifiers = [
   'Development Status :: 4 - Beta',

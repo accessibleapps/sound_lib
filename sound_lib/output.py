@@ -118,7 +118,7 @@ class Output (object):
   try:
    return self.get_device_names().index('Default')+1
   except:
-   return 1
+   return -1
 
  def find_user_provided_device(self, device_name):
   try:

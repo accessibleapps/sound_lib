@@ -1,6 +1,6 @@
 
 __author__ = 'Christopher Toth'
-__version__ = 0.72
+__version__ = 0.73
 
 def find_datafiles():
  from glob import glob

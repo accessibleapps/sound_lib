@@ -72,6 +72,9 @@ class Channel (FlagObject):
 
  __len__ = get_length
 
+ def __nonzero__(self):
+  return True
+
  def get_device(self):
   """Retrieves the device that a channel is using."""
   return bass_call_0( BASS_ChannelGetDevice, self.handle)

@@ -94,6 +94,10 @@ class Channel (FlagObject):
   position = position or self.position
   return bass_call_0(BASS_ChannelBytes2Seconds, self.handle, position)
 
+ def length_in_seconds(self):
+  return self.bytes_to_seconds(self.get_length())
+
+
  def seconds_to_bytes(self, position):
   """Translates a time (seconds) position into bytes, based on a channel's format."""
   return bass_call_0(BASS_ChannelSeconds2Bytes, self.handle, position)

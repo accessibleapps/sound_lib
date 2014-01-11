@@ -3,7 +3,7 @@ import wave
 
 from external.pybass import *
 import config
-from main import bass_call
+from main import bass_call, bass_call_0
 
 class Input (object):
 
@@ -14,3 +14,49 @@ class Input (object):
  def free(self):
   """Frees all resources used by the recording device."""
   return bass_call(BASS_RecordFree)
+
+ def get_device(self):
+    return bass_call_0(BASS_RecordGetDevice)
+
+ def set_device(self, device):
+  if device == self._device:
+   return
+  self.free()
+  self.__init__(device=device)
+  return bass_call(BASS_RecordSetDevice, device)
+
+ device = property(fget=get_device, fset=set_device)
+
+ @staticmethod
+ def get_device_names():
+  """Convenience method that returns a list of device names that are considered
+ valid by bass.
+	
+  Parameters: none.
+  returns: list of devices, 0-indexed.
+  """
+  result = []
+  info = BASS_DEVICEINFO()
+  count = 0
+  while BASS_RecordGetDeviceInfo(count, ctypes.byref(info)):
+   if info.flags & BASS_DEVICE_ENABLED:
+    retrieved = info.name
+    retrieved = retrieved.replace('(', '').replace(')', '').strip()
+    result.append(retrieved)
+   count += 1
+  return result
+
+ def find_device_by_name(self, name):
+  return self.get_device_names().index(name) + 1
+
+ def find_default_device(self):
+  try:
+   return self.get_device_names().index('Default')+1
+  except:
+   return -1
+
+ def find_user_provided_device(self, device_name):
+  try:
+   return self.find_device_by_name(device_name)
+  except ValueError:
+   return self.find_default_device()

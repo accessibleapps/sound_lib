@@ -9,6 +9,7 @@ class Input (object):
 
  def __init__ (self, device=-1):
   bass_call(BASS_RecordInit, device)
+  self._device = device
   self.config = config.BassConfig()
 
  def free(self):
@@ -23,7 +24,6 @@ class Input (object):
    return
   self.free()
   self.__init__(device=device)
-  return bass_call(BASS_RecordSetDevice, device)
 
  device = property(fget=get_device, fset=set_device)
 
@@ -35,7 +35,7 @@ class Input (object):
   Parameters: none.
   returns: list of devices, 0-indexed.
   """
-  result = []
+  result = ['Default']
   info = BASS_DEVICEINFO()
   count = 0
   while BASS_RecordGetDeviceInfo(count, ctypes.byref(info)):
@@ -47,13 +47,10 @@ class Input (object):
   return result
 
  def find_device_by_name(self, name):
-  return self.get_device_names().index(name) + 1
+  return self.get_device_names().index(name) - 1
 
  def find_default_device(self):
-  try:
-   return self.get_device_names().index('Default')+1
-  except:
-   return -1
+  return -1
 
  def find_user_provided_device(self, device_name):
   try:

@@ -17,7 +17,8 @@ class Recording(Channel):
   super(Recording, self).__init__(handle)
 
  def free(self):
-  return bass_call(BASS_RecordFree)
+  pass
+
 
 class WaveRecording(Recording):
 

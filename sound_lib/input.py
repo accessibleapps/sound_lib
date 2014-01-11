@@ -41,6 +41,8 @@ class Input (object):
   while BASS_RecordGetDeviceInfo(count, ctypes.byref(info)):
    if info.flags & BASS_DEVICE_ENABLED:
     retrieved = info.name
+    if platform.system() == 'Windows':
+     retrieved = retrieved.decode('mbcs')
     retrieved = retrieved.replace('(', '').replace(')', '').strip()
     result.append(retrieved)
    count += 1

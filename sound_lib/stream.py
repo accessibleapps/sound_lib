@@ -1,7 +1,7 @@
 import platform
 import sys
 from channel import Channel
-from main import bass_call
+from main import bass_call, bass_call_0
 from external.pybass import *
 
 convert_to_unicode = unicode
@@ -16,7 +16,7 @@ class BaseStream(Channel):
   return bass_call(BASS_StreamFree, self.handle)
 
  def get_file_position(self, mode):
-  return bass_call(BASS_StreamGetFilePosition, self.handle, mode)
+  return bass_call_0(BASS_StreamGetFilePosition, self.handle, mode)
 
 class Stream(BaseStream):
 

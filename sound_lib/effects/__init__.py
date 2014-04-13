@@ -1,1 +1,1 @@
-from tempo import Tempo
+from .tempo import Tempo

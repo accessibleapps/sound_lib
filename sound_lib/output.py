@@ -1,7 +1,7 @@
 from functools import partial
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
-from external.pybass import *
+from sound_lib.external.pybass import *
 import config
 from main import bass_call, bass_call_0, EAX_ENVIRONMENTS, update_3d_system
 

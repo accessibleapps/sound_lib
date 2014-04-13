@@ -113,6 +113,3 @@ BASS_Split_StreamGetSource = func_type(ctypes.c_ulong, HSTREAM)(('BASS_Split_Str
 #BOOL BASSMIXDEF(BASS_Split_StreamReset)(DWORD handle);
 BASS_Split_StreamReset = func_type(ctypes.c_byte, ctypes.c_ulong)(('BASS_Split_StreamReset', bassmix_module))
 
-
-if __name__ == "__main__":
-	print 'BASS Mixer Version', hex(BASS_Mixer_GetVersion())

@@ -37,12 +37,3 @@ BASS_FLAC_StreamCreateURL = func_type(HSTREAM, ctypes.c_char_p, ctypes.c_ulong, 
 #HSTREAM BASSFLACDEF(BASS_FLAC_StreamCreateFileUser)(DWORD system, DWORD flags, const BASS_FILEPROCS *procs, void *user);
 BASS_FLAC_StreamCreateFileUser = func_type(HSTREAM, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(BASS_FILEPROCS), ctypes.c_void_p)(('BASS_FLAC_StreamCreateFileUser', bassflac_module))
 
-
-if __name__ == "__main__":
-	if not pybass.BASS_Init(-1, 44100, 0, 0, 0):
-		print 'BASS_Init error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-	else:
-		handle = BASS_FLAC_StreamCreateFile(False, 'test.flac', 0, 0, 0)
-		pybass.play_handle(handle)
-		if not pybass.BASS_Free():
-			print 'BASS_Free error', pybass.get_error_description(pybass.BASS_ErrorGetCode())

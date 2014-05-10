@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -12,8 +13,9 @@ enabling the playing of MIDI files and real-time events,
 using SF2 soundfonts to provide the sounds.
 '''
 
-import sys, ctypes, platform, os, pybass
-from paths import x86_path, x64_path
+import sys, ctypes, platform, os
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bassmidi_module = libloader.load_library('bassmidi', x86_path=x86_path, x64_path=x64_path)

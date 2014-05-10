@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -23,7 +24,7 @@ can also be installed separately (WMFDIST.EXE is available from the BASS website
 import os, sys, ctypes
 from sound_lib.external import pybass
 
-from paths import x86_path, x64_path
+from .paths import x86_path, x64_path
 import libloader
 
 QWORD = pybass.QWORD

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -11,8 +12,9 @@ BASS_AAC - extension to the BASS audio library that enables the playback
 of Advanced Audio Coding and MPEG-4 streams (http://www.maresweb.de).
 '''
 
-import os, sys, ctypes, pybass
-from paths import x86_path, x64_path
+import os, sys, ctypes
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bass_aac_module = libloader.load_library('bass_aac', x86_path=x86_path, x64_path=x64_path)

@@ -1,3 +1,7 @@
+from __future__ import division
+from __future__ import absolute_import
+from future.builtins import str
+from future.builtins import range
 # copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -54,7 +58,7 @@ Main Features
 '''
 
 import os, sys, ctypes, platform
-from paths import x86_path, x64_path
+from .paths import x86_path, x64_path
 import libloader
 
 bass_module = libloader.load_library('bass', x86_path=x86_path, x64_path=x64_path, mode=ctypes.RTLD_GLOBAL)
@@ -756,7 +760,7 @@ BASS_INPUT_TYPE_ANALOG = 0x0a000000
  BASS_FX_DX8_I3DL2REVERB,
  BASS_FX_DX8_PARAMEQ,
  BASS_FX_DX8_REVERB,
- ) = xrange(9)
+ ) = range(9)
 
 
 class BASS_DX8_CHORUS(ctypes.Structure):

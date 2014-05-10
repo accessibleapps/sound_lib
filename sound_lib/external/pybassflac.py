@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -11,8 +12,9 @@ BASSFLAC - extension to the BASS audio library,
 enabling the playing of FLAC (Free Lossless Audio Codec) encoded files.
 '''
 
-import os, sys, ctypes, pybass
-from paths import x86_path, x64_path
+import os, sys, ctypes
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bassflac_module = libloader.load_library('bassflac', x86_path=x86_path, x64_path=x64_path)

@@ -887,7 +887,9 @@ BASS_SetVolume = func_type(ctypes.c_byte, ctypes.c_float)(('BASS_SetVolume', bas
 BASS_GetVolume = func_type(ctypes.c_float)(('BASS_GetVolume', bass_module))
 
 #HPLUGIN BASSDEF(BASS_PluginLoad)(const char *file, DWORD flags);
-BASS_PluginLoad = func_type(HPLUGIN, ctypes.c_char_p, ctypes.c_ulong)(('BASS_PluginLoad', bass_module))
+BASS_PluginLoad_ = func_type(HPLUGIN, ctypes.c_char_p, ctypes.c_ulong)(('BASS_PluginLoad', bass_module))
+def BASS_PluginLoad(path, flags):
+	return BASS_PluginLoad_(path.encode(sys.getfilesystemencoding()), flags)
 #BOOL BASSDEF(BASS_PluginFree)(HPLUGIN handle);
 BASS_PluginFree = func_type(ctypes.c_byte, HPLUGIN)(('BASS_PluginFree', bass_module))
 #const BASS_PLUGININFO *BASSDEF(BASS_PluginGetInfo)(HPLUGIN handle);

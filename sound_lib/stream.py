@@ -30,14 +30,14 @@ class Stream(BaseStream):
 
 class FileStream(BaseStream):
 
- def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, mono=False, autofree=False, decode=False, str=True):
+ def __init__(self, mem=False, file=None, offset=0, length=0, flags=0, three_d=False, mono=False, autofree=False, decode=False, unicode=True):
   """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
   if platform.system() == 'Darwin':
-   str = False
+   unicode = False
    file = file.encode(sys.getfilesystemencoding())
   self.setup_flag_mapping()
-  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, mono=mono, decode=decode, str=str)
-  if str and isinstance(file, str):
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, mono=mono, decode=decode, unicode=unicode)
+  if unicode and isinstance(file, str):
    file = convert_to_unicode(file)
   self.file = file
   handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)

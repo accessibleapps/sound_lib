@@ -1,9 +1,11 @@
+from __future__ import absolute_import
+from future.builtins import object
 from ctypes import string_at
 import wave
 
-from external.pybass import *
-import config
-from main import bass_call, bass_call_0
+from .external.pybass import *
+from . import config
+from .main import bass_call, bass_call_0
 
 class Input (object):
 

@@ -1,5 +1,6 @@
-from external.pybass import *
-from main import bass_call, bass_call_0, BassError, update_3d_system, FlagObject
+from __future__ import absolute_import
+from .external.pybass import *
+from .main import bass_call, bass_call_0, BassError, update_3d_system, FlagObject
 from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
 
 class Channel (FlagObject):
@@ -72,7 +73,7 @@ class Channel (FlagObject):
 
  __len__ = get_length
 
- def __nonzero__(self):
+ def __bool__(self):
   return True
 
  def get_device(self):

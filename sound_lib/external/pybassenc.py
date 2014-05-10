@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from future.builtins import range
 "BASSENC wrapper by Christopher Toth"""
 
 import ctypes
 import os
 import platform
-import pybass
-from paths import x86_path, x64_path
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bassenc_module = libloader.load_library('bassenc', x86_path=x86_path, x64_path=x64_path)
@@ -57,7 +59,7 @@ BASS_ACM_SUGGEST = 8 #suggest a format (HIWORD=format tag)
  BASS_ENCODE_COUNT_QUEUE,	#queued
  BASS_ENCODE_COUNT_QUEUE_LIMIT, #queue limit
  BASS_ENCODE_COUNT_QUEUE_FAIL, #failed to queue
-) = xrange(6)
+) = range(6)
 
 #BASS_Encode_CastInit content MIME types
 

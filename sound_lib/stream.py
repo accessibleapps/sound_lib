@@ -59,3 +59,13 @@ class URLStream(BaseStream):
   handle = bass_call(BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user)
   super(URLStream, self).__init__(handle)
 
+class PushStream(BaseStream):
+ def __init__(self, freq=44100, chans=2, flags=0, user=None, three_d=False, autofree=False, decode=False):
+  self.proc = STREAMPROC_PUSH
+  self.setup_flag_mapping()
+  flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
+  handle = bass_call(BASS_StreamCreate, freq, chans, flags, self.proc, user)
+  super(PushStream, self).__init__(handle)
+
+ def push(self, data):
+  return bass_call_0(BASS_StreamPutData, self.handle, data, len(data))

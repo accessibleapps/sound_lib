@@ -519,7 +519,7 @@ BASS_STREAMPROC_END = (-2147483648)# end of user stream flag
 
 # special STREAMPROCs
 def streamproc_dummy(handle, buffer, length, user): return 0
-def streamproc_push(handle, buffer, length, user): return -1
+streamproc_push = -1
 STREAMPROC_DUMMY = STREAMPROC(streamproc_dummy)# "dummy" stream
 STREAMPROC_PUSH = STREAMPROC(streamproc_push)# push stream
 

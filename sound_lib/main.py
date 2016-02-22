@@ -1,4 +1,5 @@
-from external.pybass import *
+from __future__ import absolute_import
+from .external.pybass import *
 from functools import update_wrapper
 
 EAX_ENVIRONMENTS = {
@@ -70,7 +71,7 @@ class FlagObject(object):
 
  def flags_for(self, **flags):
   res = 0
-  for k, v in flags.iteritems():
+  for k, v in flags.items():
    if v:
     res |= self.flag_mapping[k]
   return res

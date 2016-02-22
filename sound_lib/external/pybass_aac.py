@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -11,8 +12,9 @@ BASS_AAC - extension to the BASS audio library that enables the playback
 of Advanced Audio Coding and MPEG-4 streams (http://www.maresweb.de).
 '''
 
-import os, sys, ctypes, pybass
-from paths import x86_path, x64_path
+import os, sys, ctypes
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bass_aac_module = libloader.load_library('bass_aac', x86_path=x86_path, x64_path=x64_path)
@@ -49,13 +51,3 @@ BASS_AAC_StreamCreateFileUser = func_type(HSTREAM, ctypes.c_ulong, ctypes.c_ulon
 BASS_MP4_StreamCreateFile = func_type(HSTREAM, ctypes.c_byte, ctypes.c_void_p, QWORD, QWORD, ctypes.c_ulong)(('BASS_MP4_StreamCreateFile', bass_aac_module))
 #HSTREAM BASSAACDEF(BASS_MP4_StreamCreateFileUser)(DWORD system, DWORD flags, const BASS_FILEPROCS *procs, void *user);
 BASS_MP4_StreamCreateFileUser = func_type(HSTREAM, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(BASS_FILEPROCS), ctypes.c_void_p)(('BASS_MP4_StreamCreateFileUser', bass_aac_module))
-
-
-if __name__ == "__main__":
-	if not pybass.BASS_Init(-1, 44100, 0, 0, 0):
-		print 'BASS_Init error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-	else:
-		handle = BASS_AAC_StreamCreateFile(False, 'test.aac', 0, 0, 0)
-		pybass.play_handle(handle)
-		if not pybass.BASS_Free():
-			print 'BASS_Free error', pybass.get_error_description(pybass.BASS_ErrorGetCode())

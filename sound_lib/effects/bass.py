@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from sound_lib.external import pybass
-from effect import SoundEffect
+from .effect import SoundEffect
 
 class Chorus(SoundEffect):
  effect_type = pybass.BASS_FX_DX8_CHORUS

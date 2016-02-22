@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import platform
 if platform.system() == 'Windows':
- import pybasswma
+ from . import pybasswma
 if platform.system() != 'Darwin':
- import pybass_aac
- import pybass_alac
- import pybassflac
- import pybassmidi
+ from . import pybass_aac
+ from . import pybass_alac
+ from . import pybassflac
+ from . import pybassmidi

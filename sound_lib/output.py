@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 from functools import partial
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
-from external.pybass import *
-import config
-from main import bass_call, bass_call_0, EAX_ENVIRONMENTS, update_3d_system
+from .external.pybass import *
+from . import config
+from .main import bass_call, bass_call_0, EAX_ENVIRONMENTS, update_3d_system
 
 _getter = lambda func, key, obj: func(obj)[key]
 _setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})

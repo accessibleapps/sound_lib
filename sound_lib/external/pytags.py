@@ -45,22 +45,3 @@ TAGS_Read = func_type(ctypes.c_char_p, ctypes.c_ulong, ctypes.c_char_p)(('TAGS_R
 #DWORD _stdcall TAGS_GetVersion();
 TAGS_GetVersion = func_type(ctypes.c_ulong)(('TAGS_GetVersion', tags_module))
 
-
-if __name__ == "__main__":
-	print 'TAGS implemented Version', TAGS_VERSION
-	print 'TAGS real Version', TAGS_GetVersion()
-	import pybass
-	if not pybass.BASS_Init(-1, 44100, 0, 0, 0):
-		print 'BASS_Init error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-	else:
-		handle = pybass.BASS_StreamCreateFile(False, 'test.ogg', 0, 0, 0)
-		if handle == 0:
-			print 'BASS_StreamCreateFile error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-		else:
-			fmt = '%IFV1(%ITRM(%TRCK),%ITRM(%TRCK). )%IFV2(%ITRM(%ARTI),%ICAP(%ITRM(%ARTI)),no artist) - %IFV2(%ITRM(%TITL),%ICAP(%ITRM(%TITL)),no title)%IFV1(%ITRM(%ALBM), - %IUPC(%ITRM(%ALBM)))%IFV1(%YEAR, %(%YEAR%))%IFV1(%ITRM(%GNRE), {%ITRM(%GNRE)})%IFV1(%ITRM(%CMNT), [%ITRM(%CMNT)])'
-			tags = TAGS_Read(handle, fmt)
-			print tags
-			if not pybass.BASS_StreamFree(handle):
-				print 'BASS_StreamFree error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-		if not pybass.BASS_Free():
-			print 'BASS_Free error', pybass.get_error_description(pybass.BASS_ErrorGetCode())

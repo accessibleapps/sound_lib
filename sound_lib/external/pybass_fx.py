@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 "BASS_FX wrapper by Christopher Toth"""
 
 import ctypes
 import os
-import pybass
-from paths import x86_path, x64_path
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bass_fx_module = libloader.load_library('bass_fx', x86_path=x86_path, x64_path=x64_path)

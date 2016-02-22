@@ -26,7 +26,7 @@ class SoundEffect(object):
 
  def set_parameters(self, parameters):
   params = self.struct()
-  for p, v in parameters.iteritems():
+  for p, v in parameters.items():
    setattr(params, p, v)
   bass_call(pybass.BASS_FXSetParameters, self.handle, ctypes.pointer(params))
 

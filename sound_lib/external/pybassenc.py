@@ -57,7 +57,7 @@ BASS_ACM_SUGGEST = 8 #suggest a format (HIWORD=format tag)
  BASS_ENCODE_COUNT_QUEUE,	#queued
  BASS_ENCODE_COUNT_QUEUE_LIMIT, #queue limit
  BASS_ENCODE_COUNT_QUEUE_FAIL, #failed to queue
-) = xrange(6)
+) = range(6)
 
 #BASS_Encode_CastInit content MIME types
 

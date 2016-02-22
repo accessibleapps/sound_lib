@@ -65,7 +65,7 @@ BASS_BFX_CHAN8 = 128
  BASS_FX_BFX_COMPRESSOR2,
  BASS_FX_BFX_VOLUME_ENV,
  BASS_FX_BFX_BQF,
-) = xrange(0x10000, 0x10000+20)
+) = range(0x10000, 0x10000+20)
 
 #BiQuad filters
 (
@@ -78,7 +78,7 @@ BASS_BFX_CHAN8 = 128
  BASS_BFX_BQF_PEAKINGEQ,
  BASS_BFX_BQF_LOWSHELF,
  BASS_BFX_BQF_HIGHSHELF,
-) = xrange(9)
+) = range(9)
 
 #Echo
 class BASS_BFX_ECHO(ctypes.Structure):
@@ -281,7 +281,7 @@ tempo attributes (BASS_ChannelSet/GetAttribute)"""
  BASS_ATTRIB_TEMPO,
  BASS_ATTRIB_TEMPO_PITCH,
  BASS_ATTRIB_TEMPO_FREQ,
-) = xrange(0x10000, 0x10000+3)
+) = range(0x10000, 0x10000+3)
 
 #tempo attributes options
 #[option]											[value]
@@ -294,7 +294,7 @@ tempo attributes (BASS_ChannelSet/GetAttribute)"""
  BASS_ATTRIB_TEMPO_OPTION_SEEKWINDOW_MS, #28 default, 0 = automatic
  BASS_ATTRIB_TEMPO_OPTION_OVERLAP_MS, #8  default
  BASS_ATTRIB_TEMPO_OPTION_PREVENT_CLICK, #TRUE / FALSE (default)
-) = xrange(0x10000, 0x10000+7)
+) = range(0x10000, 0x10000+7)
 
 #HSTREAM BASS_FXDEF(BASS_FX_TempoCreate)(DWORD chan, DWORD flags);
 BASS_FX_TempoCreate = func_type(pybass.HSTREAM, ctypes.c_ulong, ctypes.c_ulong)(('BASS_FX_TempoCreate', bass_fx_module))
@@ -335,7 +335,7 @@ BASS_FX_BPM_MULT2 = 2 #if in use, then will auto multiply bpm by 2 (if BPM < min
  BASS_FX_BPM_TRAN_FREQ2, #Frequency to BPM value
  BASS_FX_BPM_TRAN_2PERCENT, #BPM value to Percents
  BASS_FX_BPM_TRAN_PERCENT2	, #Percents to BPM value
-) = xrange(5)
+) = range(5)
 
 #typedef void (CALLBACK BPMPROCESSPROC)(DWORD chan, float percent);
 BPMPROCESSPROC = func_type(None, ctypes.c_float)

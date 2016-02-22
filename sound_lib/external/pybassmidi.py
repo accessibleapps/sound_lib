@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -12,8 +13,9 @@ enabling the playing of MIDI files and real-time events,
 using SF2 soundfonts to provide the sounds.
 '''
 
-import sys, ctypes, platform, os, pybass
-from paths import x86_path, x64_path
+import sys, ctypes, platform, os
+from . import pybass
+from .paths import x86_path, x64_path
 import libloader
 
 bassmidi_module = libloader.load_library('bassmidi', x86_path=x86_path, x64_path=x64_path)
@@ -201,22 +203,3 @@ BASS_MIDI_FontSetVolume = func_type(ctypes.c_byte, HSOUNDFONT, ctypes.c_float)((
 #float BASSMIDIDEF(BASS_MIDI_FontGetVolume)(HSOUNDFONT handle);
 BASS_MIDI_FontGetVolume = func_type(ctypes.c_float, HSOUNDFONT)(('BASS_MIDI_FontGetVolume', bassmidi_module))
 
-
-if __name__ == "__main__":
-	if not pybass.BASS_Init(-1, 44100, 0, 0, 0):
-		print 'BASS_Init error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-	else:
-		font = BASS_MIDI_FontInit('test.sf2', 0)
-		if font == 0:
-			print 'BASS_MIDI_FontInit error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-		else:
-			font_info = BASS_MIDI_FONTINFO()
-			if BASS_MIDI_FontGetInfo(font, font_info):
-				print '============== SOUNDFONT Information =============='
-				print "name: %s\nloaded: %d / %d" % (font_info.name, font_info.samload, font_info.samsize)
-			handle = BASS_MIDI_StreamCreateFile(False, 'test.mid', 0, 0, 0, 44100)
-			pybass.play_handle(handle, False)
-			if BASS_MIDI_FontFree(font):
-				print 'BASS_MIDI_FontFree error', pybass.get_error_description(pybass.BASS_ErrorGetCode())
-		if not pybass.BASS_Free():
-			print 'BASS_Free error', pybass.get_error_description(pybass.BASS_ErrorGetCode())

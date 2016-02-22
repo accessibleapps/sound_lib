@@ -1,10 +1,13 @@
+from __future__ import absolute_import
 import platform
 import sys
-from channel import Channel
-from main import bass_call, bass_call_0
-from external.pybass import *
-
-convert_to_unicode = unicode
+from .channel import Channel
+from .main import bass_call, bass_call_0
+from .external.pybass import *
+try:
+ convert_to_unicode = unicode
+except NameError:
+ convert_to_unicode = str
 
 class BaseStream(Channel):
 

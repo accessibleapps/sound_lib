@@ -95,7 +95,7 @@ BASS_WASAPI_CURVE_LINEAR = 1
 BASS_WASAPI_CURVE_WINDOWS = 2
 
 #typedef DWORD (CALLBACK WASAPIPROC)(void *buffer, DWORD length, void *user);
-WASAPIPROC = func_type(ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
+WASAPIPROC = func_type(ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_void_p)
 
 #typedef void (CALLBACK WASAPINOTIFYPROC)(DWORD notify, DWORD device, void *user);
 WASAPINOTIFYPROC = func_type(ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p)
@@ -122,7 +122,7 @@ BASS_WASAPI_GetDevice = func_type(HSTREAM)(('BASS_WASAPI_GetDevice', basswasapi_
 # DWORD BASSWASAPIDEF(BASS_WASAPI_CheckFormat)(DWORD device, DWORD freq, DWORD chans, DWORD flags);
 BASS_WASAPI_CheckFormat = func_type(HSTREAM, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong)(('BASS_WASAPI_CheckFormat', basswasapi_module))
 # BOOL BASSWASAPIDEF(BASS_WASAPI_Init)(int device, DWORD freq, DWORD chans, DWORD flags, float buffer, float period, WASAPIPROC *proc, void *user);
-BASS_WASAPI_Init = func_type(HSTREAM, ctypes.c_int, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_float, ctypes.c_float, ctypes.POINTER(WASAPIPROC), ctypes.c_void_p)(('BASS_WASAPI_Init', basswasapi_module))
+BASS_WASAPI_Init = func_type(HSTREAM, ctypes.c_int, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_float, ctypes.c_float, WASAPIPROC, ctypes.c_void_p)(('BASS_WASAPI_Init', basswasapi_module))
 # BOOL BASSWASAPIDEF(BASS_WASAPI_Free)();
 BASS_WASAPI_Free = func_type(HSTREAM)(('BASS_WASAPI_Free', basswasapi_module))
 # BOOL BASSWASAPIDEF(BASS_WASAPI_GetInfo)(BASS_WASAPI_INFO *info);

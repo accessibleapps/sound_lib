@@ -134,7 +134,7 @@ BASS_WASAPI_Lock = func_type(HSTREAM, ctypes.c_bool)(('BASS_WASAPI_Lock', basswa
 # BOOL BASSWASAPIDEF(BASS_WASAPI_Start)();
 BASS_WASAPI_Start = func_type(HSTREAM)(('BASS_WASAPI_Start', basswasapi_module))
 # BOOL BASSWASAPIDEF(BASS_WASAPI_Stop)(BOOL reset);
-BASS_WASAPI_Stop = func_type(HSTREAM, ctypes.c_bool)(('BASS_WASAPI_Stop', basswasapi_module))
+BASS_WASAPI_Stop = func_type(ctypes.c_bool, ctypes.c_bool)(('BASS_WASAPI_Stop', basswasapi_module))
 # BOOL BASSWASAPIDEF(BASS_WASAPI_IsStarted)();
 BASS_WASAPI_IsStarted = func_type(HSTREAM)(('BASS_WASAPI_IsStarted', basswasapi_module))
 # BOOL BASSWASAPIDEF(BASS_WASAPI_SetVolume)(DWORD curve, float volume);

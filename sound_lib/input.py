@@ -44,6 +44,8 @@ class Input (object):
     retrieved = info.name
     if platform.system() == 'Windows':
      retrieved = retrieved.decode('mbcs')
+    elif platform.system() == 'Darwin':
+     retrieved = retrieved.decode('utf-8')
     retrieved = retrieved.replace('(', '').replace(')', '').strip()
     result.append(retrieved)
    count += 1

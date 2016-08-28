@@ -1,8 +1,10 @@
 from ctypes import string_at
+import platform
 import wave
 
 from .external.pybass import *
-from .external.pybasswasapi import *
+if platform.system() == 'Windows':
+ from .external.pybasswasapi import *
 from . import config
 from .main import bass_call, bass_call_0
 

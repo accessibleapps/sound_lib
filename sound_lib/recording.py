@@ -1,8 +1,9 @@
-from channel import Channel
-from external.pybass import *
+from __future__ import absolute_import
+from .channel import Channel
+from .external.pybass import *
 from ctypes import string_at
 import wave
-from main import bass_call, bass_call_0
+from .main import bass_call, bass_call_0
 
 class Recording(Channel):
 

@@ -14,12 +14,18 @@ class BaseStream(Channel):
 	def _callback(*args):
 		#Stub it out as otherwise it'll crash, hard.  Used for stubbing download procs
 		return 0
-	
+
 	def free(self):
 		return bass_call(BASS_StreamFree, self.handle)
 
 	def get_file_position(self, mode):
 		return bass_call_0(BASS_StreamGetFilePosition, self.handle, mode)
+
+	def setup_flag_mapping(self):
+		super(BaseStream, self).setup_flag_mapping()
+		self.flag_mapping.update({
+			'unicode': BASS_UNICODE
+		})
 
 class Stream(BaseStream):
 
@@ -42,23 +48,19 @@ class FileStream(BaseStream):
 		if unicode and isinstance(file, str):
 			file = convert_to_unicode(file)
 		self.file = file
+
 		handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
 		super(FileStream, self).__init__(handle)
 
-	def setup_flag_mapping(self):
-		super(FileStream, self).setup_flag_mapping()
-		self.flag_mapping.update({
-			'unicode': BASS_UNICODE
-		})
-
 class URLStream(BaseStream):
 
-	def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None, three_d=False, autofree=False, decode=False):
+	def __init__(self, url="", offset=0, flags=0, downloadproc=None, user=None, three_d=False, autofree=False, decode=False, unicode=True):
 		self._downloadproc = downloadproc or self._callback #we *must hold on to this
 		self.downloadproc = DOWNLOADPROC(self._downloadproc)
 		self.url = url
 		self.setup_flag_mapping()
-		flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode)
+		flags = flags | self.flags_for(three_d=three_d, autofree=autofree, decode=decode, unicode=unicode)
+		offset = int(offset)
 		handle = bass_call(BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user)
 		super(URLStream, self).__init__(handle)
 

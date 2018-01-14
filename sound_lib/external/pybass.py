@@ -937,7 +937,7 @@ BASS_StreamCreate = func_type(HSTREAM, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_
 #HSTREAM BASSDEF(BASS_StreamCreateFile)(BOOL mem, const void *file, QWORD offset, QWORD length, DWORD flags);
 BASS_StreamCreateFile = func_type(HSTREAM, ctypes.c_byte, ctypes.c_void_p, QWORD, QWORD, ctypes.c_ulong)(('BASS_StreamCreateFile', bass_module))
 #HSTREAM BASSDEF(BASS_StreamCreateURL)(const char *url, DWORD offset, DWORD flags, DOWNLOADPROC *proc, void *user);
-BASS_StreamCreateURL = func_type(HSTREAM, ctypes.c_char_p, ctypes.c_ulong, ctypes.c_ulong, DOWNLOADPROC, ctypes.c_void_p)(('BASS_StreamCreateURL', bass_module))
+BASS_StreamCreateURL = func_type(HSTREAM, ctypes.c_void_p, ctypes.c_ulong, ctypes.c_ulong, DOWNLOADPROC, ctypes.c_void_p)(('BASS_StreamCreateURL', bass_module))
 #HSTREAM BASSDEF(BASS_StreamCreateFileUser)(DWORD system, DWORD flags, const BASS_FILEPROCS *proc, void *user);
 BASS_StreamCreateFileUser = func_type(HSTREAM, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(BASS_FILEPROCS), ctypes.c_void_p)(('BASS_StreamCreateFileUser', bass_module))
 #BOOL BASSDEF(BASS_StreamFree)(HSTREAM handle);

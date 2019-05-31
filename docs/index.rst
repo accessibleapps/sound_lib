@@ -2,15 +2,21 @@
 Welcome to Sound_lib's documentation!
 =====================================
 
-.. automodule:: sound_lib.output
-    :members:
-.. automodule:: sound_lib.input
-    :members:
+The API Documentation / Guide
+-----------------------------
+
+If you are looking for information on a specific function, class, or method,
+this part of the documentation is for you.
+
+.. toctree::
+   :maxdepth: 2
+
+   api
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
 
 
 Indices and tables

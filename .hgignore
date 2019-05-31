@@ -1,0 +1,7 @@
+syntax: glob
+*.pyc
+*.rej
+*.log
+*.diff
+
+docs/_build

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -22,7 +23,7 @@ DOWNLOADPROC = pybass.DOWNLOADPROC
 SYNCPROC = pybass.SYNCPROC
 BASS_FILEPROCS = pybass.BASS_FILEPROCS
 
-from paths import x86_path, x64_path
+from .paths import x86_path, x64_path
 import libloader
 
 bassmix_module = libloader.load_library('bassmix', x86_path=x86_path, x64_path=x64_path)

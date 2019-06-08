@@ -11,6 +11,7 @@ from .main import bass_call, bass_call_0
 
 
 class Input(object):
+    """ """
     def __init__(self, device=-1):
         bass_call(BASS_RecordInit, device)
         self._device = device
@@ -21,9 +22,18 @@ class Input(object):
         return bass_call(BASS_RecordFree)
 
     def get_device(self):
+        """ """
         return bass_call_0(BASS_RecordGetDevice)
 
     def set_device(self, device):
+        """
+
+        Args:
+          device: 
+
+        Returns:
+
+        """
         if device == self._device:
             return
         self.free()
@@ -34,11 +44,14 @@ class Input(object):
     @staticmethod
     def get_device_names():
         """Convenience method that returns a list of device names that are considered
-	valid by bass.
-	
-		Parameters: none.
-		returns: list of devices, 0-indexed.
-		"""
+        	valid by bass.
+
+        Args:
+
+        Returns:
+          
+
+        """
         result = ["Default"]
         info = BASS_DEVICEINFO()
         count = 0
@@ -55,12 +68,29 @@ class Input(object):
         return result
 
     def find_device_by_name(self, name):
+        """
+
+        Args:
+          name: 
+
+        Returns:
+
+        """
         return self.get_device_names().index(name) - 1
 
     def find_default_device(self):
+        """ """
         return -1
 
     def find_user_provided_device(self, device_name):
+        """
+
+        Args:
+          device_name: 
+
+        Returns:
+
+        """
         try:
             return self.find_device_by_name(device_name)
         except ValueError:
@@ -68,6 +98,7 @@ class Input(object):
 
 
 class WASAPIInput(object):
+    """ """
     def __init__(
         self,
         device=-2,
@@ -94,18 +125,37 @@ class WASAPIInput(object):
         )
 
     def free(self):
+        """ """
         bass_call(BASS_WASAPI_Free)
 
     def set_device(self, device):
+        """
+
+        Args:
+          device: 
+
+        Returns:
+
+        """
         bass_call(BASS_WASAPI_SetDevice, device)
 
     def get_device(self):
+        """ """
         return bass_call_0(BASS_WASAPI_GetDevice)
 
     device = property(fget=get_device, fset=set_device)
 
     def start(self):
+        """ """
         return bass_call(BASS_WASAPI_Start)
 
     def stop(self, reset=False):
+        """
+
+        Args:
+          reset:  (Default value = False)
+
+        Returns:
+
+        """
         return bass_call(BASS_WASAPI_Stop, reset)

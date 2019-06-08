@@ -5,6 +5,7 @@ import string  # for the alphabet!
 
 
 class SoundEffect(object):
+    """ """
     def __init__(self, channel, type=None, priority=0):
         self.original_channel = channel
         if hasattr(channel, "handle"):
@@ -25,6 +26,14 @@ class SoundEffect(object):
         return res
 
     def set_parameters(self, parameters):
+        """
+
+        Args:
+          parameters: 
+
+        Returns:
+
+        """
         params = self.struct()
         for p, v in parameters.items():
             setattr(params, p, v)
@@ -35,9 +44,11 @@ class SoundEffect(object):
         return res + self._get_pythonic_effect_fields()
 
     def _get_effect_fields(self):
+        """ """
         return [i[0] for i in self.struct._fields_]
 
     def _get_pythonic_effect_fields(self):
+        """ """
         return [
             self._bass_to_python(i)
             for i in self._get_effect_fields()
@@ -45,6 +56,14 @@ class SoundEffect(object):
         ]
 
     def _bass_to_python(self, func):
+        """
+
+        Args:
+          func: 
+
+        Returns:
+
+        """
         for c in string.ascii_lowercase:
             func = func.replace(c.upper(), "_%s" % c)
         if func.startswith("_"):
@@ -52,6 +71,14 @@ class SoundEffect(object):
         return func[2:]
 
     def _python_to_bass(self, func):
+        """
+
+        Args:
+          func: 
+
+        Returns:
+
+        """
         for c in string.ascii_lowercase:
             func = func.replace("_%s" % c, c.upper())
         func = "%s%s" % (func[0].upper(), func[1:])

@@ -3,6 +3,7 @@ __version__ = 0.81
 
 
 def find_datafiles():
+    """ """
     from glob import glob
     import os
     import platform

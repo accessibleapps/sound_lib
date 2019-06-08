@@ -4,7 +4,9 @@ from .main import bass_call, bass_call_0, FlagObject
 
 
 class Encoder(FlagObject):
+    """ """
     def setup_flag_mapping(self):
+        """ """
         # super(Encoder, self).setup_flag_mapping()
         self.flag_mapping = {
             "pcm": pybassenc.BASS_ENCODE_PCM,
@@ -76,6 +78,7 @@ class Encoder(FlagObject):
 
     @property
     def paused(self):
+        """ """
         return (
             bass_call_0(pybassenc.BASS_Encode_IsActive, self.handle)
             == pybass.BASS_ACTIVE_PAUSED
@@ -83,19 +86,30 @@ class Encoder(FlagObject):
 
     @paused.setter
     def paused(self, paused):
+        """
+
+        Args:
+          paused: 
+
+        Returns:
+
+        """
         return bass_call(pybassenc.BASS_Encode_SetPaused, self.handle, paused)
 
     def is_stopped(self):
+        """ """
         return (
             bass_call_0(pybassenc.BASS_Encode_IsActive, self.handle)
             == pybass.BASS_ACTIVE_STOPPED
         )
 
     def stop(self):
+        """ """
         return bass_call(pybassenc.BASS_Encode_Stop, self.handle)
 
 
 class BroadcastEncoder(Encoder):
+    """ """
     def __init__(
         self,
         source_encoder,
@@ -137,11 +151,29 @@ class BroadcastEncoder(Encoder):
         )
 
     def set_title(self, title=None, url=None):
+        """
+
+        Args:
+          title:  (Default value = None)
+          url:  (Default value = None)
+
+        Returns:
+
+        """
         return bass_call(
             pybassenc.BASS_Encode_CastSetTitle, self.source_encoder.handle, title, url
         )
 
     def get_stats(self, type, password=None):
+        """
+
+        Args:
+          type: 
+          password:  (Default value = None)
+
+        Returns:
+
+        """
         types = {
             "shoutcast": pybassenc.BASS_ENCODE_STATS_SHOUT,
             "icecast": pybassenc.BASS_ENCODE_STATS_ICE,

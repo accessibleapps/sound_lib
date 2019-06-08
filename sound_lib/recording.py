@@ -7,6 +7,7 @@ from .main import bass_call, bass_call_0
 
 
 class Recording(Channel):
+    """ """
     def __init__(
         self, frequency=44100, channels=2, flags=BASS_RECORD_PAUSE, proc=None, user=None
     ):
@@ -22,31 +23,63 @@ class Recording(Channel):
         super(Recording, self).__init__(handle)
 
     def free(self):
+        """ """
         pass
 
 
 class WaveRecording(Recording):
+    """ """
     def __init__(self, filename=None, proc=None, *args, **kwargs):
         callback = proc or self.recording_callback
         super(WaveRecording, self).__init__(proc=callback, *args, **kwargs)
         self.filename = filename
 
     def recording_callback(self, handle, buffer, length, user):
+        """
+
+        Args:
+          handle: 
+          buffer: 
+          length: 
+          user: 
+
+        Returns:
+
+        """
         buf = string_at(buffer, length)
         self.file.writeframes(buf)
         return True
 
     def setup_file(self):
+        """ """
         self.file = wave.open(self.filename, "w")
         self.file.setnchannels(self._channels)
         self.file.setsampwidth(2)
         self.file.setframerate(self._frequency)
 
     def play(self, *args, **kwargs):
+        """
+
+        Args:
+          *args: 
+          **kwargs: 
+
+        Returns:
+
+        """
         if not self.is_playing:
             self.setup_file()
         super(WaveRecording, self).play(*args, **kwargs)
 
     def stop(self, *args, **kwargs):
+        """
+
+        Args:
+          *args: 
+          **kwargs: 
+
+        Returns:
+
+        """
         super(WaveRecording, self).stop(*args, **kwargs)
         self.file.close()

@@ -457,7 +457,7 @@ class Channel(FlagObject):
         """Links two MOD music or stream channels together.
 
         Args:
-          handle: The bass handle to link with this one. Must be HMUSIC or HSTREAM.
+          handle: The bass handle to link with this one. Can take both a sound_lib.channel or bass handle. Must be HMUSIC or HSTREAM.
 
         Returns:
             bool: True on success, False on failure.
@@ -465,20 +465,24 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If handle points to an invalid channel, either one is a decoding channel, or this channel is already linked to handle.
         """
+        if isinstance(handle, Channel):
+            handle=handle.handle
         bass_call(BASS_ChannelSetLink, self.handle, handle)
 
     def remove_link(self, handle):
         """Removes a link between two MOD music or stream channels.
 
         Args:
-          handle: The bass handle to unlink with this one. Must be a HMUSIC or HSTREAM. Must currently be linked.
+          handle: The bass handle to unlink with this one. Can take both a sound_lib.channel or bass handle. Must be a HMUSIC or HSTREAM. Must currently be linked.
 
         Returns:
             bool: True on success, False on failure.
         raises:
-            sound_lib.main.BassError: If chan is either not a valid channel, or is already not linked to handle.
+            sound_lib.main.BassError: If chan is either not a valid channel, or is not already linked to handle.
 
         """
+        if isinstance(handle, Channel):
+            handle=handle.handle
         return bass_call(BASS_ChannelRemoveLink, self.handle, handle)
 
     def __iadd__(self, other):

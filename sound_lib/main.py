@@ -44,7 +44,17 @@ class BassError(Exception):
 
 
 def bass_call(function, *args):
-    """Makes a call to bass and raises an exception if it fails."""
+    """Makes a call to bass and raises an exception if it fails.
+    This will most likely prove unnecessary for external usage, however we keep it just in case.
+
+    Args:
+      function (str): Name of the internal bass function to be called.
+      *args: Arguments that will be passed to function.
+
+    Returns:
+        Raw output from the specified bass function. Refer to the official docs.
+
+    """
     res = function(*args)
     if res == 0 or res == -1:
         code = BASS_ErrorGetCode()
@@ -53,7 +63,16 @@ def bass_call(function, *args):
 
 
 def bass_call_0(function, *args):
-    """Makes a call to bass and raises an exception if it fails.  Does not consider 0 an error."""
+    """Makes a call to bass and raises an exception if it fails.  Does not consider 0 an error.
+    This will most likely prove unnecessary for external usage, however we keep it just in case.
+
+    Args:
+      function (str): Name of the internal bass function to be called.
+      *args: Arguments that will be passed to function.
+
+    Returns:
+        Raw output from the specified bass function. Refer to the official docs.
+    """
     res = function(*args)
     if res == -1:
         code = BASS_ErrorGetCode()
@@ -62,9 +81,19 @@ def bass_call_0(function, *args):
 
 
 def update_3d_system(func):
-    """Decorator to automatically update the 3d system after a function call."""
+    """Decorator to automatically update the 3d system after a function call.
+    """
 
     def update_3d_system_wrapper(*args, **kwargs):
+        """
+
+        Args:
+          *args: 
+          **kwargs: 
+
+        Returns:
+
+        """
         val = func(*args, **kwargs)
         bass_call(BASS_Apply3D)
         return val
@@ -77,6 +106,14 @@ class FlagObject(object):
     """An object which translates bass flags into human-readable/usable items"""
 
     def flags_for(self, **flags):
+        """
+
+        Args:
+          **flags: 
+
+        Returns:
+
+        """
         res = 0
         for k, v in flags.items():
             if v:
@@ -84,6 +121,7 @@ class FlagObject(object):
         return res
 
     def setup_flag_mapping(self):
+        """ """
         self.flag_mapping = {
             "loop": BASS_SAMPLE_LOOP,
             "autofree": BASS_STREAM_AUTOFREE,

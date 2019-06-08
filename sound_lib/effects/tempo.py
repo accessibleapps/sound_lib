@@ -7,6 +7,7 @@ from ..main import bass_call, bass_call_0
 
 
 class Tempo(BaseStream):
+    """ """
     def __init__(
         self,
         channel,
@@ -46,29 +47,57 @@ class Tempo(BaseStream):
 
     @tempo.setter
     def tempo(self, val):
+        """
+
+        Args:
+          val: 
+
+        Returns:
+
+        """
         self.set_attribute("tempo", val)
 
     @property
     def tempo_pitch(self):
+        """ """
         return self.get_attribute("tempo_pitch")
 
     @tempo_pitch.setter
     def tempo_pitch(self, val):
+        """
+
+        Args:
+          val: 
+
+        Returns:
+
+        """
         self.set_attribute("tempo_pitch", val)
 
     @property
     def tempo_freq(self):
+        """ """
         return self.get_attribute("tempo_freq")
 
     @tempo_freq.setter
     def tempo_freq(self, val):
+        """
+
+        Args:
+          val: 
+
+        Returns:
+
+        """
         self.set_attribute("tempo_freq", val)
 
     def setup_flag_mapping(self):
+        """ """
         super(Tempo, self).setup_flag_mapping()
         self.flag_mapping.update({"free_source": pybass_fx.BASS_FX_FREESOURCE})
 
     def get_source(self):
+        """ """
         source = pybass_fx.BASS_FX_TempoGetSource(self.handle)
         if source == self.channel.handle:
             source = self.channel
@@ -77,6 +106,7 @@ class Tempo(BaseStream):
     source = property(fget=get_source)
 
     def get_rate_ratio(self):
+        """ """
         return bass_call(pybass_fx.BASS_FX_TempoGetRateRatio, self.handle)
 
     rate_ratio = property(fget=get_rate_ratio)

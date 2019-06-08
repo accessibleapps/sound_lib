@@ -6,17 +6,40 @@ from .external.pybass import *
 
 
 def _getter(base_prop, attr, obj):
+    """
+
+    Args:
+      base_prop: 
+      attr: 
+      obj: 
+
+    Returns:
+
+    """
     return getattr(getattr(obj, base_prop), attr)
 
 
 def _setter(base_prop, subattr, obj, val):
+    """
+
+    Args:
+      base_prop: 
+      subattr: 
+      obj: 
+      val: 
+
+    Returns:
+
+    """
     old = getattr(obj, base_prop)
     setattr(old, subattr, val)
     setattr(obj, base_prop, old)
 
 
 class Listener(object):
+    """ """
     def get_3d_position(self):
+        """ """
         res = {
             "position": BASS_3DVECTOR(),
             "velocity": BASS_3DVECTOR(),
@@ -34,7 +57,17 @@ class Listener(object):
 
     @update_3d_system
     def set_3d_position(self, position=None, velocity=None, front=None, top=None):
-        """Sets the position, velocity, and orientation of the listener (ie. the player)."""
+        """Sets the position, velocity, and orientation of the listener (ie. the player).
+
+        Args:
+          position:  (Default value = None)
+          velocity:  (Default value = None)
+          front:  (Default value = None)
+          top:  (Default value = None)
+
+        Returns:
+
+        """
         old = self.get_3d_position()
         if position is None:
             position = old["position"]
@@ -51,9 +84,18 @@ class Listener(object):
         bass_call(BASS_Set3DPosition, position, velocity, front, top)
 
     def get_position(self):
+        """ """
         return self.get_3d_position()["position"]
 
     def set_position(self, position):
+        """
+
+        Args:
+          position: 
+
+        Returns:
+
+        """
         self.set_3d_position(position=position)
 
     position = property(fget=get_position, fset=set_position)
@@ -71,9 +113,18 @@ class Listener(object):
     )
 
     def get_velocity(self):
+        """ """
         return self.get_3d_position()["velocity"]
 
     def set_velocity(self, velocity):
+        """
+
+        Args:
+          velocity: 
+
+        Returns:
+
+        """
         self.set_3d_position(velocity=velocity)
 
     velocity = property(fget=get_velocity, fset=set_velocity)
@@ -91,9 +142,18 @@ class Listener(object):
     )
 
     def get_front(self):
+        """ """
         return self.get_3d_position()["front"]
 
     def set_front(self, front):
+        """
+
+        Args:
+          front: 
+
+        Returns:
+
+        """
         self.set_3d_position(front=front)
 
     front = property(fget=get_front, fset=set_front)
@@ -111,9 +171,18 @@ class Listener(object):
     )
 
     def get_top(self):
+        """ """
         return self.get_3d_position()["top"]
 
     def set_top(self, top):
+        """
+
+        Args:
+          top: 
+
+        Returns:
+
+        """
         self.set_3d_position(top=top)
 
     top = property(fget=get_top, fset=set_top)

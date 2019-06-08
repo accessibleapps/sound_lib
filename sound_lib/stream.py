@@ -12,22 +12,42 @@ except NameError:
 
 
 class BaseStream(Channel):
+    """ """
     def _callback(*args):
+        """
+
+        Args:
+          *args: 
+
+        Returns:
+
+        """
         # Stub it out as otherwise it'll crash, hard.  Used for stubbing download procs
         return 0
 
     def free(self):
+        """ """
         return bass_call(BASS_StreamFree, self.handle)
 
     def get_file_position(self, mode):
+        """
+
+        Args:
+          mode: 
+
+        Returns:
+
+        """
         return bass_call_0(BASS_StreamGetFilePosition, self.handle, mode)
 
     def setup_flag_mapping(self):
+        """ """
         super(BaseStream, self).setup_flag_mapping()
         self.flag_mapping.update({"unicode": BASS_UNICODE})
 
 
 class Stream(BaseStream):
+    """ """
     def __init__(
         self,
         freq=44100,
@@ -49,6 +69,7 @@ class Stream(BaseStream):
 
 
 class FileStream(BaseStream):
+    """ """
     def __init__(
         self,
         mem=False,
@@ -83,6 +104,7 @@ class FileStream(BaseStream):
 
 
 class URLStream(BaseStream):
+    """ """
     def __init__(
         self,
         url="",
@@ -110,6 +132,7 @@ class URLStream(BaseStream):
 
 
 class PushStream(BaseStream):
+    """ """
     def __init__(
         self,
         freq=44100,
@@ -129,4 +152,12 @@ class PushStream(BaseStream):
         super(PushStream, self).__init__(handle)
 
     def push(self, data):
+        """
+
+        Args:
+          data: 
+
+        Returns:
+
+        """
         return bass_call_0(BASS_StreamPutData, self.handle, data, len(data))

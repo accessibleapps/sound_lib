@@ -9,6 +9,7 @@ from sound_lib.main import bass_call, bass_call_0
 
 
 class BassConfig(Mapping):
+    """ """
     config_map = {
         "3d_algorithm": pybass.BASS_CONFIG_3DALGORITHM,
         "am_disable": pybass.BASS_CONFIG_AM_DISABLE,

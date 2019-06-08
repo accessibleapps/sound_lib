@@ -10,6 +10,8 @@ class Channel(FlagObject):
     Each "Channel" function can be used with one or more of these channel types.
     """
 
+    attribute_mapping = {}
+
     def __init__(self, handle):
         self.handle = handle
         self.attribute_mapping = {
@@ -50,6 +52,9 @@ class Channel(FlagObject):
 
         Returns:
             bool: True on success, False otherwise.
+
+        raises:
+            sound_lib.main.BassError: If this channel isn't currently playing, already paused, or is a decoding channel and thus not playable.
         """
         return bass_call(BASS_ChannelPause, self.handle)
 
@@ -106,6 +111,9 @@ class Channel(FlagObject):
 
         Returns:
             int: The current position.
+
+        raises:
+            sound_lib.main.BassError: If the requested position is not available.
         """
         return bass_call_0(BASS_ChannelGetPosition, self.handle, mode)
 
@@ -119,6 +127,8 @@ class Channel(FlagObject):
         Returns:
             bool: True if the position was set, False otherwise.
 
+        raises:
+            sound_lib.main.BassError: If the stream is not a sound_lib.stream.FileStream or the requested position/mode is not available.
         """
         return bass_call(BASS_ChannelSetPosition, self.handle, pos, mode)
 
@@ -137,6 +147,9 @@ class Channel(FlagObject):
 
         Returns:
             bool: True on success, False otherwise.
+
+        raises:
+            sound_lib.main.BassError: If this channel has ended or doesn't have an output -buffer.
         """
         return bass_call(BASS_ChannelUpdate, self.handle, length)
 
@@ -148,6 +161,9 @@ class Channel(FlagObject):
 
         Returns:
             int: The channel length on success, -1 on failure.
+
+        raises:
+            sound_lib.main.BassError: If the requested mode is not available.
         """
         return bass_call_0(BASS_ChannelGetLength, self.handle, mode)
 
@@ -172,6 +188,9 @@ class Channel(FlagObject):
 
         Returns:
             bool: True on success, False otherwise.
+
+        raises:
+            sound_lib.main.BassError: If device is invalid, device hasn't been initialized, this channel is already using the requested device, the sample format is not supported by the device/drivers or there is insufficient memory.
         """
         bass_call(BASS_ChannelSetDevice, self.handle, device)
 
@@ -187,6 +206,8 @@ class Channel(FlagObject):
         Returns:
             A handle to the new effect on success, False otherwise.
 
+        raises:
+            sound_lib.main.BassError: If type is invalid, the specified DX8 effect is unavailable or this channel's format is not supported by the effect.
         """
         return SoundEffect(bass_call(BASS_ChannelSetFX, type, priority))
 
@@ -229,6 +250,10 @@ class Channel(FlagObject):
 
         Returns:
             The value on success, None on failure.
+
+        raises:
+            sound_lib.main.BassError: If the attribute is either unavailable or invalid.
+                Some attributes have additional possible instances where an exception might be raised.
         """
         value = pointer(c_float())
         if attribute in self.attribute_mapping:
@@ -245,6 +270,9 @@ class Channel(FlagObject):
 
         Returns:
             bool: True on success, False on failure.
+
+        raises:
+            sound_lib.main.BassError: If either attribute or value is invalid.
         """
         if attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
@@ -261,6 +289,8 @@ class Channel(FlagObject):
         Returns:
             bool: True on success, False on failure.
 
+        raises:
+            sound_lib.main.BassError: If attribute is invalid, or the attributes value is set to go from positive to negative or vice versa when the BASS_SLIDE_LOG flag is used.
         """
         if attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
@@ -296,7 +326,10 @@ class Channel(FlagObject):
         returns:
             int: -1 on error. If successful, the level of the left channel is returned in the low word (low 16 bits), and the level of the right channel is returned in the high word (high 16 bits).
                 If the channel is mono, then the low word is duplicated in the high word. The level ranges linearly from 0 (silent) to 32768 (max).
-                0 will be returned when a channel is stalled.
+                0 will be returned when a channel is stalled.        
+
+        raises:
+            sound_lib.main.BassError: If this channel is not playing, or this is a decoding channel which has reached the end
         """
         return bass_call_0(BASS_ChannelGetLevel, self.handle)
 
@@ -323,7 +356,7 @@ class Channel(FlagObject):
             dict: A dict containing the stream's 3d attributes
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel does not have 3d functionality.
         """
         answer = dict(
             mode=c_ulong(),
@@ -365,7 +398,7 @@ class Channel(FlagObject):
             bool: True on success, False otherwise.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel does not have 3d functionality, or one or more attribute values are invalid.
         """
         return bass_call(
             BASS_ChannelSet3DAttributes,
@@ -379,7 +412,11 @@ class Channel(FlagObject):
         )
 
     def get_3d_position(self):
-        """Retrieves the 3D position of a sample, stream, or MOD music channel with 3D functionality."""
+        """Retrieves the 3D position of a sample, stream, or MOD music channel with 3D functionality.
+
+        raises:
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
+        """
         answer = dict(
             position=BASS_3DVECTOR(),
             orientation=BASS_3DVECTOR(),
@@ -403,6 +440,8 @@ class Channel(FlagObject):
           orientation: Defaults to None.
           velocity: Defaults to None
 
+        raises:
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         if position:
             position = pointer(position)
@@ -423,6 +462,8 @@ class Channel(FlagObject):
         Returns:
             bool: True on success, False on failure.
 
+        raises:
+            sound_lib.main.BassError: If handle points to an invalid channel, either one is a decoding channel, or this channel is already linked to handle.
         """
         bass_call(BASS_ChannelSetLink, self.handle, handle)
 
@@ -434,6 +475,8 @@ class Channel(FlagObject):
 
         Returns:
             bool: True on success, False on failure.
+        raises:
+            sound_lib.main.BassError: If chan is either not a valid channel, or is already not linked to handle.
 
         """
         return bass_call(BASS_ChannelRemoveLink, self.handle, handle)
@@ -517,6 +560,8 @@ class Channel(FlagObject):
         Returns:
             The requested bytes.
 
+        raises:
+            sound_lib.main.BassError: If this channel has reached the end, or the BASS_DATA_AVAILABLE flag was used and this is a decoding channel.
         """
         buf = c_buffer(length)
         bass_call_0(BASS_ChannelGetData, self.handle, pointer(buf), length)
@@ -555,7 +600,7 @@ class Channel(FlagObject):
         """Retrieves this channel's position on the X-axis, if 3d functionality is available.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         return self.get_3d_position()["position"].x
 
@@ -566,7 +611,7 @@ class Channel(FlagObject):
             val: The coordinate position.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         pos = self.get_3d_position()
         pos["position"].x = val
@@ -578,7 +623,7 @@ class Channel(FlagObject):
         """Retrieves this channel's position on the Y-axis, if 3d functionality is available.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support..
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         return self.get_3d_position()["position"].y
 
@@ -589,7 +634,7 @@ class Channel(FlagObject):
           val: The coordinate position.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         pos = self.get_3d_position()
         pos["position"].y = val
@@ -601,7 +646,7 @@ class Channel(FlagObject):
         """Retrieves this channel's position on the Z-axis, if 3d functionality is available.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         return self.get_3d_position()["position"].z
 
@@ -612,7 +657,7 @@ class Channel(FlagObject):
           val: The coordinate position.
 
         raises:
-            sound_lib.main.BassError: If this channel wasn't initialized with 3d support.
+            sound_lib.main.BassError: If this channel was not initialized with support for 3d functionality.
         """
         pos = self.get_3d_position()
         pos["position"].z = val

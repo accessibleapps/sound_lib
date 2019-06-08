@@ -107,13 +107,13 @@ class FlagObject(object):
     flag_mapping = {}
 
     def flags_for(self, **flags):
-        """
+        """Retrieves flags for given attributes.
 
         Args:
-          **flags: 
+          **flags: A mapping of human-readable attribute names to numeric values.
 
         Returns:
-
+            int: A bitmask containing the specified flags, or 0 if nothing was provided.
         """
         res = 0
         for k, v in flags.items():
@@ -122,7 +122,9 @@ class FlagObject(object):
         return res
 
     def setup_flag_mapping(self):
-        """ """
+        """Sets up a class-level mapping of common flags, in the format human-readable name:value.
+        Tipically expanded upon in a subclass.
+        """
         self.flag_mapping = {
             "loop": BASS_SAMPLE_LOOP,
             "autofree": BASS_STREAM_AUTOFREE,

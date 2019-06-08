@@ -104,6 +104,7 @@ def update_3d_system(func):
 
 class FlagObject(object):
     """An object which translates bass flags into human-readable/usable items"""
+    flag_mapping = {}
 
     def flags_for(self, **flags):
         """

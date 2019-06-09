@@ -1,5 +1,5 @@
 Welcome to Sound_lib's documentation!
-====================================
+======================================
 
 **Sound_lib** is a higher-level, python wrapper around  `the Bass audio library <http://www.un4seen.com/bass.html>`_.
 

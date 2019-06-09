@@ -1,0 +1,5 @@
+# Include the license file
+include LICENSE.txt
+
+# Include the Bass library
+recursive-include sound_lib/lib *

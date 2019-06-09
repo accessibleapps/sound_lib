@@ -11,14 +11,9 @@ this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 2
-
+   
+   install
    api
-
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 
 Indices and tables
 ==================

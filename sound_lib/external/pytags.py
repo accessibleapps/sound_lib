@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright(c) Max Kolosov 2009 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
@@ -26,7 +27,7 @@ Supported tags:
 '''
 
 import sys, ctypes, platform
-from paths import x86_path, x64_path
+from .paths import x86_path, x64_path
 import libloader
 tags_module = libloader.load_library('tags', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()# Current version. Just increments each release.

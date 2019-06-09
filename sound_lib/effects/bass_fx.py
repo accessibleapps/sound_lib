@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from sound_lib.external import pybass_fx
-from effect import SoundEffect
+from .effect import SoundEffect
 
 
 class Volume(SoundEffect):

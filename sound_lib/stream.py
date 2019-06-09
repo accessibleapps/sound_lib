@@ -26,12 +26,13 @@ class BaseStream(Channel):
         return 0
 
     def free(self):
-        """ """
+        """Frees a sample stream's resources, including any sync/DSP/FX it has. """
         return bass_call(BASS_StreamFree, self.handle)
 
     def get_file_position(self, mode):
         """
-
+        Retrieves the file position/status of a stream.
+        
         Args:
           mode: 
 
@@ -153,7 +154,8 @@ class PushStream(BaseStream):
 
     def push(self, data):
         """
-
+        Adds sample data to a "push" stream. 
+        
         Args:
           data: 
 

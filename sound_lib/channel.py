@@ -262,7 +262,7 @@ class Channel(FlagObject):
         return value.contents.value
 
     def set_attribute(self, attribute, value):
-        """Sets the value of this channel's attribute.
+        """Sets the value of an attribute on this channel.
 
         Args:
           attribute: The attribute to set the value of. Can either be of type str or int.

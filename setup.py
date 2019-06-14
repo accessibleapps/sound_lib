@@ -16,7 +16,7 @@ setup(
     command_options={
         'build_sphinx': {
             'project': ('setup.py', 'sound_lib'),
-            'version': ('setup.py', str(version),
+            'version': ('setup.py', str(__version__)),
         }
     },
     install_requires=["libloader", "platform_utils"],

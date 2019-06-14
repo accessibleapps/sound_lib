@@ -1,1 +1,2 @@
 platform_utils>=0.41
+libloader

@@ -20,6 +20,8 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'Sound_lib'
 copyright = '2019, Christopher Toth'
 author = 'Christopher Toth'
+# To prevent master file contents.rst not found.
+master_doc = 'index'
 
 # The full version, including alpha/beta/rc tags
 release = '0.8'

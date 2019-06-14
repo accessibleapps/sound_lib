@@ -1,1 +1,1 @@
-platform_utils
+platform_utils>=0.41

@@ -29,7 +29,7 @@ class Recording(Channel):
 
 class WaveRecording(Recording):
     """ """
-    def __init__(self, filename=None, proc=None, *args, **kwargs):
+    def __init__(self, filename = "", proc = None, *args, **kwargs):
         callback = proc or self.recording_callback
         super(WaveRecording, self).__init__(proc=callback, *args, **kwargs)
         self.filename = filename
@@ -52,6 +52,8 @@ class WaveRecording(Recording):
 
     def setup_file(self):
         """ """
+        if not self.filename:
+            raise ValueError("filename cannot be blank")
         self.file = wave.open(self.filename, "w")
         self.file.setnchannels(self._channels)
         self.file.setsampwidth(2)

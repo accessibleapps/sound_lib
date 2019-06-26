@@ -101,7 +101,7 @@ class Output(object):
         """ """
         volume = BASS_GetConfig(BASS_CONFIG_GVOL_STREAM)
         if volume:
-            volume = volume / 100.0
+            volume = volume / 10000.0
         return volume
 
     def set_volume(self, volume):
@@ -113,9 +113,9 @@ class Output(object):
         Returns:
 
         """
-        # Pass in a float 0.0 to 100.0 and watch the volume magically change
+        # Pass in a float 0.0 to 1.0 and watch the volume magically change
         return bass_call(
-            BASS_SetConfig, BASS_CONFIG_GVOL_STREAM, int(round(volume * 100, 2))
+            BASS_SetConfig, BASS_CONFIG_GVOL_STREAM, int(round(volume * 10000, 2))
         )
 
     volume = property(get_volume, set_volume)

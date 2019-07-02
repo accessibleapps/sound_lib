@@ -1,5 +1,8 @@
-Quick Start
+Quickstart
 ===========
+
+Here we give a brief overview of the many features sound_lib has to offer.
+It should be at least enough to get up and running.
 
 Playing
 -------

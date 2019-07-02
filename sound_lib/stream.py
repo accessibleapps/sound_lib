@@ -37,7 +37,10 @@ class BaseStream(Channel):
           mode: 
 
         Returns:
+            int: The requested file position on success, -1 otherwise.
 
+        raises:
+            sound_lib.main.BassError: If the handle is invalid, the stream is not a FileStream, or the requested position is not available.
         """
         return bass_call_0(BASS_StreamGetFilePosition, self.handle, mode)
 
@@ -48,7 +51,9 @@ class BaseStream(Channel):
 
 
 class Stream(BaseStream):
-    """ """
+    """A sample stream.
+    Higher-level streams are used in 90% of cases."""
+
     def __init__(
         self,
         freq=44100,
@@ -70,7 +75,9 @@ class Stream(BaseStream):
 
 
 class FileStream(BaseStream):
-    """ """
+    """A sample stream that loads from a supported filetype.
+    Can load from both disk and memory."""
+
     def __init__(
         self,
         mem=False,
@@ -84,7 +91,6 @@ class FileStream(BaseStream):
         decode=False,
         unicode=True,
     ):
-        """Creates a sample stream from an MP3, MP2, MP1, OGG, WAV, AIFF or plugin supported file."""
         if platform.system() == "Darwin":
             unicode = False
             file = file.encode(sys.getfilesystemencoding())
@@ -105,7 +111,9 @@ class FileStream(BaseStream):
 
 
 class URLStream(BaseStream):
-    """ """
+    """Creates a sample stream from a file found on the internet.
+    Downloaded data can optionally be received through a callback function for further manipulation."""
+
     def __init__(
         self,
         url="",
@@ -133,7 +141,8 @@ class URLStream(BaseStream):
 
 
 class PushStream(BaseStream):
-    """ """
+    """ A stream that receives and plays raw audio data in realtime."""
+
     def __init__(
         self,
         freq=44100,
@@ -154,12 +163,15 @@ class PushStream(BaseStream):
 
     def push(self, data):
         """
-        Adds sample data to a "push" stream. 
-        
+        Adds sample data to the stream.
+
         Args:
-          data: 
+          data (bytes): Data to be sent.
 
         Returns:
+            int: The amount of queued data on success, -1 otherwise.
 
+        raises:
+            sound_lib.main.BassError: If the stream has ended or there is insufficient memory.
         """
         return bass_call_0(BASS_StreamPutData, self.handle, data, len(data))

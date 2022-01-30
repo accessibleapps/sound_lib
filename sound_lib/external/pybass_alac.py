@@ -7,7 +7,7 @@ from . import pybass
 from .paths import x86_path, x64_path
 import libloader
 
-bass_fx_module = libloader.load_library('bass_alac', x86_path=x86_path, x64_path=x64_path)
+bass_alac_module = libloader.load_library('bass_alac', x86_path=x86_path, x64_path=x64_path)
 func_type = libloader.get_functype()
 
 pybass.BASS_PluginLoad(libloader.find_library_path('bass_alac', x86_path=x86_path, x64_path=x64_path), 0)

@@ -126,6 +126,9 @@ class URLStream(BaseStream):
         decode=False,
         unicode=True,
     ):
+        if platform.system() == "Darwin":
+            unicode = False
+            url = url.encode(sys.getfilesystemencoding())
         self._downloadproc = downloadproc or self._callback  # we *must hold on to this
         self.downloadproc = DOWNLOADPROC(self._downloadproc)
         self.url = url

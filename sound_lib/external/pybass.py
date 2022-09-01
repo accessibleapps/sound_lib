@@ -998,6 +998,8 @@ BASS_ChannelFlags = func_type(ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ct
 BASS_ChannelUpdate = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_ulong)(('BASS_ChannelUpdate', bass_module))
 #BOOL BASSDEF(BASS_ChannelLock)(DWORD handle, BOOL lock);
 BASS_ChannelLock = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_byte)(('BASS_ChannelLock', bass_module))
+#BOOL BASSDEF(BASS_ChannelFree)(DWORD handle);
+BASS_ChannelFree = func_type(ctypes.c_byte, ctypes.c_ulong)(('BASS_ChannelFree', bass_module))
 #BOOL BASSDEF(BASS_ChannelPlay)(DWORD handle, BOOL restart);
 BASS_ChannelPlay = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_byte)(('BASS_ChannelPlay', bass_module))
 #BOOL BASSDEF(BASS_ChannelStop)(DWORD handle);

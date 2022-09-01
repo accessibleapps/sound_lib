@@ -209,6 +209,7 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If type is invalid, the specified DX8 effect is unavailable or this channel's format is not supported by the effect.
         """
+        from .effects.bass_fx import SoundEffect
         return SoundEffect(bass_call(BASS_ChannelSetFX, type, priority))
 
     def bytes_to_seconds(self, position=None):
@@ -376,9 +377,10 @@ class Channel(FlagObject):
             pointer(answer["oangle"]),
             pointer(answer["outvol"]),
         )
+        res = {}
         for k in answer:
-            answer[k] = answer[k].value()
-        return answer
+            res[k] = answer[k].value
+        return res
 
     @update_3d_system
     def set_3d_attributes(
@@ -571,11 +573,6 @@ class Channel(FlagObject):
         bass_call_0(BASS_ChannelGetData, self.handle, pointer(buf), length)
         return buf
 
-    # This is less and less of a one-to-one mapping,
-    # But I feel that it's better to be consistent with ourselves
-    # Than with the library.  We won't punish ourselves
-    # For their bad decisions
-
     def get_looping(self):
         """Returns whether this channel is currently setup to loop."""
         return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, 0) == 20
@@ -593,6 +590,14 @@ class Channel(FlagObject):
         return bass_call_0(BASS_ChannelFlags, self.handle, 0, BASS_SAMPLE_LOOP)
 
     looping = property(fget=get_looping, fset=set_looping)
+
+    def free(self):
+        """Frees a channel.
+
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return bass_call(BASS_ChannelFree, self.handle)
 
     def __del__(self):
         try:

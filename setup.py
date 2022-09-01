@@ -7,7 +7,7 @@ setup(
     name="sound_lib",
     author=__author__,
     author_email="q@q-continuum.net",
-    version=__version__,
+    version=str(__version__),
     description="Pythonic wrapper to the Bass sound library and various add-ons",
     # long_description = open('README.txt').read(),
     package_dir={"sound_lib": "sound_lib"},
@@ -20,11 +20,8 @@ setup(
         }
     },
     install_requires=["libloader", "platform_utils"],
-    dependency_links=[
-        "http://hg.q-continuum.net/libloader/archive/tip.tar.gz#egg=libloader-dev",
-    ],
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Stable",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",

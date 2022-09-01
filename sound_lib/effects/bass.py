@@ -1,7 +1,8 @@
 from __future__ import absolute_import
-from sound_lib.external import pybass
+from ..external import pybass
 from .effect import SoundEffect
 
+"""Effects built-in to BASS"""
 
 class Chorus(SoundEffect):
     """ """

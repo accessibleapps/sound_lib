@@ -1,7 +1,8 @@
 from __future__ import absolute_import
-from sound_lib.external import pybass_fx
+from ..external import pybass_fx
 from .effect import SoundEffect
 
+""" Effects from bass_fx """
 
 class Volume(SoundEffect):
     """ """

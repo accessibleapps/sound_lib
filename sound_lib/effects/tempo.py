@@ -5,7 +5,6 @@ from ..stream import BaseStream
 from ..channel import Channel
 from ..main import bass_call, bass_call_0
 
-
 class Tempo(BaseStream):
     """ """
     def __init__(

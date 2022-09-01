@@ -1,8 +1,8 @@
-from sound_lib.main import bass_call
+from __future__ import absolute_import
+from ..main import bass_call
 import ctypes
-from sound_lib.external import pybass
+from ..external import pybass
 import string  # for the alphabet!
-
 
 class SoundEffect(object):
     """ """

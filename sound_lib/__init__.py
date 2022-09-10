@@ -1,5 +1,5 @@
 __author__ = "Christopher Toth"
-__version__ = 0.83
+__version__ = "0.8.4"
 
 
 def find_datafiles():

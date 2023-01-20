@@ -91,7 +91,7 @@ class FileStream(BaseStream):
         decode=False,
         unicode=True,
     ):
-        if platform.system() == "Darwin":
+        if platform.system() == "Darwin" and file:
             unicode = False
             file = file.encode(sys.getfilesystemencoding())
         self.setup_flag_mapping()
@@ -126,7 +126,7 @@ class URLStream(BaseStream):
         decode=False,
         unicode=True,
     ):
-        if platform.system() == "Darwin":
+        if platform.system() in ('Darwin', 'Linux'):
             unicode = False
             url = url.encode(sys.getfilesystemencoding())
         self._downloadproc = downloadproc or self._callback  # we *must hold on to this

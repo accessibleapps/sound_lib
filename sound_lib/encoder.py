@@ -75,6 +75,20 @@ class Encoder(FlagObject):
             user,
         )
 
+    def set_title(self, title=None, url=None):
+        """
+
+        Args:
+          title:  (Default value = None)
+          url:  (Default value = None)
+
+        Returns:
+
+        """
+        return bass_call(
+            pybassenc.BASS_Encode_CastSetTitle, self.handle, title, url
+        )
+
     @property
     def paused(self):
         """ """
@@ -147,20 +161,6 @@ class BroadcastEncoder(Encoder):
             headers,
             bitrate,
             public,
-        )
-
-    def set_title(self, title=None, url=None):
-        """
-
-        Args:
-          title:  (Default value = None)
-          url:  (Default value = None)
-
-        Returns:
-
-        """
-        return bass_call(
-            pybassenc.BASS_Encode_CastSetTitle, self.source_encoder.handle, title, url
         )
 
     def get_stats(self, type, password=None):

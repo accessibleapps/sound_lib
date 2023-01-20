@@ -63,9 +63,8 @@ class Encoder(FlagObject):
         )  # fwiw!
         self.source = source
         source_handle = source.handle
-        if callback is None:
-            callback = lambda *a: None
-        callback = pybassenc.ENCODEPROC(callback)
+        if callback is not None:
+            callback = pybassenc.ENCODEPROC(callback)
         self.callback = callback
         self.handle = bass_call(
             pybassenc.BASS_Encode_Start,
@@ -204,6 +203,7 @@ class Server:
         self.buffer = buffer
         self.burst = burst
         self.user = user
+        self._callback = pybassenc.ENCODECLIENTPROC(self.client_callback)
         self.handle = bass_call(
             pybassenc.BASS_Encode_ServerInit,
             encoder.handle,
@@ -211,12 +211,12 @@ class Server:
             buffer,
             burst,
             0, #flags
-            self.client_callback,
+            self._callback,
             user,
         )
-        
-    @   pybassenc.ENCODECLIENTPROC
-    def client_callback(self, handle, client, connect, user):
+
+
+    def client_callback(self, handle, connect, client, headers, user):
         """
 
         Args:
@@ -232,5 +232,6 @@ class Server:
             print("client connected")
         else:
             print("client disconnected")
-        return 1
+        print(headers)
+        return True
     

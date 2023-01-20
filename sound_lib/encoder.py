@@ -186,3 +186,51 @@ class BroadcastEncoder(Encoder):
         return bass_call(
             pybassenc.BASS_Encode_CastGetStats, self.handle, type, password
         )
+
+class Server:
+    """Local Audio Server"""
+
+    #DWORD BASSENCDEF(BASS_Encode_ServerInit)(HENCODE handle, const char *port, DWORD buffer, DWORD burst, DWORD flags, ENCODECLIENTPROC *proc, void *user);
+    def __init__(
+        self,
+        encoder,
+        port,
+        buffer=64000,
+        burst=64000,
+        user=None,
+    ):
+        self.encoder = encoder
+        self.port = port
+        self.buffer = buffer
+        self.burst = burst
+        self.user = user
+        self.handle = bass_call(
+            pybassenc.BASS_Encode_ServerInit,
+            encoder.handle,
+            str(port).encode('ascii'),
+            buffer,
+            burst,
+            0, #flags
+            self.client_callback,
+            user,
+        )
+        
+    @   pybassenc.ENCODECLIENTPROC
+    def client_callback(self, handle, client, connect, user):
+        """
+
+        Args:
+            handle: 
+            client: 
+            connect: 
+            user: 
+
+        Returns:
+            An integer 0 or 1 if the connection should be accepted
+        """
+        if connect:
+            print("client connected")
+        else:
+            print("client disconnected")
+        return 1
+    

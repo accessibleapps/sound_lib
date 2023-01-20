@@ -97,7 +97,7 @@ BASS_ENCODE_SERVER_NOHTTP = 1	#no HTTP headers
 BASS_Encode_GetVersion = func_type(ctypes.c_ulong)(('BASS_Encode_GetVersion', bassenc_module))
 
 #HENCODE BASSENCDEF(BASS_Encode_Start)(DWORD handle, const char *cmdline, DWORD flags, ENCODEPROC *proc, void *user);
-BASS_Encode_Start = func_type(HENCODE, ctypes.c_ulong, ctypes.c_char_p, ctypes.c_ulong, ENCODEPROC, ctypes.c_void_p)(('BASS_Encode_Start', bassenc_module))
+BASS_Encode_Start = func_type(HENCODE, ctypes.c_ulong, ctypes.c_char_p, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_void_p)(('BASS_Encode_Start', bassenc_module))
 
 #HENCODE BASSENCDEF(BASS_Encode_StartLimit)(DWORD handle, const char *cmdline, DWORD flags, ENCODEPROC *proc, void *user, DWORD limit);
 BASS_Encode_StartLimit = func_type(HENCODE, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong, ENCODEPROC, ctypes.c_void_p, ctypes.c_ulong)(('BASS_Encode_StartLimit', bassenc_module))
@@ -162,7 +162,7 @@ BASS_Encode_CastGetStats = func_type(ctypes.c_char_p, HENCODE, ctypes.c_ulong, c
 #Local audio server
 
 #DWORD BASSENCDEF(BASS_Encode_ServerInit)(HENCODE handle, const char *port, DWORD buffer, DWORD burst, DWORD flags, ENCODECLIENTPROC *proc, void *user);
-BASS_Encode_ServerInit = func_type(ctypes.c_ulong, HENCODE, ctypes.c_char_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ENCODECLIENTPROC, ctypes.c_void_p)(('BASS_Encode_ServerInit', bassenc_module))
+BASS_Encode_ServerInit = func_type(ctypes.c_ulong, HENCODE, ctypes.c_char_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_void_p)(('BASS_Encode_ServerInit', bassenc_module))
 
 #BOOL BASSENCDEF(BASS_Encode_ServerKick)(HENCODE handle, const char *client);
 BASS_Encode_ServerKick = func_type(ctypes.c_byte, HENCODE, ctypes.c_char_p)(('BASS_Encode_ServerKick', bassenc_module))

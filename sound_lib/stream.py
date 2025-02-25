@@ -91,7 +91,7 @@ class FileStream(BaseStream):
         decode=False,
         unicode=True,
     ):
-        if platform.system() == "Darwin" and file:
+        if platform.system() == "Darwin" and file and not mem:
             unicode = False
             file = file.encode(sys.getfilesystemencoding())
         self.setup_flag_mapping()

@@ -11,7 +11,18 @@ _setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})
 
 
 class Output(object):
-    """ """
+    """Represents the audio output device and its settings.
+
+    This class handles initialization of the output device, volume control,
+    and device selection.
+
+    Args:
+        device (int): Device to use, -1 = default device
+        frequency (int): Output sample rate
+        flags (int): BASS_DEVICE_xxx flags
+        window (int): Window handle, if using DirectSound output
+        clsid: Device identifier
+    """
     def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
         try:
             self.use_default_device()

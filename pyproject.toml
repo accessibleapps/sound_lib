@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sound_lib"
+version = "0.8.7"
+description = "Pythonic wrapper to the Bass sound library and various add-ons"
+authors = [
+    {name = "Christopher Toth", email = "q@q-continuum.net"}
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8", 
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "libloader",
+    "platform_utils==1.5.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/q-continuum/sound_lib"
+Issues = "https://github.com/q-continuum/sound_lib/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sound_lib*"]
+
+[tool.setuptools.package-data]
+sound_lib = ["lib/x86/*", "lib/x64/*"]
+

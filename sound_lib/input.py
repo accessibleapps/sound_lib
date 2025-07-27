@@ -11,8 +11,13 @@ from .main import bass_call, bass_call_0
 
 
 class Input(object):
-    """Provides initialization and management for recording on a global level.
-    Initialization is required if wanting to grab audio from an input device.
+    """Manages audio input devices for recording.
+
+    This class provides initialization and management for recording on a global level.
+    It must be initialized before attempting to capture audio from an input device.
+
+    Args:
+        device (int): Input device to use, -1 = default device
     """
 
     def __init__(self, device=-1):

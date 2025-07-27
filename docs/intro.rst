@@ -1,9 +1,14 @@
 Introduction
 =============
 
-Sound_lib is a library which simplifies working with audio.
+Sound_lib is a Python library that simplifies working with audio in Python applications.
 
-It is primarily a wrapper over the excellent Bass sound library, and includes a majority of Bass's add-ons.
+It serves as a high-level wrapper around the powerful BASS audio library, incorporating most of BASS's add-ons to provide a comprehensive audio solution.
+
+Why Sound_lib?
+--------------
+
+Sound_lib aims to make audio programming in Python more accessible and intuitive. It abstracts away many of the low-level details of the BASS library while still providing access to its powerful features.
 
 Features
 ---------

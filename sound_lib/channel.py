@@ -5,9 +5,15 @@ from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
 
 
 class Channel(FlagObject):
-    """A "channel" can be a sample playback channel (HCHANNEL), a sample stream (HSTREAM), a MOD music (HMUSIC), or a recording (HRECORD).
-    Chances are, if you're playing audio, you're using a channel on one level or another.
-    Each "Channel" function can be used with one or more of these channel types.
+    """A "channel" represents an audio stream that can be manipulated.
+    
+    It can be one of the following:
+    - A sample playback channel (HCHANNEL)
+    - A sample stream (HSTREAM)
+    - A MOD music (HMUSIC)
+    - A recording (HRECORD)
+
+    Most audio playback and manipulation in sound_lib is done through Channel objects.
     """
 
     attribute_mapping = {}

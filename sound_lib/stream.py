@@ -75,8 +75,22 @@ class Stream(BaseStream):
 
 
 class FileStream(BaseStream):
-    """A sample stream that loads from a supported filetype.
-    Can load from both disk and memory."""
+    """A sample stream that loads from a supported audio file format.
+    
+    This class can load audio from both disk files and memory.
+
+    Args:
+        mem (bool): If True, load from memory. If False, load from file.
+        file (str): Path to the audio file or memory address.
+        offset (int): Offset in bytes when reading from memory.
+        length (int): Data length in bytes when reading from memory.
+        flags (int): BASS_STREAM_xxx flags.
+        three_d (bool): Enable 3D functionality.
+        mono (bool): Force mono audio.
+        autofree (bool): Automatically free the stream when playback ends.
+        decode (bool): Create a decoding channel.
+        unicode (bool): Filename is in Unicode format.
+    """
 
     def __init__(
         self,

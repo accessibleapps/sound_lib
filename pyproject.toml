@@ -27,7 +27,7 @@ classifiers = [
 ]
 dependencies = [
     "libloader",
-    "platform_utils==1.5.7",
+    "platform_utils==1.5.9",
 ]
 
 [project.urls]

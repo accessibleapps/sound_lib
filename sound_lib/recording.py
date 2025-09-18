@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from .channel import Channel
-from .external.pybass import *
+from .external.pybass import BASS_RecordStart, BASS_RECORD_PAUSE, RECORDPROC
 from ctypes import string_at
 import wave
 from .main import bass_call, bass_call_0

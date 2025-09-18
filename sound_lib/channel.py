@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from .external.pybass import *
 from .main import bass_call, bass_call_0, BassError, update_3d_system, FlagObject
-from ctypes import pointer, c_float, c_long, c_ulong, c_buffer
+from ctypes import pointer, c_float, c_long, c_ulong, c_buffer, sizeof
 
 
 class Channel(FlagObject):
@@ -284,6 +284,63 @@ class Channel(FlagObject):
         if attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
         return bass_call(BASS_ChannelSetAttribute, self.handle, attribute, value)
+
+    def get_attribute_ex(self, attribute, size=None):
+        """Get extended attribute data of variable size.
+
+        Args:
+            attribute: Attribute constant (BASS_ATTRIB_SCANINFO, BASS_ATTRIB_USER, etc.)
+            size (int, optional): Buffer size in bytes. If None, queries size first.
+
+        Returns:
+            bytes: Raw attribute data, or None if not available
+
+        raises:
+            sound_lib.main.BassError: If attribute is invalid or not available
+        """
+        if attribute in self.attribute_mapping:
+            attribute = self.attribute_mapping[attribute]
+
+        # If size not provided, query it first
+        if size is None:
+            size = bass_call_0(BASS_ChannelGetAttributeEx, self.handle, attribute, None, 0)
+            if size == 0:
+                return None
+
+        # Allocate buffer and get the data
+        buffer = c_buffer(size)
+        actual_size = bass_call_0(BASS_ChannelGetAttributeEx, self.handle, attribute, buffer, size)
+        if actual_size == 0:
+            return None
+
+        return buffer.raw[:actual_size]
+
+    def set_attribute_ex(self, attribute, data):
+        """Set extended attribute with variable-size data.
+
+        Args:
+            attribute: Attribute constant
+            data (bytes): Raw data to set
+
+        Returns:
+            bool: True on success
+
+        raises:
+            sound_lib.main.BassError: If attribute is invalid or data is malformed
+        """
+        if attribute in self.attribute_mapping:
+            attribute = self.attribute_mapping[attribute]
+
+        # Convert data to ctypes buffer if needed
+        if isinstance(data, bytes):
+            buffer = c_buffer(data)
+            size = len(data)
+        else:
+            # Assume it's already a ctypes buffer
+            buffer = data
+            size = sizeof(data)
+
+        return bass_call(BASS_ChannelSetAttributeEx, self.handle, attribute, buffer, size)
 
     def slide_attribute(self, attribute, value, time):
         """Slides this channel's attribute from its current value to a new value.

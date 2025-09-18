@@ -1,12 +1,16 @@
 from __future__ import absolute_import
+
 import ctypes
-from ..external import pybass, pybass_fx
-from ..stream import BaseStream
+
 from ..channel import Channel
-from ..main import bass_call, bass_call_0
+from ..external import pybass_fx
+from ..main import bass_call
+from ..stream import BaseStream
+
 
 class Tempo(BaseStream):
     """ """
+
     def __init__(
         self,
         channel,
@@ -49,7 +53,7 @@ class Tempo(BaseStream):
         """
 
         Args:
-          val: 
+          val:
 
         Returns:
 
@@ -66,7 +70,7 @@ class Tempo(BaseStream):
         """
 
         Args:
-          val: 
+          val:
 
         Returns:
 
@@ -83,7 +87,7 @@ class Tempo(BaseStream):
         """
 
         Args:
-          val: 
+          val:
 
         Returns:
 

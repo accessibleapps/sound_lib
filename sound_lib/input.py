@@ -1,11 +1,25 @@
-from ctypes import string_at
+import ctypes
 import platform
-import wave
 
-from .external.pybass import *
+from .external.pybass import (
+    BASS_DEVICE_ENABLED,
+    BASS_DEVICEINFO,
+    BASS_RecordFree,
+    BASS_RecordGetDevice,
+    BASS_RecordGetDeviceInfo,
+    BASS_RecordInit,
+)
 
 if platform.system() == "Windows":
-    from .external.pybasswasapi import *
+    from .external.pybasswasapi import (
+        WASAPIPROC,
+        BASS_WASAPI_Free,
+        BASS_WASAPI_GetDevice,
+        BASS_WASAPI_Init,
+        BASS_WASAPI_SetDevice,
+        BASS_WASAPI_Start,
+        BASS_WASAPI_Stop,
+    )
 from . import config
 from .main import bass_call, bass_call_0
 
@@ -55,7 +69,7 @@ class Input(object):
     @staticmethod
     def get_device_names():
         """Convenience method that returns a list of device names that are considered
-        	valid by bass.
+                valid by bass.
 
         Returns:
             list: A list containing names of input devices on the system.
@@ -124,6 +138,8 @@ class WASAPIInput(object):
         period=0.0,
         callback=None,
     ):
+        if platform.system() != "Windows":
+            raise RuntimeError("WASAPI is only supported on Windows")
         if callback is None:
             callback = lambda buffer, length, user: True
         self.proc = WASAPIPROC(callback)

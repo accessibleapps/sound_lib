@@ -1,11 +1,15 @@
 from __future__ import absolute_import
-from ..main import bass_call
+
 import ctypes
-from ..external import pybass
 import string  # for the alphabet!
+
+from ..external import pybass
+from ..main import bass_call
+
 
 class SoundEffect(object):
     """ """
+
     def __init__(self, channel, type=None, priority=0):
         self.original_channel = channel
         if hasattr(channel, "handle"):
@@ -29,7 +33,7 @@ class SoundEffect(object):
         """
 
         Args:
-          parameters: 
+          parameters:
 
         Returns:
 
@@ -59,7 +63,7 @@ class SoundEffect(object):
         """
 
         Args:
-          func: 
+          func:
 
         Returns:
 
@@ -74,7 +78,7 @@ class SoundEffect(object):
         """
 
         Args:
-          func: 
+          func:
 
         Returns:
 

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
+
 from .external import pybass, pybassenc
-from .main import bass_call, bass_call_0, FlagObject
+from .main import FlagObject, bass_call, bass_call_0
 
 
 class Encoder(FlagObject):

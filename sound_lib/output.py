@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from logging import getLogger
+
 
 import ctypes
 import platform
@@ -34,7 +36,9 @@ from .external.pybass import (
     BASS_Start,
     BASS_Stop,
 )
-from .main import EAX_ENVIRONMENTS, bass_call, bass_call_0, update_3d_system
+from .main import EAX_ENVIRONMENTS, BassError, bass_call, bass_call_0, update_3d_system
+
+logger = getLogger("sound_lib.output")
 
 _getter = lambda func, key, obj: func(obj)[key]
 _setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})
@@ -57,8 +61,8 @@ class Output(object):
     def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
         try:
             self.use_default_device()
-        except:
-            pass
+        except BassError:
+            logger.warning("Could not set default device, continuing")
         self._device = device
         self.frequency = frequency
         self.flags = flags
@@ -236,7 +240,8 @@ class Output(object):
         """ """
         try:
             return self.get_device_names().index("Default") + 1
-        except:
+        except ValueError:
+            logger.warning("Could not find default device")
             return -1
 
     def find_user_provided_device(self, device_name):
@@ -251,6 +256,9 @@ class Output(object):
         try:
             return self.find_device_by_name(device_name)
         except ValueError:
+            logger.warning(
+                "Could not find device named %s, using default device", device_name
+            )
             return self.find_default_device()
 
 

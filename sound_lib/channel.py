@@ -449,6 +449,30 @@ class Channel(FlagObject):
         # Convert to Python list
         return [levels_array[i] for i in range(num_levels)]
 
+    def get_rms_level(self, length=0.02, mono=False):
+        """Get RMS (Root Mean Square) level measurement.
+
+        Args:
+            length (float): Seconds of data to analyze (default 0.02 = 20ms)
+            mono (bool): Get single mono level instead of per-channel levels
+
+        Returns:
+            float or list: Single RMS level (mono=True) or list of RMS levels per channel
+        """
+        return self.get_level_ex(length=length, mono=mono, rms=True)
+
+    def get_stereo_levels(self, length=0.02, rms=False):
+        """Get stereo level measurement (left/right).
+
+        Args:
+            length (float): Seconds of data to analyze (default 0.02 = 20ms)
+            rms (bool): Get RMS level instead of peak level
+
+        Returns:
+            list: [left_level, right_level] where left is from even channels, right from odd
+        """
+        return self.get_level_ex(length=length, stereo=True, rms=rms)
+
     def lock(self):
         """Locks a stream, MOD music or recording channel to the current thread.
 

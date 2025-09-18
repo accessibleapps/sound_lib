@@ -1,5 +1,6 @@
 import ctypes
 import platform
+from typing import Any, Callable, List, Optional
 
 from .external.pybass import (
     BASS_DEVICE_ENABLED,
@@ -34,16 +35,16 @@ class Input(object):
         device (int): Input device to use, -1 = default device
     """
 
-    def __init__(self, device=-1):
+    def __init__(self, device: int = -1) -> None:
         bass_call(BASS_RecordInit, device)
         self._device = device
         self.config = config.BassConfig()
 
-    def free(self):
+    def free(self) -> Any:
         """Frees all resources used by the recording device."""
         return bass_call(BASS_RecordFree)
 
-    def get_device(self):
+    def get_device(self) -> int:
         """
         Retrieves the device used for recording.
 
@@ -52,7 +53,7 @@ class Input(object):
         """
         return bass_call_0(BASS_RecordGetDevice)
 
-    def set_device(self, device):
+    def set_device(self, device: int) -> None:
         """
         Sets the device to use for recording.
 
@@ -62,12 +63,14 @@ class Input(object):
         if device == self._device:
             return
         self.free()
-        self.__init__(device=device)
+        bass_call(BASS_RecordInit, device)
+        self._device = device
+        self.config = config.BassConfig()
 
     device = property(fget=get_device, fset=set_device)
 
     @staticmethod
-    def get_device_names():
+    def get_device_names() -> List[str]:
         """Convenience method that returns a list of device names that are considered
                 valid by bass.
 
@@ -89,7 +92,7 @@ class Input(object):
             count += 1
         return result
 
-    def find_device_by_name(self, name):
+    def find_device_by_name(self, name: str) -> int:
         """
         Attempts to locate an input device given it's name.
 
@@ -104,11 +107,11 @@ class Input(object):
         """
         return self.get_device_names().index(name) - 1
 
-    def find_default_device(self):
+    def find_default_device(self) -> int:
         """Returns the index of the default device."""
         return -1
 
-    def find_user_provided_device(self, device_name):
+    def find_user_provided_device(self, device_name: str) -> int:
         """Locate an input device given it's name, falling back to the default if not found.
 
         Args:
@@ -130,14 +133,14 @@ class WASAPIInput(object):
 
     def __init__(
         self,
-        device=-2,
-        frequency=0,
-        channels=0,
-        flags=0,
-        buffer=0.0,
-        period=0.0,
-        callback=None,
-    ):
+        device: int = -2,
+        frequency: int = 0,
+        channels: int = 0,
+        flags: int = 0,
+        buffer: float = 0.0,
+        period: float = 0.0,
+        callback: Optional[Callable[[Any, int, Any], bool]] = None,
+    ) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("WASAPI is only supported on Windows")
         if callback is None:
@@ -155,11 +158,11 @@ class WASAPIInput(object):
             None,
         )
 
-    def free(self):
+    def free(self) -> Any:
         """Frees all resources used by the recording device."""
         bass_call(BASS_WASAPI_Free)
 
-    def set_device(self, device):
+    def set_device(self, device: int) -> Any:
         """
         Sets the device to use for recording.
 
@@ -168,7 +171,7 @@ class WASAPIInput(object):
         """
         bass_call(BASS_WASAPI_SetDevice, device)
 
-    def get_device(self):
+    def get_device(self) -> int:
         """
         Retrieves the device used for recording.
 
@@ -179,7 +182,7 @@ class WASAPIInput(object):
 
     device = property(fget=get_device, fset=set_device)
 
-    def start(self):
+    def start(self) -> Any:
         """Starts the device.
 
         returns:
@@ -187,7 +190,7 @@ class WASAPIInput(object):
         """
         return bass_call(BASS_WASAPI_Start)
 
-    def stop(self, reset=False):
+    def stop(self, reset: bool = False) -> Any:
         """
         Stops the device.
 

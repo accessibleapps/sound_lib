@@ -1,7 +1,59 @@
 from __future__ import absolute_import
-from .external.pybass import *
-from .main import bass_call, bass_call_0, BassError, update_3d_system, FlagObject
-from ctypes import pointer, c_float, c_long, c_ulong, c_buffer, sizeof
+from typing import Any, Dict, List, Optional, Union
+from .external.pybass import (
+    BASS_ACTIVE_PAUSED,
+    BASS_ACTIVE_PLAYING,
+    BASS_ACTIVE_STALLED,
+    BASS_ACTIVE_STOPPED,
+    BASS_ATTRIB_EAXMIX,
+    BASS_ATTRIB_FREQ,
+    BASS_ATTRIB_PAN,
+    BASS_ATTRIB_VOL,
+    BASS_ChannelBytes2Seconds,
+    BASS_ChannelFlags,
+    BASS_ChannelFree,
+    BASS_ChannelGet3DAttributes,
+    BASS_ChannelGet3DPosition,
+    BASS_ChannelGetAttribute,
+    BASS_ChannelGetAttributeEx,
+    BASS_ChannelGetData,
+    BASS_ChannelGetDevice,
+    BASS_ChannelGetInfo,
+    BASS_ChannelGetLength,
+    BASS_ChannelGetLevel,
+    BASS_ChannelGetLevelEx,
+    BASS_ChannelGetPosition,
+    BASS_ChannelIsActive,
+    BASS_ChannelIsSliding,
+    BASS_ChannelLock,
+    BASS_ChannelPause,
+    BASS_ChannelPlay,
+    BASS_ChannelRemoveLink,
+    BASS_ChannelSeconds2Bytes,
+    BASS_ChannelSet3DAttributes,
+    BASS_ChannelSet3DPosition,
+    BASS_ChannelSetAttribute,
+    BASS_ChannelSetAttributeEx,
+    BASS_ChannelSetDevice,
+    BASS_ChannelSetFX,
+    BASS_ChannelSetLink,
+    BASS_ChannelSetPosition,
+    BASS_ChannelSlideAttribute,
+    BASS_ChannelStop,
+    BASS_ChannelUpdate,
+    BASS_CHANNELINFO,
+    BASS_LEVEL_MONO,
+    BASS_LEVEL_NOREMOVE,
+    BASS_LEVEL_RMS,
+    BASS_LEVEL_STEREO,
+    BASS_LEVEL_VOLPAN,
+    BASS_POS_BYTE,
+    BASS_POS_DECODE,
+    BASS_SAMPLE_LOOP,
+    BASS_3DVECTOR,
+)
+from .main import BassError, FlagObject, bass_call, bass_call_0, update_3d_system
+from ctypes import c_buffer, c_float, c_long, c_ulong, pointer, sizeof
 
 
 class Channel(FlagObject):
@@ -16,9 +68,9 @@ class Channel(FlagObject):
     Most audio playback and manipulation in sound_lib is done through Channel objects.
     """
 
-    attribute_mapping = {}
+    attribute_mapping: Dict[str, int] = {}
 
-    def __init__(self, handle):
+    def __init__(self, handle: int) -> None:
         self.handle = handle
         self.attribute_mapping = {
             "eaxmix": BASS_ATTRIB_EAXMIX,
@@ -29,10 +81,10 @@ class Channel(FlagObject):
             "decode": BASS_POS_DECODE,
         }
 
-    def add_attributes_to_mapping(self, **attrs):
+    def add_attributes_to_mapping(self, **attrs: int) -> None:
         self.attribute_mapping.update(**attrs)
 
-    def play(self, restart=False):
+    def play(self, restart: bool = False) -> Any:
         """Starts (or resumes) playback of a sample, stream, MOD music, or recording.
 
         Args:
@@ -43,7 +95,7 @@ class Channel(FlagObject):
         """
         return bass_call(BASS_ChannelPlay, self.handle, restart)
 
-    def play_blocking(self, restart=False):
+    def play_blocking(self, restart: bool = False) -> None:
         """Starts (or resumes) playback, waiting to return until reaching the end of the stream
 
         Args:
@@ -53,7 +105,7 @@ class Channel(FlagObject):
         while self.is_playing:
             pass
 
-    def pause(self):
+    def pause(self) -> Any:
         """Pauses a sample, stream, MOD music, or recording.
 
         Returns:
@@ -64,7 +116,7 @@ class Channel(FlagObject):
         """
         return bass_call(BASS_ChannelPause, self.handle)
 
-    def is_active(self):
+    def is_active(self) -> int:
         """Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
         return bass_call_0(BASS_ChannelIsActive, self.handle)
 
@@ -108,7 +160,7 @@ class Channel(FlagObject):
         """
         return self.is_active() == BASS_ACTIVE_STALLED
 
-    def get_position(self, mode=BASS_POS_BYTE):
+    def get_position(self, mode: int = BASS_POS_BYTE) -> int:
         """Retrieves the playback position of a sample, stream, or MOD music. Can also be used with a recording channel.
 
         Args:
@@ -122,7 +174,7 @@ class Channel(FlagObject):
         """
         return bass_call_0(BASS_ChannelGetPosition, self.handle, mode)
 
-    def set_position(self, pos, mode=BASS_POS_BYTE):
+    def set_position(self, pos: int, mode: int = BASS_POS_BYTE) -> Any:
         """Sets the playback position of a sample, MOD music, or stream.
 
         Args:
@@ -139,11 +191,11 @@ class Channel(FlagObject):
 
     position = property(get_position, set_position)
 
-    def stop(self):
+    def stop(self) -> Any:
         """Stops a sample, stream, MOD music, or recording."""
         return bass_call(BASS_ChannelStop, self.handle)
 
-    def update(self, length=0):
+    def update(self, length: int = 0) -> Any:
         """Updates the playback buffer of a stream or MOD music.
 
         Args:
@@ -158,7 +210,7 @@ class Channel(FlagObject):
         """
         return bass_call(BASS_ChannelUpdate, self.handle, length)
 
-    def get_length(self, mode=BASS_POS_BYTE):
+    def get_length(self, mode: int = BASS_POS_BYTE) -> int:
         """Retrieves the playback length of this channel.
 
         Args:
@@ -174,10 +226,10 @@ class Channel(FlagObject):
 
     __len__ = get_length
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> bool:
         return True
 
-    def get_device(self):
+    def get_device(self) -> int:
         """Retrieves the device in use by this channel.
 
         returns:
@@ -185,7 +237,7 @@ class Channel(FlagObject):
         """
         return bass_call_0(BASS_ChannelGetDevice, self.handle)
 
-    def set_device(self, device):
+    def set_device(self, device: int) -> None:
         """Changes the device in use by this channel. Must be a stream, MOD music or sample.
 
         Args:
@@ -201,7 +253,7 @@ class Channel(FlagObject):
 
     device = property(get_device, set_device)
 
-    def set_fx(self, type, priority=0):
+    def set_fx(self, type: int, priority: int = 0) -> Any:
         """Sets an effect on a stream, MOD music, or recording channel.
 
         Args:
@@ -218,7 +270,7 @@ class Channel(FlagObject):
 
         return SoundEffect(bass_call(BASS_ChannelSetFX, type, priority))
 
-    def bytes_to_seconds(self, position=None):
+    def bytes_to_seconds(self, position: Optional[int] = None) -> float:
         """Translates a byte position into time (seconds), based on the format in use by this channel.
 
         Args:
@@ -230,7 +282,7 @@ class Channel(FlagObject):
         position = position or self.position
         return bass_call_0(BASS_ChannelBytes2Seconds, self.handle, position)
 
-    def length_in_seconds(self):
+    def length_in_seconds(self) -> float:
         """Retrieves the length of the stream, in seconds, regardless of position.
 
         returns:
@@ -238,7 +290,7 @@ class Channel(FlagObject):
         """
         return self.bytes_to_seconds(self.get_length())
 
-    def seconds_to_bytes(self, position):
+    def seconds_to_bytes(self, position: float) -> int:
         """Translates a time (seconds) position into bytes, based on the format in use by this channel.
 
         Args:
@@ -249,7 +301,7 @@ class Channel(FlagObject):
         """
         return bass_call_0(BASS_ChannelSeconds2Bytes, self.handle, position)
 
-    def get_attribute(self, attribute):
+    def get_attribute(self, attribute: Union[str, int]) -> float:
         """Retrieves the value of this channel's attribute.
 
         Args:
@@ -263,12 +315,12 @@ class Channel(FlagObject):
                 Some attributes have additional possible instances where an exception might be raised.
         """
         value = pointer(c_float())
-        if attribute in self.attribute_mapping:
+        if isinstance(attribute, str) and attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
         bass_call(BASS_ChannelGetAttribute, self.handle, attribute, value)
         return value.contents.value
 
-    def set_attribute(self, attribute, value):
+    def set_attribute(self, attribute: Union[str, int], value: float) -> Any:
         """Sets the value of an attribute on this channel.
 
         Args:
@@ -281,11 +333,11 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If either attribute or value is invalid.
         """
-        if attribute in self.attribute_mapping:
+        if isinstance(attribute, str) and attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
         return bass_call(BASS_ChannelSetAttribute, self.handle, attribute, value)
 
-    def get_attribute_ex(self, attribute, size=None):
+    def get_attribute_ex(self, attribute: Union[str, int], size: Optional[int] = None) -> Optional[bytes]:
         """Get extended attribute data of variable size.
 
         Args:
@@ -298,7 +350,7 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If attribute is invalid or not available
         """
-        if attribute in self.attribute_mapping:
+        if isinstance(attribute, str) and attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
 
         # If size not provided, query it first
@@ -319,7 +371,7 @@ class Channel(FlagObject):
 
         return buffer.raw[:actual_size]
 
-    def set_attribute_ex(self, attribute, data):
+    def set_attribute_ex(self, attribute: Union[str, int], data: Union[bytes, Any]) -> Any:
         """Set extended attribute with variable-size data.
 
         Args:
@@ -332,7 +384,7 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If attribute is invalid or data is malformed
         """
-        if attribute in self.attribute_mapping:
+        if isinstance(attribute, str) and attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
 
         # Convert data to ctypes buffer if needed
@@ -348,7 +400,7 @@ class Channel(FlagObject):
             BASS_ChannelSetAttributeEx, self.handle, attribute, buffer, size
         )
 
-    def slide_attribute(self, attribute, value, time):
+    def slide_attribute(self, attribute: Union[str, int], value: float, time: float) -> Any:
         """Slides this channel's attribute from its current value to a new value.
 
         Args:
@@ -362,13 +414,13 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If attribute is invalid, or the attributes value is set to go from positive to negative or vice versa when the BASS_SLIDE_LOG flag is used.
         """
-        if attribute in self.attribute_mapping:
+        if isinstance(attribute, str) and attribute in self.attribute_mapping:
             attribute = self.attribute_mapping[attribute]
         return bass_call(
             BASS_ChannelSlideAttribute, self.handle, attribute, value, time * 1000
         )
 
-    def is_sliding(self, attribute=0):
+    def is_sliding(self, attribute: int = 0) -> bool:
         """Checks if an attribute (or any attribute) of this channel is sliding. Must be a sample, stream, or MOD music.
 
         Args:
@@ -380,7 +432,7 @@ class Channel(FlagObject):
         """
         return bass_call_0(BASS_ChannelIsSliding, self.handle, attribute)
 
-    def get_info(self):
+    def get_info(self) -> Any:
         """Retrieves information on this channel.
 
         returns:
@@ -390,7 +442,7 @@ class Channel(FlagObject):
         bass_call(BASS_ChannelGetInfo, self.handle, value)
         return value[0]
 
-    def get_level(self):
+    def get_level(self) -> int:
         """Retrieves the level (peak amplitude) of a stream, MOD music or recording channel.
 
         returns:
@@ -405,13 +457,13 @@ class Channel(FlagObject):
 
     def get_level_ex(
         self,
-        length=0.02,
-        mono=False,
-        stereo=False,
-        rms=False,
-        apply_volume_pan=False,
-        no_remove=False,
-    ):
+        length: float = 0.02,
+        mono: bool = False,
+        stereo: bool = False,
+        rms: bool = False,
+        apply_volume_pan: bool = False,
+        no_remove: bool = False,
+    ) -> List[float]:
         """Enhanced level measurement with configurable options.
 
         Args:
@@ -463,7 +515,7 @@ class Channel(FlagObject):
         # Convert to Python list
         return [levels_array[i] for i in range(num_levels)]
 
-    def get_rms_level(self, length=0.02, mono=False):
+    def get_rms_level(self, length: float = 0.02, mono: bool = False) -> Union[float, List[float]]:
         """Get RMS (Root Mean Square) level measurement.
 
         Args:
@@ -475,7 +527,7 @@ class Channel(FlagObject):
         """
         return self.get_level_ex(length=length, mono=mono, rms=True)
 
-    def get_stereo_levels(self, length=0.02, rms=False):
+    def get_stereo_levels(self, length: float = 0.02, rms: bool = False) -> List[float]:
         """Get stereo level measurement (left/right).
 
         Args:
@@ -487,7 +539,7 @@ class Channel(FlagObject):
         """
         return self.get_level_ex(length=length, stereo=True, rms=rms)
 
-    def lock(self):
+    def lock(self) -> Any:
         """Locks a stream, MOD music or recording channel to the current thread.
 
         returns:
@@ -495,7 +547,7 @@ class Channel(FlagObject):
         """
         return bass_call(BASS_ChannelLock, self.handle, True)
 
-    def unlock(self):
+    def unlock(self) -> Any:
         """Unlocks a stream, MOD music or recording channel from the current thread.
 
         returns:
@@ -503,7 +555,7 @@ class Channel(FlagObject):
         """
         return bass_call(BASS_ChannelLock, self.handle, False)
 
-    def get_3d_attributes(self):
+    def get_3d_attributes(self) -> Dict[str, Union[int, float]]:
         """Retrieves the 3D attributes of a sample, stream, or MOD music channel with 3D functionality.
 
         returns:
@@ -532,13 +584,13 @@ class Channel(FlagObject):
         )
         res = {}
         for k in answer:
-            res[k] = answer[k].value
+            res[k] = answer[k].value  # type: ignore
         return res
 
     @update_3d_system
     def set_3d_attributes(
-        self, mode=-1, min=0.0, max=0.0, iangle=-1, oangle=-1, outvol=-1
-    ):
+        self, mode: int = -1, min: float = 0.0, max: float = 0.0, iangle: int = -1, oangle: int = -1, outvol: float = -1
+    ) -> Any:
         """Sets the 3D attributes of a sample, stream, or MOD music channel with 3D functionality.
 
         Args:
@@ -566,7 +618,7 @@ class Channel(FlagObject):
             outvol,
         )
 
-    def get_3d_position(self):
+    def get_3d_position(self) -> Dict[str, Any]:
         """Retrieves the 3D position of a sample, stream, or MOD music channel with 3D functionality.
 
         raises:
@@ -587,7 +639,7 @@ class Channel(FlagObject):
         return answer
 
     @update_3d_system
-    def set_3d_position(self, position=None, orientation=None, velocity=None):
+    def set_3d_position(self, position: Optional[Any] = None, orientation: Optional[Any] = None, velocity: Optional[Any] = None) -> Any:
         """Sets the 3D position of a sample, stream, or MOD music channel with 3D functionality.
 
         Args:
@@ -608,7 +660,7 @@ class Channel(FlagObject):
             BASS_ChannelSet3DPosition, self.handle, position, orientation, velocity
         )
 
-    def set_link(self, handle):
+    def set_link(self, handle: Union[int, 'Channel']) -> None:
         """Links two MOD music or stream channels together.
 
         Args:
@@ -624,7 +676,7 @@ class Channel(FlagObject):
             handle = handle.handle
         bass_call(BASS_ChannelSetLink, self.handle, handle)
 
-    def remove_link(self, handle):
+    def remove_link(self, handle: Union[int, 'Channel']) -> Any:
         """Removes a link between two MOD music or stream channels.
 
         Args:
@@ -640,17 +692,17 @@ class Channel(FlagObject):
             handle = handle.handle
         return bass_call(BASS_ChannelRemoveLink, self.handle, handle)
 
-    def __iadd__(self, other):
+    def __iadd__(self, other: 'Channel') -> 'Channel':
         """Convenience method to link this channel to another.  Calls set_link on the passed in item's handle"""
         self.set_link(other.handle)
         return self
 
-    def __isub__(self, other):
+    def __isub__(self, other: 'Channel') -> 'Channel':
         """Convenience method to unlink this channel from another.  Calls remove_link on the passed in item's handle"""
         self.remove_link(other.handle)
         return self
 
-    def get_frequency(self):
+    def get_frequency(self) -> float:
         """Retrieves sample frequency (sample rate).
 
         returns:
@@ -658,7 +710,7 @@ class Channel(FlagObject):
         """
         return self.get_attribute(BASS_ATTRIB_FREQ)
 
-    def set_frequency(self, frequency):
+    def set_frequency(self, frequency: float) -> None:
         """Sets the frequency (sample rate) of this channel.
 
         Args:
@@ -671,11 +723,11 @@ class Channel(FlagObject):
 
     frequency = property(fget=get_frequency, fset=set_frequency)
 
-    def get_pan(self):
+    def get_pan(self) -> float:
         """Gets the panning/balance position of this channel."""
         return self.get_attribute(BASS_ATTRIB_PAN)
 
-    def set_pan(self, pan):
+    def set_pan(self, pan: float) -> Any:
         """Sets the panning/balance position of this channel.
 
         Args:
@@ -689,7 +741,7 @@ class Channel(FlagObject):
 
     pan = property(fget=get_pan, fset=set_pan)
 
-    def get_volume(self):
+    def get_volume(self) -> float:
         """Gets the volume level of a channel.
 
         returns:
@@ -697,7 +749,7 @@ class Channel(FlagObject):
         """
         return self.get_attribute(BASS_ATTRIB_VOL)
 
-    def set_volume(self, volume):
+    def set_volume(self, volume: float) -> None:
         """sets the volume level of a channel.
 
         Args:
@@ -710,7 +762,7 @@ class Channel(FlagObject):
 
     volume = property(fget=get_volume, fset=set_volume)
 
-    def get_data(self, length=16384):
+    def get_data(self, length: int = 16384) -> Any:
         """Retrieves the immediate sample data (or an FFT representation of it) of this channel. Must be a sample channel, stream, MOD music, or recording channel.
 
         Args:
@@ -726,11 +778,11 @@ class Channel(FlagObject):
         bass_call_0(BASS_ChannelGetData, self.handle, pointer(buf), length)
         return buf
 
-    def get_looping(self):
+    def get_looping(self) -> bool:
         """Returns whether this channel is currently setup to loop."""
         return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, 0) == 20
 
-    def set_looping(self, looping):
+    def set_looping(self, looping: bool) -> Any:
         """Determines whether this channel is setup to loop.
 
         Args:
@@ -744,7 +796,7 @@ class Channel(FlagObject):
 
     looping = property(fget=get_looping, fset=set_looping)
 
-    def free(self):
+    def free(self) -> Any:
         """Frees a channel.
 
         Returns:
@@ -752,13 +804,13 @@ class Channel(FlagObject):
         """
         return bass_call(BASS_ChannelFree, self.handle)
 
-    def __del__(self):
+    def __del__(self) -> None:
         try:
             self.free()
         except:
             pass
 
-    def get_x(self):
+    def get_x(self) -> float:
         """Retrieves this channel's position on the X-axis, if 3d functionality is available.
 
         raises:
@@ -766,7 +818,7 @@ class Channel(FlagObject):
         """
         return self.get_3d_position()["position"].x
 
-    def set_x(self, val):
+    def set_x(self, val: float) -> None:
         """Sets positioning of this channel on the X-axis, if 3d functionality is available.
 
         Args:
@@ -781,7 +833,7 @@ class Channel(FlagObject):
 
     x = property(fget=get_x, fset=set_x)
 
-    def get_y(self):
+    def get_y(self) -> float:
         """Retrieves this channel's position on the Y-axis, if 3d functionality is available.
 
         raises:
@@ -789,7 +841,7 @@ class Channel(FlagObject):
         """
         return self.get_3d_position()["position"].y
 
-    def set_y(self, val):
+    def set_y(self, val: float) -> None:
         """Sets positioning of this channel on the Y-axis, if 3d functionality is available.
 
         Args:
@@ -804,7 +856,7 @@ class Channel(FlagObject):
 
     y = property(fget=get_y, fset=set_y)
 
-    def get_z(self):
+    def get_z(self) -> float:
         """Retrieves this channel's position on the Z-axis, if 3d functionality is available.
 
         raises:
@@ -812,7 +864,7 @@ class Channel(FlagObject):
         """
         return self.get_3d_position()["position"].z
 
-    def set_z(self, val):
+    def set_z(self, val: float) -> None:
         """Sets positioning of this channel on the Z-axis, if 3d functionality is available.
 
         Args:
@@ -827,7 +879,7 @@ class Channel(FlagObject):
 
     z = property(fget=get_z, fset=set_z)
 
-    def get_attributes(self):
+    def get_attributes(self) -> Dict[str, float]:
         """Retrieves all values of all attributes from this object and displays them in a dictionary whose keys are determined by this object's attribute_mapping"""
         res = {}
         for k in self.attribute_mapping:

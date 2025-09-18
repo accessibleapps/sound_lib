@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from logging import getLogger
+from typing import Any, Dict, List, Optional, Union
 
 
 import ctypes
@@ -58,7 +59,7 @@ class Output(object):
         clsid: Device identifier
     """
 
-    def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
+    def __init__(self, device: int = -1, frequency: int = 44100, flags: int = 0, window: int = 0, clsid: Optional[Any] = None) -> None:
         try:
             self.use_default_device()
         except BassError:
@@ -72,11 +73,11 @@ class Output(object):
             device=device, frequency=frequency, flags=flags, window=window, clsid=clsid
         )
         self.config = config.BassConfig()
-        self.proxy = None
+        self.proxy: Optional[c_char_p] = None
 
     def init_device(
-        self, device=None, frequency=None, flags=None, window=None, clsid=None
-    ):
+        self, device: Optional[int] = None, frequency: Optional[int] = None, flags: Optional[int] = None, window: Optional[int] = None, clsid: Optional[Any] = None
+    ) -> None:
         """
 
         Args:
@@ -110,23 +111,23 @@ class Output(object):
             device = 1
         bass_call(BASS_Init, device, frequency, flags, window, clsid)
 
-    def start(self):
+    def start(self) -> Any:
         """ """
         return bass_call(BASS_Start)
 
-    def pause(self):
+    def pause(self) -> Any:
         """ """
         return bass_call(BASS_Pause)
 
-    def stop(self):
+    def stop(self) -> Any:
         """ """
         return bass_call(BASS_Stop)
 
-    def get_device(self):
+    def get_device(self) -> int:
         """ """
         return bass_call_0(BASS_GetDevice)
 
-    def set_device(self, device):
+    def set_device(self, device: int) -> Any:
         """
 
         Args:
@@ -143,14 +144,14 @@ class Output(object):
 
     device = property(fget=get_device, fset=set_device)
 
-    def get_volume(self):
+    def get_volume(self) -> float:
         """ """
         volume = BASS_GetConfig(BASS_CONFIG_GVOL_STREAM)
         if volume:
             volume = volume / 10000.0
         return volume
 
-    def set_volume(self, volume):
+    def set_volume(self, volume: float) -> Any:
         """
 
         Args:
@@ -167,16 +168,16 @@ class Output(object):
     volume = property(get_volume, set_volume)
 
     @staticmethod
-    def free():
+    def free() -> Any:
         """ """
         return bass_call(BASS_Free)
 
-    def get_proxy(self):
+    def get_proxy(self) -> bytes:
         """ """
         ptr = bass_call(BASS_GetConfigPtr, BASS_CONFIG_NET_PROXY)
         return string_at(ptr)
 
-    def set_proxy(self, proxy):
+    def set_proxy(self, proxy: Union[str, bytes]) -> Any:
         """
 
         Args:
@@ -185,10 +186,12 @@ class Output(object):
         Returns:
 
         """
+        if isinstance(proxy, str):
+            proxy = proxy.encode('utf-8')
         self.proxy = c_char_p(proxy)
         return bass_call(BASS_SetConfigPtr, BASS_CONFIG_NET_PROXY, self.proxy)
 
-    def use_default_device(self, use=True):
+    def use_default_device(self, use: bool = True) -> Any:
         """
 
         Args:
@@ -200,7 +203,7 @@ class Output(object):
         return bass_call(BASS_SetConfig, BASS_CONFIG_DEV_DEFAULT, use)
 
     @staticmethod
-    def get_device_names():
+    def get_device_names() -> List[str]:
         """Convenience method that returns a list of device names that are considered
                 valid by bass.
 
@@ -225,7 +228,7 @@ class Output(object):
             count += 1
         return result
 
-    def find_device_by_name(self, name):
+    def find_device_by_name(self, name: str) -> int:
         """
 
         Args:
@@ -236,7 +239,7 @@ class Output(object):
         """
         return self.get_device_names().index(name) + 1
 
-    def find_default_device(self):
+    def find_default_device(self) -> int:
         """ """
         try:
             return self.get_device_names().index("Default") + 1
@@ -244,7 +247,7 @@ class Output(object):
             logger.warning("Could not find default device")
             return -1
 
-    def find_user_provided_device(self, device_name):
+    def find_user_provided_device(self, device_name: str) -> int:
         """
 
         Args:
@@ -265,10 +268,10 @@ class Output(object):
 class ThreeDOutput(Output):
     """ """
 
-    def __init__(self, flags=BASS_DEVICE_3D, *args, **kwargs):
-        super(ThreeDOutput, self).__init__(flags=flags, *args, **kwargs)
+    def __init__(self, device: int = -1, frequency: int = 44100, flags: int = BASS_DEVICE_3D, window: int = 0, clsid: Optional[Any] = None) -> None:
+        super(ThreeDOutput, self).__init__(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
 
-    def get_3d_factors(self):
+    def get_3d_factors(self) -> Dict[str, float]:
         """ """
         res = {
             "distance_factor": c_float(),
@@ -284,7 +287,7 @@ class ThreeDOutput(Output):
         return {k: res[k].value for k in res}
 
     @update_3d_system
-    def set_3d_factors(self, distance_factor=-1, rolloff=-1, doppler_factor=-1):
+    def set_3d_factors(self, distance_factor: Union[float, str] = -1, rolloff: float = -1, doppler_factor: float = -1) -> Any:
         """
 
         Args:
@@ -296,7 +299,7 @@ class ThreeDOutput(Output):
 
         """
         conversions = {"meters": 1.0, "yards": 0.9144, "feet": 0.3048}
-        if distance_factor in conversions:
+        if isinstance(distance_factor, str) and distance_factor in conversions:
             distance_factor = conversions[distance_factor]
         return bass_call(BASS_Set3DFactors, distance_factor, rolloff, doppler_factor)
 
@@ -315,7 +318,7 @@ class ThreeDOutput(Output):
         fset=partial(_setter, set_3d_factors, "doppler_factor"),
     )
 
-    def set_eax_parameters(self, environment=None, volume=None, decay=None, damp=None):
+    def set_eax_parameters(self, environment: Optional[Union[str, int]] = None, volume: Optional[float] = None, decay: Optional[float] = None, damp: Optional[float] = None) -> None:
         """
 
         Args:
@@ -328,7 +331,7 @@ class ThreeDOutput(Output):
 
         """
 
-        def convert_arg(arg):
+        def convert_arg(arg: Optional[Union[str, int, float]]) -> int:
             """
 
             Args:
@@ -338,22 +341,23 @@ class ThreeDOutput(Output):
 
             """
             if arg is None:
-                arg = -1
-            return arg
+                return -1
+            return int(arg) if not isinstance(arg, str) else -1
 
-        environment = convert_arg(environment)
-        if environment in EAX_ENVIRONMENTS:
+        if isinstance(environment, str) and environment in EAX_ENVIRONMENTS:
             environment = EAX_ENVIRONMENTS[environment]
+        else:
+            environment = convert_arg(environment)
         volume = convert_arg(volume)
         decay = convert_arg(decay)
         damp = convert_arg(damp)
         bass_call(BASS_SetEAXParameters, environment, volume, decay, damp)
 
-    def get_3d_algorithm(self):
+    def get_3d_algorithm(self) -> int:
         """ """
         return BASS_GetConfig(BASS_CONFIG_3DALGORITHM)
 
-    def set_3d_algorithm(self, algo):
+    def set_3d_algorithm(self, algo: Union[str, int]) -> Any:
         """
 
         Args:
@@ -368,6 +372,6 @@ class ThreeDOutput(Output):
             "full": BASS_3DALG_FULL,
             "light": BASS_3DALG_LIGHT,
         }
-        if algo in replacements:
+        if isinstance(algo, str) and algo in replacements:
             algo = replacements[algo]
         return BASS_SetConfig(BASS_CONFIG_3DALGORITHM, algo)

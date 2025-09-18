@@ -1,6 +1,16 @@
 from __future__ import absolute_import
-from .external import pybass
+
 from .channel import Channel
+from .external.pybass import (
+    BASS_ATTRIB_MUSIC_AMPLIFY,
+    BASS_ATTRIB_MUSIC_BPM,
+    BASS_ATTRIB_MUSIC_PANSEP,
+    BASS_ATTRIB_MUSIC_SPEED,
+    BASS_ATTRIB_MUSIC_VOL_CHAN,
+    BASS_ATTRIB_MUSIC_VOL_GLOBAL,
+    BASS_ATTRIB_MUSIC_VOL_INST,
+    BASS_MusicLoad,
+)
 
 
 class Music(Channel):
@@ -10,7 +20,7 @@ class Music(Channel):
         handle = BASS_MusicLoad(mem, file, offset, length, flags, freq)
         super(Music, self).__init__(handle)
         self.add_attributes_to_mapping(
-            music_amplify=pybass.BASS_ATTRIB_MUSIC_AMPLIFY,
+            music_amplify=BASS_ATTRIB_MUSIC_AMPLIFY,
             music_bpm=BASS_ATTRIB_MUSIC_BPM,
             music_pansep=BASS_ATTRIB_MUSIC_PANSEP,
             music_speed=BASS_ATTRIB_MUSIC_SPEED,

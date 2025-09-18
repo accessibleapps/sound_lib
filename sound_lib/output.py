@@ -1,10 +1,40 @@
 from __future__ import absolute_import
-from functools import partial
+
+import ctypes
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
-from .external.pybass import *
+from functools import partial
+
 from . import config
-from .main import bass_call, bass_call_0, EAX_ENVIRONMENTS, update_3d_system
+from .external.pybass import (
+    BASS_3DALG_DEFAULT,
+    BASS_3DALG_FULL,
+    BASS_3DALG_LIGHT,
+    BASS_3DALG_OFF,
+    BASS_CONFIG_3DALGORITHM,
+    BASS_CONFIG_DEV_DEFAULT,
+    BASS_CONFIG_GVOL_STREAM,
+    BASS_CONFIG_NET_PROXY,
+    BASS_DEVICE_3D,
+    BASS_DEVICE_ENABLED,
+    BASS_DEVICEINFO,
+    BASS_Free,
+    BASS_Get3DFactors,
+    BASS_GetConfig,
+    BASS_GetConfigPtr,
+    BASS_GetDevice,
+    BASS_GetDeviceInfo,
+    BASS_Init,
+    BASS_Pause,
+    BASS_Set3DFactors,
+    BASS_SetConfig,
+    BASS_SetConfigPtr,
+    BASS_SetDevice,
+    BASS_SetEAXParameters,
+    BASS_Start,
+    BASS_Stop,
+)
+from .main import EAX_ENVIRONMENTS, bass_call, bass_call_0, update_3d_system
 
 _getter = lambda func, key, obj: func(obj)[key]
 _setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})
@@ -304,7 +334,7 @@ class ThreeDOutput(Output):
             return arg
 
         environment = convert_arg(environment)
-        if isinstance(environment, basestring) and environment in EAX_ENVIRONMENTS:
+        if environment in EAX_ENVIRONMENTS:
             environment = EAX_ENVIRONMENTS[environment]
         volume = convert_arg(volume)
         decay = convert_arg(decay)

@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 import platform
 import sys
+import ctypes
+import os
 from .channel import Channel
 from .main import bass_call, bass_call_0
 from .external.pybass import *
@@ -209,4 +211,165 @@ class PushStream(BaseStream):
             sound_lib.main.BassError: If the stream has ended or there is insufficient memory.
         """
         return bass_call_0(BASS_StreamPutData, self.handle, data, len(data))
+
+    def push_end(self):
+        """
+        Signal end of stream data.
+
+        Returns:
+            int: The amount of queued data on success, -1 otherwise
+
+        raises:
+            sound_lib.main.BassError: If the handle is invalid or stream is not using push system.
+        """
+        return bass_call_0(BASS_StreamPutData, self.handle, None, BASS_STREAMPROC_END)
+
+    def get_queue_level(self):
+        """
+        Get amount of data currently queued for playback.
+
+        Returns:
+            int: Amount of data in bytes currently queued, -1 on error
+
+        raises:
+            sound_lib.main.BassError: If the handle is invalid or stream is not using push system.
+        """
+        return bass_call_0(BASS_StreamPutData, self.handle, None, 0)
+
+    def allocate_queue_space(self, length):
+        """
+        Allocate space in the queue buffer to ensure at least 'length' bytes are available.
+
+        Args:
+            length (int): Minimum number of bytes of free space to ensure
+
+        Returns:
+            int: The amount of queued data on success, -1 otherwise
+
+        raises:
+            sound_lib.main.BassError: If there is insufficient memory or the push limit is exceeded.
+        """
+        return bass_call_0(BASS_StreamPutData, self.handle, None, length)
+
+
+class FileUserStream(BaseStream):
+    """A sample stream created from a file-like object using custom file operations.
+
+    This class allows streaming from any file-like object (file handles, BytesIO,
+    custom objects) by implementing the necessary callback functions internally.
+
+    Args:
+        file_obj: File-like object with read(), seek(), close() methods
+        system (int): File system type (STREAMFILE_NOBUFFER, STREAMFILE_BUFFER, STREAMFILE_BUFFERPUSH)
+        flags (int): BASS_STREAM_xxx flags
+        three_d (bool): Enable 3D functionality
+        mono (bool): Force mono audio
+        autofree (bool): Automatically free the stream when playback ends
+        decode (bool): Create a decoding channel
+    """
+
+    def __init__(
+        self,
+        file_obj,
+        system=STREAMFILE_NOBUFFER,
+        flags=0,
+        three_d=False,
+        mono=False,
+        autofree=False,
+        decode=False,
+    ):
+        self.file_obj = file_obj
+        self.setup_flag_mapping()
+        flags = flags | self.flags_for(
+            three_d=three_d,
+            autofree=autofree,
+            mono=mono,
+            decode=decode,
+        )
+
+        # Store original position for length calculation
+        self._original_position = None
+        if hasattr(file_obj, 'tell'):
+            try:
+                self._original_position = file_obj.tell()
+            except (OSError, IOError):
+                pass  # Some file objects don't support tell()
+
+        # Create callback functions that operate on our file object
+        def close_callback(user):
+            """Callback for closing the file"""
+            if hasattr(self.file_obj, 'close'):
+                try:
+                    self.file_obj.close()
+                except (OSError, IOError):
+                    pass
+
+        def length_callback(user):
+            """Callback for getting file length"""
+            try:
+                # Try various approaches to get file length
+                if hasattr(self.file_obj, 'size'):
+                    return self.file_obj.size
+
+                if hasattr(self.file_obj, 'getvalue'):
+                    # BytesIO and similar objects
+                    return len(self.file_obj.getvalue())
+
+                if hasattr(self.file_obj, 'seek') and hasattr(self.file_obj, 'tell'):
+                    # Seekable file-like objects
+                    current = self.file_obj.tell()
+                    self.file_obj.seek(0, 2)  # Seek to end
+                    size = self.file_obj.tell()
+                    self.file_obj.seek(current)  # Restore position
+                    return size
+
+                if hasattr(self.file_obj, 'name') and os.path.exists(self.file_obj.name):
+                    # Regular file objects
+                    return os.path.getsize(self.file_obj.name)
+
+            except (OSError, IOError, AttributeError):
+                pass
+            return 0  # Unknown size
+
+        def read_callback(buffer, length, user):
+            """Callback for reading data from file"""
+            try:
+                data = self.file_obj.read(length)
+                if data:
+                    # Copy data to BASS buffer
+                    data_bytes = data if isinstance(data, bytes) else data.encode()
+                    bytes_to_copy = min(len(data_bytes), length)
+                    ctypes.memmove(buffer, data_bytes, bytes_to_copy)
+                    return bytes_to_copy
+                return 0
+            except (OSError, IOError, AttributeError):
+                return 0
+
+        def seek_callback(offset, user):
+            """Callback for seeking in file"""
+            try:
+                if hasattr(self.file_obj, 'seek'):
+                    self.file_obj.seek(offset)
+                    return True
+            except (OSError, IOError, AttributeError):
+                pass
+            return False
+
+        # Create the callback structure
+        # Store callbacks to prevent garbage collection
+        self._close_func = FILECLOSEPROC(close_callback)
+        self._length_func = FILELENPROC(length_callback)
+        self._read_func = FILEREADPROC(read_callback)
+        self._seek_func = FILESEEKPROC(seek_callback)
+
+        self.file_procs = BASS_FILEPROCS(
+            close=self._close_func,
+            length=self._length_func,
+            read=self._read_func,
+            seek=self._seek_func
+        )
+
+        handle = bass_call(BASS_StreamCreateFileUser, system, flags,
+                          ctypes.byref(self.file_procs), None)
+        super(FileUserStream, self).__init__(handle)
 

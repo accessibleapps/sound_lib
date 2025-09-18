@@ -9,9 +9,9 @@ def _getter(base_prop, attr, obj):
     """
 
     Args:
-      base_prop: 
-      attr: 
-      obj: 
+      base_prop:
+      attr:
+      obj:
 
     Returns:
 
@@ -23,10 +23,10 @@ def _setter(base_prop, subattr, obj, val):
     """
 
     Args:
-      base_prop: 
-      subattr: 
-      obj: 
-      val: 
+      base_prop:
+      subattr:
+      obj:
+      val:
 
     Returns:
 
@@ -38,6 +38,7 @@ def _setter(base_prop, subattr, obj, val):
 
 class Listener(object):
     """ """
+
     def get_3d_position(self):
         """ """
         res = {
@@ -91,7 +92,7 @@ class Listener(object):
         """
 
         Args:
-          position: 
+          position:
 
         Returns:
 
@@ -120,7 +121,7 @@ class Listener(object):
         """
 
         Args:
-          velocity: 
+          velocity:
 
         Returns:
 
@@ -149,7 +150,7 @@ class Listener(object):
         """
 
         Args:
-          front: 
+          front:
 
         Returns:
 
@@ -178,7 +179,7 @@ class Listener(object):
         """
 
         Args:
-          top: 
+          top:
 
         Returns:
 

@@ -81,15 +81,14 @@ def bass_call_0(function, *args):
 
 
 def update_3d_system(func):
-    """Decorator to automatically update the 3d system after a function call.
-    """
+    """Decorator to automatically update the 3d system after a function call."""
 
     def update_3d_system_wrapper(*args, **kwargs):
         """
 
         Args:
-          *args: 
-          **kwargs: 
+          *args:
+          **kwargs:
 
         Returns:
 
@@ -104,6 +103,7 @@ def update_3d_system(func):
 
 class FlagObject(object):
     """An object which translates bass flags into human-readable/usable items"""
+
     flag_mapping = {}
 
     def flags_for(self, **flags):

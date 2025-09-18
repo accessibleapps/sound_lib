@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-import ctypes
 
 from ..channel import Channel
 from ..external import pybass_fx

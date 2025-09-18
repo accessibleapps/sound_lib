@@ -6,7 +6,7 @@ from ctypes import pointer, c_float, c_long, c_ulong, c_buffer, sizeof
 
 class Channel(FlagObject):
     """A "channel" represents an audio stream that can be manipulated.
-    
+
     It can be one of the following:
     - A sample playback channel (HCHANNEL)
     - A sample stream (HSTREAM)
@@ -65,8 +65,7 @@ class Channel(FlagObject):
         return bass_call(BASS_ChannelPause, self.handle)
 
     def is_active(self):
-        """Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress.
-        """
+        """Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
         return bass_call_0(BASS_ChannelIsActive, self.handle)
 
     @property
@@ -216,6 +215,7 @@ class Channel(FlagObject):
             sound_lib.main.BassError: If type is invalid, the specified DX8 effect is unavailable or this channel's format is not supported by the effect.
         """
         from .effects.bass_fx import SoundEffect
+
         return SoundEffect(bass_call(BASS_ChannelSetFX, type, priority))
 
     def bytes_to_seconds(self, position=None):
@@ -273,7 +273,7 @@ class Channel(FlagObject):
 
         Args:
           attribute: The attribute to set the value of. Can either be of type str or int.
-          value: 
+          value:
 
         Returns:
             bool: True on success, False on failure.
@@ -303,13 +303,17 @@ class Channel(FlagObject):
 
         # If size not provided, query it first
         if size is None:
-            size = bass_call_0(BASS_ChannelGetAttributeEx, self.handle, attribute, None, 0)
+            size = bass_call_0(
+                BASS_ChannelGetAttributeEx, self.handle, attribute, None, 0
+            )
             if size == 0:
                 return None
 
         # Allocate buffer and get the data
         buffer = c_buffer(size)
-        actual_size = bass_call_0(BASS_ChannelGetAttributeEx, self.handle, attribute, buffer, size)
+        actual_size = bass_call_0(
+            BASS_ChannelGetAttributeEx, self.handle, attribute, buffer, size
+        )
         if actual_size == 0:
             return None
 
@@ -340,7 +344,9 @@ class Channel(FlagObject):
             buffer = data
             size = sizeof(data)
 
-        return bass_call(BASS_ChannelSetAttributeEx, self.handle, attribute, buffer, size)
+        return bass_call(
+            BASS_ChannelSetAttributeEx, self.handle, attribute, buffer, size
+        )
 
     def slide_attribute(self, attribute, value, time):
         """Slides this channel's attribute from its current value to a new value.
@@ -390,14 +396,22 @@ class Channel(FlagObject):
         returns:
             int: -1 on error. If successful, the level of the left channel is returned in the low word (low 16 bits), and the level of the right channel is returned in the high word (high 16 bits).
                 If the channel is mono, then the low word is duplicated in the high word. The level ranges linearly from 0 (silent) to 32768 (max).
-                0 will be returned when a channel is stalled.        
+                0 will be returned when a channel is stalled.
 
         raises:
             sound_lib.main.BassError: If this channel is not playing, or this is a decoding channel which has reached the end
         """
         return bass_call_0(BASS_ChannelGetLevel, self.handle)
 
-    def get_level_ex(self, length=0.02, mono=False, stereo=False, rms=False, apply_volume_pan=False, no_remove=False):
+    def get_level_ex(
+        self,
+        length=0.02,
+        mono=False,
+        stereo=False,
+        rms=False,
+        apply_volume_pan=False,
+        no_remove=False,
+    ):
         """Enhanced level measurement with configurable options.
 
         Args:
@@ -607,7 +621,7 @@ class Channel(FlagObject):
             sound_lib.main.BassError: If handle points to an invalid channel, either one is a decoding channel, or this channel is already linked to handle.
         """
         if isinstance(handle, Channel):
-            handle=handle.handle
+            handle = handle.handle
         bass_call(BASS_ChannelSetLink, self.handle, handle)
 
     def remove_link(self, handle):
@@ -623,7 +637,7 @@ class Channel(FlagObject):
 
         """
         if isinstance(handle, Channel):
-            handle=handle.handle
+            handle = handle.handle
         return bass_call(BASS_ChannelRemoveLink, self.handle, handle)
 
     def __iadd__(self, other):

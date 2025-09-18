@@ -11,6 +11,7 @@ class Recording(Channel):
     Inherits from :class:`sound_lib.channel.Channel`. Everything works based on those functions.
     For example, calling play starts, stop stops, etc etc.
     """
+
     def __init__(
         self, frequency=44100, channels=2, flags=BASS_RECORD_PAUSE, proc=None, user=None
     ):
@@ -35,7 +36,8 @@ class Recording(Channel):
 
 class WaveRecording(Recording):
     """Allows for making wave audio recordings to the filesystem."""
-    def __init__(self, filename = "", proc = None, *args, **kwargs):
+
+    def __init__(self, filename="", proc=None, *args, **kwargs):
         callback = proc or self._recording_callback
         super(WaveRecording, self).__init__(proc=callback, *args, **kwargs)
         self.filename = filename

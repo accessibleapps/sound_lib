@@ -23,6 +23,7 @@ class Output(object):
         window (int): Window handle, if using DirectSound output
         clsid: Device identifier
     """
+
     def __init__(self, device=-1, frequency=44100, flags=0, window=0, clsid=None):
         try:
             self.use_default_device()
@@ -95,7 +96,7 @@ class Output(object):
         """
 
         Args:
-          device: 
+          device:
 
         Returns:
 
@@ -119,7 +120,7 @@ class Output(object):
         """
 
         Args:
-          volume: 
+          volume:
 
         Returns:
 
@@ -145,7 +146,7 @@ class Output(object):
         """
 
         Args:
-          proxy: 
+          proxy:
 
         Returns:
 
@@ -167,12 +168,12 @@ class Output(object):
     @staticmethod
     def get_device_names():
         """Convenience method that returns a list of device names that are considered
-        	valid by bass.
+                valid by bass.
 
         Args:
 
         Returns:
-          
+
 
         """
         result = []  # empty list to start.
@@ -194,7 +195,7 @@ class Output(object):
         """
 
         Args:
-          name: 
+          name:
 
         Returns:
 
@@ -212,7 +213,7 @@ class Output(object):
         """
 
         Args:
-          device_name: 
+          device_name:
 
         Returns:
 
@@ -225,6 +226,7 @@ class Output(object):
 
 class ThreeDOutput(Output):
     """ """
+
     def __init__(self, flags=BASS_DEVICE_3D, *args, **kwargs):
         super(ThreeDOutput, self).__init__(flags=flags, *args, **kwargs)
 
@@ -287,11 +289,12 @@ class ThreeDOutput(Output):
         Returns:
 
         """
+
         def convert_arg(arg):
             """
 
             Args:
-              arg: 
+              arg:
 
             Returns:
 
@@ -316,7 +319,7 @@ class ThreeDOutput(Output):
         """
 
         Args:
-          algo: 
+          algo:
 
         Returns:
 

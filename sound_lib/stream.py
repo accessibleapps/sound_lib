@@ -15,11 +15,12 @@ except NameError:
 
 class BaseStream(Channel):
     """ """
+
     def _callback(*args):
         """
 
         Args:
-          *args: 
+          *args:
 
         Returns:
 
@@ -28,7 +29,7 @@ class BaseStream(Channel):
         return 0
 
     def free(self):
-        """Frees a sample stream's resources, including any sync/DSP/FX it has. """
+        """Frees a sample stream's resources, including any sync/DSP/FX it has."""
         return bass_call(BASS_StreamFree, self.handle)
 
     def get_file_position(self, mode):
@@ -60,7 +61,9 @@ class BaseStream(Channel):
             sound_lib.main.BassError: If the handle is invalid, stream is not using STREAMFILE_BUFFERPUSH, or the file has ended.
         """
         if data is None:
-            return bass_call_0(BASS_StreamPutFileData, self.handle, None, BASS_FILEDATA_END)
+            return bass_call_0(
+                BASS_StreamPutFileData, self.handle, None, BASS_FILEDATA_END
+            )
         return bass_call_0(BASS_StreamPutFileData, self.handle, data, len(data))
 
     def setup_flag_mapping(self):
@@ -95,7 +98,7 @@ class Stream(BaseStream):
 
 class FileStream(BaseStream):
     """A sample stream that loads from a supported audio file format.
-    
+
     This class can load audio from both disk files and memory.
 
     Args:
@@ -159,7 +162,7 @@ class URLStream(BaseStream):
         decode=False,
         unicode=True,
     ):
-        if platform.system() in ('Darwin', 'Linux'):
+        if platform.system() in ("Darwin", "Linux"):
             unicode = False
             url = url.encode(sys.getfilesystemencoding())
         self._downloadproc = downloadproc or self._callback  # we *must hold on to this
@@ -177,7 +180,7 @@ class URLStream(BaseStream):
 
 
 class PushStream(BaseStream):
-    """ A stream that receives and plays raw audio data in realtime."""
+    """A stream that receives and plays raw audio data in realtime."""
 
     def __init__(
         self,
@@ -289,7 +292,7 @@ class FileUserStream(BaseStream):
 
         # Store original position for length calculation
         self._original_position = None
-        if hasattr(file_obj, 'tell'):
+        if hasattr(file_obj, "tell"):
             try:
                 self._original_position = file_obj.tell()
             except (OSError, IOError):
@@ -298,7 +301,7 @@ class FileUserStream(BaseStream):
         # Create callback functions that operate on our file object
         def close_callback(user):
             """Callback for closing the file"""
-            if hasattr(self.file_obj, 'close'):
+            if hasattr(self.file_obj, "close"):
                 try:
                     self.file_obj.close()
                 except (OSError, IOError):
@@ -308,14 +311,14 @@ class FileUserStream(BaseStream):
             """Callback for getting file length"""
             try:
                 # Try various approaches to get file length
-                if hasattr(self.file_obj, 'size'):
+                if hasattr(self.file_obj, "size"):
                     return self.file_obj.size
 
-                if hasattr(self.file_obj, 'getvalue'):
+                if hasattr(self.file_obj, "getvalue"):
                     # BytesIO and similar objects
                     return len(self.file_obj.getvalue())
 
-                if hasattr(self.file_obj, 'seek') and hasattr(self.file_obj, 'tell'):
+                if hasattr(self.file_obj, "seek") and hasattr(self.file_obj, "tell"):
                     # Seekable file-like objects
                     current = self.file_obj.tell()
                     self.file_obj.seek(0, 2)  # Seek to end
@@ -323,7 +326,9 @@ class FileUserStream(BaseStream):
                     self.file_obj.seek(current)  # Restore position
                     return size
 
-                if hasattr(self.file_obj, 'name') and os.path.exists(self.file_obj.name):
+                if hasattr(self.file_obj, "name") and os.path.exists(
+                    self.file_obj.name
+                ):
                     # Regular file objects
                     return os.path.getsize(self.file_obj.name)
 
@@ -348,7 +353,7 @@ class FileUserStream(BaseStream):
         def seek_callback(offset, user):
             """Callback for seeking in file"""
             try:
-                if hasattr(self.file_obj, 'seek'):
+                if hasattr(self.file_obj, "seek"):
                     self.file_obj.seek(offset)
                     return True
             except (OSError, IOError, AttributeError):
@@ -366,10 +371,14 @@ class FileUserStream(BaseStream):
             close=self._close_func,
             length=self._length_func,
             read=self._read_func,
-            seek=self._seek_func
+            seek=self._seek_func,
         )
 
-        handle = bass_call(BASS_StreamCreateFileUser, system, flags,
-                          ctypes.byref(self.file_procs), None)
+        handle = bass_call(
+            BASS_StreamCreateFileUser,
+            system,
+            flags,
+            ctypes.byref(self.file_procs),
+            None,
+        )
         super(FileUserStream, self).__init__(handle)
-

@@ -5,6 +5,7 @@ from .main import bass_call, bass_call_0, FlagObject
 
 class Encoder(FlagObject):
     """ """
+
     def setup_flag_mapping(self):
         """ """
         # super(Encoder, self).setup_flag_mapping()
@@ -85,9 +86,7 @@ class Encoder(FlagObject):
         Returns:
 
         """
-        return bass_call(
-            pybassenc.BASS_Encode_CastSetTitle, self.handle, title, url
-        )
+        return bass_call(pybassenc.BASS_Encode_CastSetTitle, self.handle, title, url)
 
     @property
     def paused(self):
@@ -102,7 +101,7 @@ class Encoder(FlagObject):
         """
 
         Args:
-          paused: 
+          paused:
 
         Returns:
 
@@ -123,6 +122,7 @@ class Encoder(FlagObject):
 
 class BroadcastEncoder(Encoder):
     """ """
+
     def __init__(
         self,
         source_encoder,
@@ -167,7 +167,7 @@ class BroadcastEncoder(Encoder):
         """
 
         Args:
-          type: 
+          type:
           password:  (Default value = None)
 
         Returns:
@@ -186,10 +186,11 @@ class BroadcastEncoder(Encoder):
             pybassenc.BASS_Encode_CastGetStats, self.handle, type, password
         )
 
+
 class Server:
     """Local Audio Server"""
 
-    #DWORD BASSENCDEF(BASS_Encode_ServerInit)(HENCODE handle, const char *port, DWORD buffer, DWORD burst, DWORD flags, ENCODECLIENTPROC *proc, void *user);
+    # DWORD BASSENCDEF(BASS_Encode_ServerInit)(HENCODE handle, const char *port, DWORD buffer, DWORD burst, DWORD flags, ENCODECLIENTPROC *proc, void *user);
     def __init__(
         self,
         encoder,
@@ -207,23 +208,22 @@ class Server:
         self.handle = bass_call(
             pybassenc.BASS_Encode_ServerInit,
             encoder.handle,
-            str(port).encode('ascii'),
+            str(port).encode("ascii"),
             buffer,
             burst,
-            0, #flags
+            0,  # flags
             self._callback,
             user,
         )
-
 
     def client_callback(self, handle, connect, client, headers, user):
         """
 
         Args:
-            handle: 
-            client: 
-            connect: 
-            user: 
+            handle:
+            client:
+            connect:
+            user:
 
         Returns:
             An integer 0 or 1 if the connection should be accepted
@@ -234,4 +234,3 @@ class Server:
             print("client disconnected")
         print(headers)
         return True
-    

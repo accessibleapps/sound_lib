@@ -340,6 +340,58 @@ class Channel(FlagObject):
         """
         return bass_call_0(BASS_ChannelGetLevel, self.handle)
 
+    def get_level_ex(self, length=0.02, mono=False, stereo=False, rms=False, apply_volume_pan=False, no_remove=False):
+        """Enhanced level measurement with configurable options.
+
+        Args:
+            length (float): Seconds of data to analyze (default 0.02 = 20ms, max 1.0 for non-decoding channels)
+            mono (bool): Get single mono level from all channels
+            stereo (bool): Get stereo level (left from even channels, right from odd channels)
+            rms (bool): Get RMS level instead of peak level
+            apply_volume_pan (bool): Apply current volume/pan settings to the reading
+            no_remove (bool): Don't remove inspected data from recording channel buffer
+
+        Returns:
+            list: List of float levels. Length depends on mono/stereo flags:
+                - mono=True: Single level [level]
+                - stereo=True: Two levels [left, right]
+                - Neither: One level per channel [ch1, ch2, ...]
+
+        raises:
+            sound_lib.main.BassError: If channel is invalid, not playing, or has reached end (decoding channels)
+        """
+        # Build flags
+        flags = 0
+        if mono:
+            flags |= BASS_LEVEL_MONO
+        if stereo:
+            flags |= BASS_LEVEL_STEREO
+        if rms:
+            flags |= BASS_LEVEL_RMS
+        if apply_volume_pan:
+            flags |= BASS_LEVEL_VOLPAN
+        if no_remove:
+            flags |= BASS_LEVEL_NOREMOVE
+
+        # Determine array size needed
+        if mono:
+            num_levels = 1
+        elif stereo:
+            num_levels = 2
+        else:
+            # Get channel count from info
+            info = self.get_info()
+            num_levels = info.chans
+
+        # Allocate array for levels
+        levels_array = (c_float * num_levels)()
+
+        # Call BASS function
+        bass_call(BASS_ChannelGetLevelEx, self.handle, levels_array, length, flags)
+
+        # Convert to Python list
+        return [levels_array[i] for i in range(num_levels)]
+
     def lock(self):
         """Locks a stream, MOD music or recording channel to the current thread.
 

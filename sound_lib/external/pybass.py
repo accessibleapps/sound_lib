@@ -651,6 +651,13 @@ BASS_DATA_FFT8192 = (-2147483643)# 8192 FFT
 BASS_DATA_FFT_INDIVIDUAL = 0x10# FFT flag: FFT for each channel, else all combined
 BASS_DATA_FFT_NOWINDOW = 0x20# FFT flag: no Hanning window
 
+# BASS_ChannelGetLevelEx flags
+BASS_LEVEL_MONO = 1# get mono level
+BASS_LEVEL_STEREO = 2# get stereo level
+BASS_LEVEL_RMS = 4# get RMS level
+BASS_LEVEL_VOLPAN = 8# apply volume and pan
+BASS_LEVEL_NOREMOVE = 16# don't remove data from recording buffer
+
 # BASS_ChannelGetTags types : what's returned
 BASS_TAG_ID3 = 0# ID3v1 tags : TAG_ID3 structure
 BASS_TAG_ID3V2 = 1# ID3v2 tags : variable length block

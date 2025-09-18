@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from ctypes import pointer
 from functools import partial
 from .main import bass_call, update_3d_system
-from .external.pybass import *
+from .external.pybass import BASS_3DVECTOR
 
 
 def _getter(base_prop, attr, obj):

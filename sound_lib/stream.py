@@ -32,9 +32,9 @@ class BaseStream(Channel):
     def get_file_position(self, mode):
         """
         Retrieves the file position/status of a stream.
-        
+
         Args:
-          mode: 
+          mode:
 
         Returns:
             int: The requested file position on success, -1 otherwise.
@@ -43,6 +43,23 @@ class BaseStream(Channel):
             sound_lib.main.BassError: If the handle is invalid, the stream is not a FileStream, or the requested position is not available.
         """
         return bass_call_0(BASS_StreamGetFilePosition, self.handle, mode)
+
+    def put_file_data(self, data):
+        """
+        Adds data to a push buffered user file stream's buffer.
+
+        Args:
+            data (bytes): File data to add, or None to end the file
+
+        Returns:
+            int: Number of bytes read from data on success, -1 otherwise
+
+        raises:
+            sound_lib.main.BassError: If the handle is invalid, stream is not using STREAMFILE_BUFFERPUSH, or the file has ended.
+        """
+        if data is None:
+            return bass_call_0(BASS_StreamPutFileData, self.handle, None, BASS_FILEDATA_END)
+        return bass_call_0(BASS_StreamPutFileData, self.handle, data, len(data))
 
     def setup_flag_mapping(self):
         """ """
@@ -192,3 +209,4 @@ class PushStream(BaseStream):
             sound_lib.main.BassError: If the stream has ended or there is insufficient memory.
         """
         return bass_call_0(BASS_StreamPutData, self.handle, data, len(data))
+

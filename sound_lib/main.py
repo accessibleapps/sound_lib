@@ -1,5 +1,11 @@
 from __future__ import absolute_import
-from .external.pybass import *
+from .external.pybass import (
+    BASS_3DVECTOR,
+    BASS_Apply3D,
+    BASS_ErrorGetCode,
+)
+
+
 from functools import update_wrapper
 
 EAX_ENVIRONMENTS = {

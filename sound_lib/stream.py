@@ -1,11 +1,36 @@
 from __future__ import absolute_import
-import platform
-import sys
+
 import ctypes
 import os
+import platform
+import sys
+
 from .channel import Channel
+from .external.pybass import (
+    BASS_FILEDATA_END,
+    BASS_FILEPROCS,
+    BASS_STREAMPROC_END,
+    BASS_StreamCreate,
+    BASS_StreamCreateFile,
+    BASS_StreamCreateFileUser,
+    BASS_StreamCreateURL,
+    BASS_StreamFree,
+    BASS_StreamGetFilePosition,
+    BASS_StreamPutData,
+    BASS_UNICODE,
+    DOWNLOADPROC,
+    FILECLOSEPROC,
+    FILELENPROC,
+    FILEREADPROC,
+    FILESEEKPROC,
+    STREAMFILE_BUFFER,
+    STREAMFILE_BUFFERPUSH,
+    STREAMFILE_NOBUFFER,
+    STREAMPROC,
+    STREAMPROC_PUSH,
+    BASS_StreamPutFileData,
+)
 from .main import bass_call, bass_call_0
-from .external.pybass import *
 
 try:
     convert_to_unicode = unicode

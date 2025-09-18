@@ -1,14 +1,48 @@
 from __future__ import absolute_import
+from typing import Any, Callable, Dict, TypeVar
 from .external.pybass import (
-    BASS_3DVECTOR,
     BASS_Apply3D,
     BASS_ErrorGetCode,
+    EAX_ENVIRONMENT_GENERIC,
+    EAX_ENVIRONMENT_PADDEDCELL,
+    EAX_ENVIRONMENT_ROOM,
+    EAX_ENVIRONMENT_BATHROOM,
+    EAX_ENVIRONMENT_LIVINGROOM,
+    EAX_ENVIRONMENT_STONEROOM,
+    EAX_ENVIRONMENT_AUDITORIUM,
+    EAX_ENVIRONMENT_CONCERTHALL,
+    EAX_ENVIRONMENT_CAVE,
+    EAX_ENVIRONMENT_ARENA,
+    EAX_ENVIRONMENT_HANGAR,
+    EAX_ENVIRONMENT_CARPETEDHALLWAY,
+    EAX_ENVIRONMENT_HALLWAY,
+    EAX_ENVIRONMENT_STONECORRIDOR,
+    EAX_ENVIRONMENT_ALLEY,
+    EAX_ENVIRONMENT_FOREST,
+    EAX_ENVIRONMENT_CITY,
+    EAX_ENVIRONMENT_MOUNTAINS,
+    EAX_ENVIRONMENT_QUARRY,
+    EAX_ENVIRONMENT_PLAIN,
+    EAX_ENVIRONMENT_PARKINGLOT,
+    EAX_ENVIRONMENT_SEWERPIPE,
+    EAX_ENVIRONMENT_UNDERWATER,
+    EAX_ENVIRONMENT_DRUGGED,
+    EAX_ENVIRONMENT_DIZZY,
+    EAX_ENVIRONMENT_PSYCHOTIC,
+    BASS_SAMPLE_LOOP,
+    BASS_STREAM_AUTOFREE,
+    BASS_SAMPLE_MONO,
+    BASS_SAMPLE_SOFTWARE,
+    BASS_SAMPLE_3D,
+    BASS_SAMPLE_FX,
+    BASS_STREAM_DECODE,
+    get_error_description,
 )
-
-
 from functools import update_wrapper
 
-EAX_ENVIRONMENTS = {
+F = TypeVar("F", bound=Callable[..., Any])
+
+EAX_ENVIRONMENTS: Dict[str, int] = {
     "generic": EAX_ENVIRONMENT_GENERIC,
     "padded_cell": EAX_ENVIRONMENT_PADDEDCELL,
     "room": EAX_ENVIRONMENT_ROOM,
@@ -41,15 +75,15 @@ EAX_ENVIRONMENTS = {
 class BassError(Exception):
     """Error that is raised when there is a problem with a Bass call."""
 
-    def __init__(self, code, description):
+    def __init__(self, code: int, description: str) -> None:
         self.code = code
         self.description = description
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "%d, %s" % (self.code, self.description)
 
 
-def bass_call(function, *args):
+def bass_call(function: Callable[..., Any], *args: Any) -> Any:
     """Makes a call to bass and raises an exception if it fails.
     This will most likely prove unnecessary for external usage, however we keep it just in case.
 
@@ -68,7 +102,7 @@ def bass_call(function, *args):
     return res
 
 
-def bass_call_0(function, *args):
+def bass_call_0(function: Callable[..., Any], *args: Any) -> Any:
     """Makes a call to bass and raises an exception if it fails.  Does not consider 0 an error.
     This will most likely prove unnecessary for external usage, however we keep it just in case.
 
@@ -86,10 +120,10 @@ def bass_call_0(function, *args):
     return res
 
 
-def update_3d_system(func):
+def update_3d_system(func: F) -> F:
     """Decorator to automatically update the 3d system after a function call."""
 
-    def update_3d_system_wrapper(*args, **kwargs):
+    def update_3d_system_wrapper(*args: Any, **kwargs: Any) -> Any:
         """
 
         Args:
@@ -104,15 +138,15 @@ def update_3d_system(func):
         return val
 
     update_wrapper(update_3d_system_wrapper, func)
-    return update_3d_system_wrapper
+    return update_3d_system_wrapper  # type: ignore
 
 
 class FlagObject(object):
     """An object which translates bass flags into human-readable/usable items"""
 
-    flag_mapping = {}
+    flag_mapping: Dict[str, int] = {}
 
-    def flags_for(self, **flags):
+    def flags_for(self, **flags: bool) -> int:
         """Retrieves flags for given attributes.
 
         Args:
@@ -127,7 +161,7 @@ class FlagObject(object):
                 res |= self.flag_mapping[k]
         return res
 
-    def setup_flag_mapping(self):
+    def setup_flag_mapping(self) -> None:
         """Sets up a class-level mapping of common flags, in the format human-readable name:value.
         Tipically expanded upon in a subclass.
         """

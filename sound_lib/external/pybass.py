@@ -1010,6 +1010,8 @@ BASS_ChannelPause = func_type(ctypes.c_byte, ctypes.c_ulong)(('BASS_ChannelPause
 BASS_ChannelSetAttribute = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_float)(('BASS_ChannelSetAttribute', bass_module))
 #BOOL BASSDEF(BASS_ChannelGetAttribute)(DWORD handle, DWORD attrib, float *value);
 BASS_ChannelGetAttribute = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(ctypes.c_float))(('BASS_ChannelGetAttribute', bass_module))
+#DWORD BASSDEF(BASS_ChannelGetAttributeEx)(DWORD handle, DWORD attrib, void *value, DWORD size);
+BASS_ChannelGetAttributeEx = func_type(ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong)(('BASS_ChannelGetAttributeEx', bass_module))
 #BOOL BASSDEF(BASS_ChannelSlideAttribute)(DWORD handle, DWORD attrib, float value, DWORD time);
 BASS_ChannelSlideAttribute = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_float, ctypes.c_ulong)(('BASS_ChannelSlideAttribute', bass_module))
 #BOOL BASSDEF(BASS_ChannelIsSliding)(DWORD handle, DWORD attrib);

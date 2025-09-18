@@ -1030,6 +1030,8 @@ BASS_ChannelSetPosition = func_type(ctypes.c_byte, ctypes.c_ulong, QWORD, ctypes
 BASS_ChannelGetPosition = func_type(QWORD, ctypes.c_ulong, ctypes.c_ulong)(('BASS_ChannelGetPosition', bass_module))
 #DWORD BASSDEF(BASS_ChannelGetLevel)(DWORD handle);
 BASS_ChannelGetLevel = func_type(ctypes.c_ulong, ctypes.c_ulong)(('BASS_ChannelGetLevel', bass_module))
+#BOOL BASSDEF(BASS_ChannelGetLevelEx)(DWORD handle, float *levels, float length, DWORD flags);
+BASS_ChannelGetLevelEx = func_type(ctypes.c_byte, ctypes.c_ulong, ctypes.POINTER(ctypes.c_float), ctypes.c_float, ctypes.c_ulong)(('BASS_ChannelGetLevelEx', bass_module))
 #DWORD BASSDEF(BASS_ChannelGetData)(DWORD handle, void *buffer, DWORD length);
 BASS_ChannelGetData = func_type(ctypes.c_ulong, ctypes.c_ulong, ctypes.c_void_p, ctypes.c_ulong)(('BASS_ChannelGetData', bass_module))
 #HSYNC BASSDEF(BASS_ChannelSetSync)(DWORD handle, DWORD type, QWORD param, SYNCPROC *proc, void *user);

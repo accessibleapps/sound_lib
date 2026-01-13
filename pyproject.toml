@@ -48,5 +48,7 @@ sound_lib = ["lib/x86/*", "lib/x64/*"]
 [dependency-groups]
 dev = [
     "mypy>=1.4.1",
+    "pyright>=1.1.406",
     "pytest>=7.4.4",
+    "ruff>=0.14.0",
 ]

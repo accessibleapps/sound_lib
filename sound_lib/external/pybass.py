@@ -53,9 +53,13 @@ Main Features
   play samples/streams/musics in any 3D position, with EAX support
 '''
 
-import os, sys, ctypes, platform
-from .paths import x86_path, x64_path
+import ctypes
+import platform
+import sys
+
 import libloader
+
+from .paths import x64_path, x86_path
 
 bass_module = libloader.load_library('bass', x86_path=x86_path, x64_path=x64_path, mode=ctypes.RTLD_GLOBAL)
 func_type = libloader.get_functype()
@@ -63,13 +67,12 @@ func_type = libloader.get_functype()
 
 QWORD = ctypes.c_int64
 
-def LOBYTE(a): return (ctypes.c_byte)(a)
-def HIBYTE(a): return (ctypes.c_byte)((a)>>8)
-def LOWORD(a): return (ctypes.c_ushort)(a)
-def HIWORD(a): return (ctypes.c_ushort)((a)>>16)
-def MAKEWORD(a,b): return (ctypes.c_ushort)(((a)&0xff)|((b)<<8))
-def MAKELONG(a,b): return (ctypes.c_ulong)(((a)&0xffff)|((b)<<16))
-
+def LOBYTE(a: int): return (ctypes.c_byte)(a)
+def HIBYTE(a: int): return (ctypes.c_byte)((a)>>8)
+def LOWORD(a: int): return (ctypes.c_ushort)(a)
+def HIWORD(a: int): return (ctypes.c_ushort)((a)>>16)
+def MAKEWORD(a: int,b: int): return (ctypes.c_ushort)(((a)&0xff)|((b)<<8))
+def MAKELONG(a: int,b: int): return (ctypes.c_ulong)(((a)&0xffff)|((b)<<16))
 BASSVERSION = 0x204
 BASSVERSIONTEXT = '2.4'
 
@@ -156,7 +159,7 @@ error_descriptions[BASS_ERROR_ENDED] = 'the channel/file has ended'
 BASS_ERROR_UNKNOWN = -1
 error_descriptions[BASS_ERROR_UNKNOWN] = 'some other mystery problem'
 
-def get_error_description(error_code = -1):
+def get_error_description(error_code: int = -1) -> str:
 	return error_descriptions.get(error_code, 'unknown BASS error code ' + str(error_code))
 
 # BASS_SetConfig options
@@ -357,7 +360,7 @@ BASS_SPEAKER_FRONT = 0x1000000# front speakers
 BASS_SPEAKER_REAR = 0x2000000# rear/side speakers
 BASS_SPEAKER_CENLFE = 0x3000000# center & LFE speakers (5.1)
 BASS_SPEAKER_REAR2 = 0x4000000# rear center speakers (7.1)
-def BASS_SPEAKER_N(n): return ((n)<<24)# n'th pair of speakers (max 15)
+def BASS_SPEAKER_N(n: int) -> int: return ((n)<<24)# n'th pair of speakers (max 15)
 BASS_SPEAKER_LEFT = 0x10000000# modifier: left
 BASS_SPEAKER_RIGHT = 0x20000000# modifier: right
 BASS_SPEAKER_FRONTLEFT = BASS_SPEAKER_FRONT|BASS_SPEAKER_LEFT
@@ -525,7 +528,7 @@ STREAMPROC = func_type(ctypes.c_ulong, HSTREAM, ctypes.c_void_p, ctypes.c_ulong,
 BASS_STREAMPROC_END = (-2147483648)# end of user stream flag
 
 # special STREAMPROCs
-def streamproc_dummy(handle, buffer, length, user): return 0
+def streamproc_dummy(handle: int, buffer, length, user): return 0
 streamproc_push = -1
 STREAMPROC_DUMMY = STREAMPROC(streamproc_dummy)# "dummy" stream
 STREAMPROC_PUSH = STREAMPROC(streamproc_push)# push stream
@@ -898,7 +901,7 @@ BASS_GetVolume = func_type(ctypes.c_float)(('BASS_GetVolume', bass_module))
 
 #HPLUGIN BASSDEF(BASS_PluginLoad)(const char *file, DWORD flags);
 _BASS_PluginLoad = func_type(HPLUGIN, ctypes.c_char_p, ctypes.c_ulong)(('BASS_PluginLoad', bass_module))
-def BASS_PluginLoad(file, flags):
+def BASS_PluginLoad(file: str, flags: 	int) -> int:
     if type(file) != bytes:
         file = file.encode(sys.getfilesystemencoding())
     return _BASS_PluginLoad(file, flags)
@@ -1080,7 +1083,7 @@ if platform.system().lower() == 'windows':
 	#BOOL BASSDEF(BASS_GetEAXParameters)(DWORD *env, float *vol, float *decay, float *damp);
 	BASS_GetEAXParameters = func_type(ctypes.c_byte, ctypes.POINTER(ctypes.c_ulong), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float))(('BASS_GetEAXParameters', bass_module))
 
-def seconds_to_string(value):
+def seconds_to_string(value: float) -> str:
 	str_seconds = '00'
 	str_minutes = '00'
 	str_hours = '00'
@@ -1111,7 +1114,7 @@ def seconds_to_string(value):
 def stream_length_as_hms(handle, mode = BASS_POS_BYTE):
 	return seconds_to_string(BASS_ChannelBytes2Seconds(handle, BASS_ChannelGetLength(handle, mode)))
 
-def get_tags(handle, tags = BASS_TAG_OGG):
+def get_tags(handle: int, tags = BASS_TAG_OGG):
 	result = []
 	addr = BASS_ChannelGetTags(handle, tags)
 	res = ''

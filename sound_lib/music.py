@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from .channel import Channel
 from .external.pybass import (
     BASS_ATTRIB_MUSIC_AMPLIFY,

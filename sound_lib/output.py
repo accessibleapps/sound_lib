@@ -1,12 +1,9 @@
-from __future__ import absolute_import
-from logging import getLogger
-from typing import Any, Dict, List, Optional, Union
-
-
 import ctypes
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
 from functools import partial
+from logging import getLogger
+from typing import Any, Dict, List, Optional, Union
 
 from . import config
 from .external.pybass import (
@@ -59,7 +56,14 @@ class Output(object):
         clsid: Device identifier
     """
 
-    def __init__(self, device: int = -1, frequency: int = 44100, flags: int = 0, window: int = 0, clsid: Optional[Any] = None) -> None:
+    def __init__(
+        self,
+        device: int = -1,
+        frequency: int = 44100,
+        flags: int = 0,
+        window: int = 0,
+        clsid: Optional[Any] = None,
+    ) -> None:
         try:
             self.use_default_device()
         except BassError:
@@ -76,7 +80,12 @@ class Output(object):
         self.proxy: Optional[c_char_p] = None
 
     def init_device(
-        self, device: Optional[int] = None, frequency: Optional[int] = None, flags: Optional[int] = None, window: Optional[int] = None, clsid: Optional[Any] = None
+        self,
+        device: Optional[int] = None,
+        frequency: Optional[int] = None,
+        flags: Optional[int] = None,
+        window: Optional[int] = None,
+        clsid: Optional[Any] = None,
     ) -> None:
         """
 
@@ -187,11 +196,11 @@ class Output(object):
 
         """
         if isinstance(proxy, str):
-            proxy = proxy.encode('utf-8')
+            proxy = proxy.encode("utf-8")
         self.proxy = c_char_p(proxy)
         return bass_call(BASS_SetConfigPtr, BASS_CONFIG_NET_PROXY, self.proxy)
 
-    def use_default_device(self, use: bool = True) -> Any:
+    def use_default_device(self, use: bool = True) -> None:
         """
 
         Args:
@@ -210,10 +219,10 @@ class Output(object):
         Args:
 
         Returns:
-
-
+            List[str]: List of device names.
         """
-        result = []  # empty list to start.
+
+        result: List[str] = []  # empty list to start.
         info = BASS_DEVICEINFO()
         count = 1
         while BASS_GetDeviceInfo(count, ctypes.byref(info)):
@@ -268,8 +277,17 @@ class Output(object):
 class ThreeDOutput(Output):
     """ """
 
-    def __init__(self, device: int = -1, frequency: int = 44100, flags: int = BASS_DEVICE_3D, window: int = 0, clsid: Optional[Any] = None) -> None:
-        super(ThreeDOutput, self).__init__(device=device, frequency=frequency, flags=flags, window=window, clsid=clsid)
+    def __init__(
+        self,
+        device: int = -1,
+        frequency: int = 44100,
+        flags: int = BASS_DEVICE_3D,
+        window: int = 0,
+        clsid: Optional[Any] = None,
+    ) -> None:
+        super(ThreeDOutput, self).__init__(
+            device=device, frequency=frequency, flags=flags, window=window, clsid=clsid
+        )
 
     def get_3d_factors(self) -> Dict[str, float]:
         """ """
@@ -287,7 +305,12 @@ class ThreeDOutput(Output):
         return {k: res[k].value for k in res}
 
     @update_3d_system
-    def set_3d_factors(self, distance_factor: Union[float, str] = -1, rolloff: float = -1, doppler_factor: float = -1) -> Any:
+    def set_3d_factors(
+        self,
+        distance_factor: Union[float, str] = -1,
+        rolloff: float = -1,
+        doppler_factor: float = -1,
+    ) -> Any:
         """
 
         Args:
@@ -318,7 +341,13 @@ class ThreeDOutput(Output):
         fset=partial(_setter, set_3d_factors, "doppler_factor"),
     )
 
-    def set_eax_parameters(self, environment: Optional[Union[str, int]] = None, volume: Optional[float] = None, decay: Optional[float] = None, damp: Optional[float] = None) -> None:
+    def set_eax_parameters(
+        self,
+        environment: Optional[Union[str, int]] = None,
+        volume: Optional[float] = None,
+        decay: Optional[float] = None,
+        damp: Optional[float] = None,
+    ) -> None:
         """
 
         Args:

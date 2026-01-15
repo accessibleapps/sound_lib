@@ -30,10 +30,15 @@ from .external.pybass import (
     BASS_SetConfig,
     BASS_SetConfigPtr,
     BASS_SetDevice,
-    BASS_SetEAXParameters,
     BASS_Start,
     BASS_Stop,
 )
+
+# EAX is Windows-only
+try:
+    from .external.pybass import BASS_SetEAXParameters
+except ImportError:
+    BASS_SetEAXParameters = None
 from .main import EAX_ENVIRONMENTS, BassError, bass_call, bass_call_0, update_3d_system
 
 logger = getLogger("sound_lib.output")
@@ -359,6 +364,9 @@ class ThreeDOutput(Output):
         Returns:
 
         """
+        if BASS_SetEAXParameters is None:
+            logger.warning("EAX is only supported on Windows")
+            return
 
         def convert_arg(arg: Optional[Union[str, int, float]]) -> int:
             """

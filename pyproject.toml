@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sound_lib"
-version = "0.8.7"
+version = "0.8.8"
 description = "Pythonic wrapper to the Bass sound library and various add-ons"
 authors = [
     {name = "Christopher Toth", email = "q@q-continuum.net"}

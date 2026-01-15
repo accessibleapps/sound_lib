@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from typing import Any, Dict, List, Optional, Union
 from .external.pybass import (
     BASS_ACTIVE_PAUSED,
+    BASS_ACTIVE_PAUSED_DEVICE,
     BASS_ACTIVE_PLAYING,
     BASS_ACTIVE_STALLED,
     BASS_ACTIVE_STOPPED,
@@ -148,6 +149,16 @@ class Channel(FlagObject):
             bool: True if stopped, False otherwise.
         """
         return self.is_active() == BASS_ACTIVE_STOPPED
+
+    @property
+    def is_device_paused(self):
+        """
+        Checks whether the output device is currently paused.
+
+        Returns:
+            bool: True if device is paused, False otherwise.
+        """
+        return self.is_active() == BASS_ACTIVE_PAUSED_DEVICE
 
     @property
     def is_stalled(self):

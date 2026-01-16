@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import ctypes
 import os
 import platform
@@ -209,8 +207,8 @@ class PushStream(BaseStream):
 
     def __init__(
         self,
-        freq=44100,
-        chans=2,
+        freq: int = 44100,
+        chans: int = 2,
         flags=0,
         user=None,
         three_d=False,

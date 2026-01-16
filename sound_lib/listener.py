@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from ctypes import pointer
 from functools import partial
 from .main import bass_call, update_3d_system

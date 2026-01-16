@@ -4,6 +4,7 @@ except ImportError:
     from collections import Mapping
 
 import ctypes
+
 from sound_lib.external import pybass
 from sound_lib.main import bass_call, bass_call_0
 

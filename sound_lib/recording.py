@@ -1,8 +1,8 @@
-from __future__ import absolute_import
-from .channel import Channel
-from .external.pybass import BASS_RecordStart, BASS_RECORD_PAUSE, RECORDPROC
-from ctypes import string_at
 import wave
+from ctypes import string_at
+
+from .channel import Channel
+from .external.pybass import BASS_RECORD_PAUSE, RECORDPROC, BASS_RecordStart
 from .main import bass_call
 
 
@@ -13,7 +13,12 @@ class Recording(Channel):
     """
 
     def __init__(
-        self, frequency=44100, channels=2, flags=BASS_RECORD_PAUSE, proc=None, user=None
+        self,
+        frequency: int = 44100,
+        channels: int = 2,
+        flags: int = BASS_RECORD_PAUSE,
+        proc=None,
+        user=None,
     ):
         if not proc:
             proc = lambda: True
@@ -37,9 +42,9 @@ class Recording(Channel):
 class WaveRecording(Recording):
     """Allows for making wave audio recordings to the filesystem."""
 
-    def __init__(self, filename="", proc=None, *args, **kwargs):
+    def __init__(self, filename: str = "", proc=None, *args, **kwargs):
         callback = proc or self._recording_callback
-        super(WaveRecording, self).__init__(proc=callback, *args, **kwargs)
+        super().__init__(proc=callback, *args, **kwargs)
         self.filename = filename
 
     def _recording_callback(self, handle, buffer, length, user):
@@ -58,8 +63,8 @@ class WaveRecording(Recording):
     def play(self, *args, **kwargs):
         if not self.is_playing:
             self._setup_file()
-        super(WaveRecording, self).play(*args, **kwargs)
+        super().play(*args, **kwargs)
 
     def stop(self, *args, **kwargs):
-        super(WaveRecording, self).stop(*args, **kwargs)
+        super().stop(*args, **kwargs)
         self.file.close()

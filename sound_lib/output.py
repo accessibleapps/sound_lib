@@ -3,7 +3,7 @@ import platform
 from ctypes import c_char_p, c_float, pointer, string_at
 from functools import partial
 from logging import getLogger
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from . import config
 from .external.pybass import (
@@ -43,8 +43,13 @@ from .main import EAX_ENVIRONMENTS, BassError, bass_call, bass_call_0, update_3d
 
 logger = getLogger("sound_lib.output")
 
-_getter = lambda func, key, obj: func(obj)[key]
-_setter = lambda func, kwarg, obj, val: func(obj, **{kwarg: val})
+
+def _getter(func: Callable[..., Any], key: str, obj: Dict) -> Any:
+    return func(obj)[key]
+
+
+def _setter(func: Callable[..., Any], kwarg: str, obj: Dict, val: Any) -> Any:
+    return func(obj, **{kwarg: val})
 
 
 class Output(object):

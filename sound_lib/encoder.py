@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from typing import Optional
 
 from .external import pybass, pybassenc
 from .main import FlagObject, bass_call, bass_call_0
@@ -30,9 +30,9 @@ class Encoder(FlagObject):
     def __init__(
         self,
         source,
-        command_line,
-        pcm=False,
-        no_header=False,
+        command_line: str,
+        pcm: bool = False,
+        no_header: bool = False,
         rf64=False,
         big_endian=False,
         fp_8bit=False,
@@ -98,7 +98,7 @@ class Encoder(FlagObject):
         )
 
     @paused.setter
-    def paused(self, paused):
+    def paused(self, paused: bool):
         """
 
         Args:
@@ -109,7 +109,7 @@ class Encoder(FlagObject):
         """
         return bass_call(pybassenc.BASS_Encode_SetPaused, self.handle, paused)
 
-    def is_stopped(self):
+    def is_stopped(self) -> bool:
         """ """
         return (
             bass_call_0(pybassenc.BASS_Encode_IsActive, self.handle)
@@ -128,15 +128,15 @@ class BroadcastEncoder(Encoder):
         self,
         source_encoder,
         server,
-        password,
+        password: str,
         content,
-        name=None,
-        url=None,
-        genre=None,
-        description=None,
-        headers=None,
-        bitrate=0,
-        public=False,
+        name: Optional[str] = None,
+        url: Optional[str] = None,
+        genre: Optional[str] = None,
+        description: Optional[str] = None,
+        headers: Optional[str] = None,
+        bitrate: int = 0,
+        public: bool = False,
     ):
         contents = {
             "mp3": pybassenc.BASS_ENCODE_TYPE_MP3,
@@ -164,7 +164,7 @@ class BroadcastEncoder(Encoder):
             public,
         )
 
-    def get_stats(self, type, password=None):
+    def get_stats(self, type, password: Optional[str] = None):
         """
 
         Args:
@@ -196,9 +196,9 @@ class Server:
         self,
         encoder,
         port,
-        buffer=64000,
-        burst=64000,
-        user=None,
+        buffer: int = 64000,
+        burst: int = 64000,
+        user: Optional[Any] = None,
     ):
         self.encoder = encoder
         self.port = port

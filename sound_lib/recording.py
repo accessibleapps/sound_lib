@@ -1,10 +1,47 @@
 import wave
 from ctypes import string_at
+from enum import Enum, IntFlag
 from logging import getLogger
 
 from .channel import Channel
-from .external.pybass import BASS_RECORD_PAUSE, RECORDPROC, BASS_RecordStart
+from .external.pybass import RECORDPROC, BASS_RecordStart
 from .main import bass_call
+
+
+class RecordingFlags(IntFlag):
+    """Flags for recording start options."""
+
+    PAUSE = 0x8000  # Start recording paused
+
+
+class InputFlags(IntFlag):
+    """Flags for recording input state."""
+
+    OFF = 0x10000
+    ON = 0x20000
+
+
+class InputType(Enum):
+    """Recording input source types (mutually exclusive).
+
+    Use INPUT_TYPE_MASK (0xFF000000) to extract type from a combined flags value.
+    """
+
+    UNDEF = 0x00000000
+    DIGITAL = 0x01000000
+    LINE = 0x02000000
+    MIC = 0x03000000
+    SYNTH = 0x04000000
+    CD = 0x05000000
+    PHONE = 0x06000000
+    SPEAKER = 0x07000000
+    WAVE = 0x08000000
+    AUX = 0x09000000
+    ANALOG = 0x0A000000
+
+
+# Mask for extracting InputType from a combined flags value
+INPUT_TYPE_MASK = 0xFF000000
 
 logger = getLogger("sound_lib.recording")
 
@@ -19,7 +56,7 @@ class Recording(Channel):
         self,
         frequency: int = 44100,
         channels: int = 2,
-        flags: int = BASS_RECORD_PAUSE,
+        flags: RecordingFlags | int = RecordingFlags.PAUSE,
         proc=None,
         user=None,
     ):

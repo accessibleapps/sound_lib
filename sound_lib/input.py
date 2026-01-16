@@ -4,13 +4,13 @@ from logging import getLogger
 from typing import Any, Callable, List, Optional
 
 from .external.pybass import (
-    BASS_DEVICE_ENABLED,
     BASS_DEVICEINFO,
     BASS_RecordFree,
     BASS_RecordGetDevice,
     BASS_RecordGetDeviceInfo,
     BASS_RecordInit,
 )
+from .output import DeviceInfoFlags
 
 if platform.system() == "Windows":
     from .external.pybasswasapi import (
@@ -86,7 +86,7 @@ class Input(object):
         info = BASS_DEVICEINFO()
         count = 0
         while BASS_RecordGetDeviceInfo(count, ctypes.byref(info)):
-            if info.flags & BASS_DEVICE_ENABLED:
+            if info.flags & DeviceInfoFlags.ENABLED:
                 retrieved = info.name
                 if platform.system() == "Windows":
                     retrieved = retrieved.decode("mbcs")

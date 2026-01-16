@@ -1,27 +1,17 @@
 from ctypes import c_buffer, c_float, c_long, c_ulong, pointer, sizeof
+from enum import IntEnum, IntFlag
 from logging import getLogger
 from typing import Any, Dict, List, Optional, Union
 
 from .external.pybass import (
     BASS_3DVECTOR,
-    BASS_ACTIVE_PAUSED,
-    BASS_ACTIVE_PAUSED_DEVICE,
-    BASS_ACTIVE_PLAYING,
-    BASS_ACTIVE_STALLED,
-    BASS_ACTIVE_STOPPED,
     BASS_ATTRIB_EAXMIX,
     BASS_ATTRIB_FREQ,
     BASS_ATTRIB_PAN,
     BASS_ATTRIB_VOL,
     BASS_CHANNELINFO,
-    BASS_LEVEL_MONO,
-    BASS_LEVEL_NOREMOVE,
-    BASS_LEVEL_RMS,
-    BASS_LEVEL_STEREO,
-    BASS_LEVEL_VOLPAN,
     BASS_POS_BYTE,
     BASS_POS_DECODE,
-    BASS_SAMPLE_LOOP,
     BASS_ChannelBytes2Seconds,
     BASS_ChannelFlags,
     BASS_ChannelFree,
@@ -58,6 +48,54 @@ from .external.pybass import (
 from .main import BassError, FlagObject, bass_call, bass_call_0, update_3d_system
 
 logger = getLogger("sound_lib.channel")
+
+
+class ActiveState(IntEnum):
+    """Channel playback state (mutually exclusive)."""
+
+    STOPPED = 0
+    PLAYING = 1
+    STALLED = 2
+    PAUSED = 3
+    PAUSED_DEVICE = 4
+
+
+class LevelFlags(IntFlag):
+    """Flags for get_level_ex() method."""
+
+    MONO = 1
+    STEREO = 2
+    RMS = 4
+    VOLPAN = 8
+    NOREMOVE = 16
+
+
+class SpeakerFlags(IntFlag):
+    """Speaker assignment flags for channel output routing."""
+
+    FRONT = 0x1000000
+    REAR = 0x2000000
+    CENLFE = 0x3000000
+    REAR2 = 0x4000000
+    LEFT = 0x10000000
+    RIGHT = 0x20000000
+
+
+class ChannelFlags(IntFlag):
+    """Flags for channel creation controlling audio format and behavior."""
+
+    BITS_8 = 1  # 8 bit audio
+    MONO = 2  # mono
+    LOOP = 4  # looped
+    THREE_D = 8  # 3D functionality
+    SOFTWARE = 16  # not using hardware mixing
+    MUTEMAX = 32  # mute at max distance (3D only)
+    VAM = 64  # DX7 voice allocation & management
+    FX = 128  # old implementation of DX8 effects
+    FLOAT = 256  # 32-bit floating-point
+    OVER_VOL = 0x10000  # override lowest volume
+    OVER_POS = 0x20000  # override longest playing
+    OVER_DIST = 0x30000  # override furthest from listener (3D only)
 
 
 class Channel(FlagObject):
@@ -122,9 +160,9 @@ class Channel(FlagObject):
         logger.debug("Pausing channel: handle=%d", self.handle)
         return bass_call(BASS_ChannelPause, self.handle)
 
-    def is_active(self) -> int:
+    def is_active(self) -> ActiveState:
         """Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
-        return bass_call_0(BASS_ChannelIsActive, self.handle)
+        return ActiveState(bass_call_0(BASS_ChannelIsActive, self.handle))
 
     @property
     def is_playing(self):
@@ -133,7 +171,7 @@ class Channel(FlagObject):
         Returns:
             bool: True if playing, False otherwise.
         """
-        return self.is_active() == BASS_ACTIVE_PLAYING
+        return self.is_active() == ActiveState.PLAYING
 
     @property
     def is_paused(self):
@@ -143,7 +181,7 @@ class Channel(FlagObject):
         Returns:
             bool: True if paused, False otherwise.
         """
-        return self.is_active() == BASS_ACTIVE_PAUSED
+        return self.is_active() == ActiveState.PAUSED
 
     @property
     def is_stopped(self):
@@ -153,7 +191,7 @@ class Channel(FlagObject):
         Returns:
             bool: True if stopped, False otherwise.
         """
-        return self.is_active() == BASS_ACTIVE_STOPPED
+        return self.is_active() == ActiveState.STOPPED
 
     @property
     def is_device_paused(self):
@@ -163,7 +201,7 @@ class Channel(FlagObject):
         Returns:
             bool: True if device is paused, False otherwise.
         """
-        return self.is_active() == BASS_ACTIVE_PAUSED_DEVICE
+        return self.is_active() == ActiveState.PAUSED_DEVICE
 
     @property
     def is_stalled(self):
@@ -174,7 +212,7 @@ class Channel(FlagObject):
         Returns:
             bool: True if stalled, False otherwise.
         """
-        return self.is_active() == BASS_ACTIVE_STALLED
+        return self.is_active() == ActiveState.STALLED
 
     def get_position(self, mode: int = BASS_POS_BYTE) -> int:
         """Retrieves the playback position of a sample, stream, or MOD music. Can also be used with a recording channel.
@@ -482,48 +520,35 @@ class Channel(FlagObject):
     def get_level_ex(
         self,
         length: float = 0.02,
-        mono: bool = False,
-        stereo: bool = False,
-        rms: bool = False,
-        apply_volume_pan: bool = False,
-        no_remove: bool = False,
+        flags: LevelFlags | int = LevelFlags(0),
     ) -> List[float]:
         """Enhanced level measurement with configurable options.
 
         Args:
             length (float): Seconds of data to analyze (default 0.02 = 20ms, max 1.0 for non-decoding channels)
-            mono (bool): Get single mono level from all channels
-            stereo (bool): Get stereo level (left from even channels, right from odd channels)
-            rms (bool): Get RMS level instead of peak level
-            apply_volume_pan (bool): Apply current volume/pan settings to the reading
-            no_remove (bool): Don't remove inspected data from recording channel buffer
+            flags (LevelFlags | int): Level measurement flags. Can combine:
+                - LevelFlags.MONO: Get single mono level from all channels
+                - LevelFlags.STEREO: Get stereo level (left from even, right from odd channels)
+                - LevelFlags.RMS: Get RMS level instead of peak level
+                - LevelFlags.VOLPAN: Apply current volume/pan settings to the reading
+                - LevelFlags.NOREMOVE: Don't remove inspected data from recording channel buffer
 
         Returns:
-            list: List of float levels. Length depends on mono/stereo flags:
-                - mono=True: Single level [level]
-                - stereo=True: Two levels [left, right]
+            list: List of float levels. Length depends on flags:
+                - MONO: Single level [level]
+                - STEREO: Two levels [left, right]
                 - Neither: One level per channel [ch1, ch2, ...]
 
         raises:
             sound_lib.main.BassError: If channel is invalid, not playing, or has reached end (decoding channels)
         """
-        # Build flags
-        flags = 0
-        if mono:
-            flags |= BASS_LEVEL_MONO
-        if stereo:
-            flags |= BASS_LEVEL_STEREO
-        if rms:
-            flags |= BASS_LEVEL_RMS
-        if apply_volume_pan:
-            flags |= BASS_LEVEL_VOLPAN
-        if no_remove:
-            flags |= BASS_LEVEL_NOREMOVE
+        # Convert to int for the BASS call
+        flags_int = int(flags)
 
         # Determine array size needed
-        if mono:
+        if flags_int & LevelFlags.MONO:
             num_levels = 1
-        elif stereo:
+        elif flags_int & LevelFlags.STEREO:
             num_levels = 2
         else:
             # Get channel count from info
@@ -534,7 +559,7 @@ class Channel(FlagObject):
         levels_array = (c_float * num_levels)()
 
         # Call BASS function
-        bass_call(BASS_ChannelGetLevelEx, self.handle, levels_array, length, flags)
+        bass_call(BASS_ChannelGetLevelEx, self.handle, levels_array, length, flags_int)
 
         # Convert to Python list
         return [levels_array[i] for i in range(num_levels)]
@@ -551,7 +576,10 @@ class Channel(FlagObject):
         Returns:
             float or list: Single RMS level (mono=True) or list of RMS levels per channel
         """
-        return self.get_level_ex(length=length, mono=mono, rms=True)
+        flags = LevelFlags.RMS
+        if mono:
+            flags |= LevelFlags.MONO
+        return self.get_level_ex(length=length, flags=flags)
 
     def get_stereo_levels(self, length: float = 0.02, rms: bool = False) -> List[float]:
         """Get stereo level measurement (left/right).
@@ -563,7 +591,10 @@ class Channel(FlagObject):
         Returns:
             list: [left_level, right_level] where left is from even channels, right from odd
         """
-        return self.get_level_ex(length=length, stereo=True, rms=rms)
+        flags = LevelFlags.STEREO
+        if rms:
+            flags |= LevelFlags.RMS
+        return self.get_level_ex(length=length, flags=flags)
 
     def lock(self) -> Any:
         """Locks a stream, MOD music or recording channel to the current thread.
@@ -817,7 +848,7 @@ class Channel(FlagObject):
 
     def get_looping(self) -> bool:
         """Returns whether this channel is currently setup to loop."""
-        return bass_call_0(BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, 0) == 20
+        return bass_call_0(BASS_ChannelFlags, self.handle, ChannelFlags.LOOP, 0) == 20
 
     def set_looping(self, looping: bool) -> Any:
         """Determines whether this channel is setup to loop.
@@ -827,9 +858,9 @@ class Channel(FlagObject):
         """
         if looping:
             return bass_call_0(
-                BASS_ChannelFlags, self.handle, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP
+                BASS_ChannelFlags, self.handle, ChannelFlags.LOOP, ChannelFlags.LOOP
             )
-        return bass_call_0(BASS_ChannelFlags, self.handle, 0, BASS_SAMPLE_LOOP)
+        return bass_call_0(BASS_ChannelFlags, self.handle, 0, ChannelFlags.LOOP)
 
     looping = property(fget=get_looping, fset=set_looping)
 

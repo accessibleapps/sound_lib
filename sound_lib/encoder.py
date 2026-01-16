@@ -1,8 +1,38 @@
+from enum import IntFlag
 from logging import getLogger
 from typing import Any, Optional
 
+from .channel import ActiveState
 from .external import pybass, pybassenc
 from .main import FlagObject, bass_call, bass_call_0
+
+
+class EncodeFlags(IntFlag):
+    """Flags for encoder creation."""
+
+    NOHEAD = 1  # Don't send a WAV header to the encoder
+    FP_8BIT = 2  # Convert floating-point sample data to 8-bit integer
+    FP_16BIT = 4  # Convert floating-point sample data to 16-bit integer
+    FP_24BIT = 6  # Convert floating-point sample data to 24-bit integer
+    FP_32BIT = 8  # Convert floating-point sample data to 32-bit integer
+    BIGEND = 16  # Big-endian sample data
+    PAUSE = 32  # Start encoding paused
+    PCM = 64  # Write PCM sample data (no encoder)
+    RF64 = 128  # Send an RF64 header
+    MONO = 256  # Convert to mono (if not already)
+    QUEUE = 512  # Queue data to feed encoder asynchronously
+    CAST_NOLIMIT = 0x1000  # Don't limit casting data rate
+    LIMIT = 0x2000  # Limit data rate to real-time
+    AUTOFREE = 0x40000  # Free the encoder when the channel is freed
+
+
+class EncodeNotify(IntFlag):
+    """Encoder notification status codes."""
+
+    ENCODER = 1  # Encoder died
+    CAST = 2  # Cast server connection died
+    CAST_TIMEOUT = 0x10000  # Cast timeout
+    QUEUE_FULL = 0x10001  # Queue is out of space
 
 logger = getLogger("sound_lib.encoder")
 
@@ -14,19 +44,19 @@ class Encoder(FlagObject):
         """ """
         # super(Encoder, self).setup_flag_mapping()
         self.flag_mapping = {
-            "pcm": pybassenc.BASS_ENCODE_PCM,
-            "no_header": pybassenc.BASS_ENCODE_NOHEAD,
-            "rf64": pybassenc.BASS_ENCODE_RF64,
-            "big_endian": pybassenc.BASS_ENCODE_BIGEND,
-            "fp_8bit": pybassenc.BASS_ENCODE_FP_8BIT,
-            "fp_16bit": pybassenc.BASS_ENCODE_FP_16BIT,
-            "fp_24bit": pybassenc.BASS_ENCODE_FP_24BIT,
-            "fp_32bit": pybassenc.BASS_ENCODE_FP_32BIT,
-            "queue": pybassenc.BASS_ENCODE_QUEUE,
-            "limit": pybassenc.BASS_ENCODE_LIMIT,
-            "no_limit": pybassenc.BASS_ENCODE_CAST_NOLIMIT,
-            "pause": pybassenc.BASS_ENCODE_PAUSE,
-            "autofree": pybassenc.BASS_ENCODE_AUTOFREE,
+            "pcm": EncodeFlags.PCM,
+            "no_header": EncodeFlags.NOHEAD,
+            "rf64": EncodeFlags.RF64,
+            "big_endian": EncodeFlags.BIGEND,
+            "fp_8bit": EncodeFlags.FP_8BIT,
+            "fp_16bit": EncodeFlags.FP_16BIT,
+            "fp_24bit": EncodeFlags.FP_24BIT,
+            "fp_32bit": EncodeFlags.FP_32BIT,
+            "queue": EncodeFlags.QUEUE,
+            "limit": EncodeFlags.LIMIT,
+            "no_limit": EncodeFlags.CAST_NOLIMIT,
+            "pause": EncodeFlags.PAUSE,
+            "autofree": EncodeFlags.AUTOFREE,
             "unicode": pybass.BASS_UNICODE,
         }
 
@@ -98,7 +128,7 @@ class Encoder(FlagObject):
         """ """
         return (
             bass_call_0(pybassenc.BASS_Encode_IsActive, self.handle)
-            == pybass.BASS_ACTIVE_PAUSED
+            == ActiveState.PAUSED
         )
 
     @paused.setter
@@ -117,7 +147,7 @@ class Encoder(FlagObject):
         """ """
         return (
             bass_call_0(pybassenc.BASS_Encode_IsActive, self.handle)
-            == pybass.BASS_ACTIVE_STOPPED
+            == ActiveState.STOPPED
         )
 
     def stop(self):

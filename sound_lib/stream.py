@@ -2,9 +2,10 @@ import ctypes
 import os
 import platform
 import sys
+from enum import IntFlag
 from logging import getLogger
 
-from .channel import Channel
+from .channel import Channel, ChannelFlags
 from .external.pybass import (
     BASS_FILEDATA_END,
     BASS_FILEPROCS,
@@ -37,6 +38,34 @@ try:
     convert_to_unicode = unicode
 except NameError:
     convert_to_unicode = str
+
+
+class StreamFlags(IntFlag):
+    """Flags for stream creation controlling streaming behavior."""
+
+    PRESCAN = 0x20000  # enable pin-point seeking/length (MP3/MP2/MP1)
+    AUTOFREE = 0x40000  # automatically free the stream when it stops/ends
+    RESTRATE = 0x80000  # restrict the download rate of internet file streams
+    BLOCK = 0x100000  # download/play internet file stream in small blocks
+    DECODE = 0x200000  # don't play the stream, only decode
+    STATUS = 0x800000  # give server status info (HTTP/ICY tags) in DOWNLOADPROC
+
+
+class MusicFlags(IntFlag):
+    """Flags for MOD music playback controlling interpolation and behavior."""
+
+    RAMP = 0x200  # normal ramping
+    RAMPS = 0x400  # sensitive ramping
+    SURROUND = 0x800  # surround sound
+    SURROUND2 = 0x1000  # surround sound (mode 2)
+    FT2MOD = 0x2000  # play .MOD as FastTracker 2 does
+    PT1MOD = 0x4000  # play .MOD as ProTracker 1 does
+    POSRESET = 0x8000  # stop all notes when moving position
+    NONINTER = 0x10000  # non-interpolated sample mixing
+    STOPBACK = 0x80000  # stop the music on a backwards jump effect
+    NOSAMPLE = 0x100000  # don't load the samples
+    POSRESETEX = 0x400000  # stop all notes and reset bpm/etc when moving position
+    SINCINTER = 0x800000  # sinc interpolated sample mixing
 
 
 class BaseStream(Channel):
@@ -105,15 +134,15 @@ class Stream(BaseStream):
 
     def __init__(
         self,
-        freq=44100,
-        chans=2,
-        flags=0,
+        freq: int = 44100,
+        chans: int = 2,
+        flags: ChannelFlags | StreamFlags | int = 0,
         proc=None,
         user=None,
-        three_d=False,
-        autofree=False,
-        decode=False,
-    ):
+        three_d: bool = False,
+        autofree: bool = False,
+        decode: bool = False,
+    ) -> None:
         self.proc = STREAMPROC(proc)
         self.setup_flag_mapping()
         flags = flags | self.flags_for(
@@ -143,17 +172,17 @@ class FileStream(BaseStream):
 
     def __init__(
         self,
-        mem=False,
+        mem: bool = False,
         file=None,
-        offset=0,
-        length=0,
-        flags=0,
-        three_d=False,
-        mono=False,
-        autofree=False,
-        decode=False,
-        unicode=True,
-    ):
+        offset: int = 0,
+        length: int = 0,
+        flags: ChannelFlags | StreamFlags | int = 0,
+        three_d: bool = False,
+        mono: bool = False,
+        autofree: bool = False,
+        decode: bool = False,
+        unicode: bool = True,
+    ) -> None:
         if platform.system() == "Darwin" and file and not mem:
             unicode = False
             file = file.encode(sys.getfilesystemencoding())
@@ -180,16 +209,16 @@ class URLStream(BaseStream):
 
     def __init__(
         self,
-        url="",
-        offset=0,
-        flags=0,
+        url: str = "",
+        offset: int = 0,
+        flags: ChannelFlags | StreamFlags | int = 0,
         downloadproc=None,
         user=None,
-        three_d=False,
-        autofree=False,
-        decode=False,
-        unicode=True,
-    ):
+        three_d: bool = False,
+        autofree: bool = False,
+        decode: bool = False,
+        unicode: bool = True,
+    ) -> None:
         if platform.system() in ("Darwin", "Linux"):
             unicode = False
             url = url.encode(sys.getfilesystemencoding())
@@ -215,12 +244,12 @@ class PushStream(BaseStream):
         self,
         freq: int = 44100,
         chans: int = 2,
-        flags=0,
+        flags: ChannelFlags | StreamFlags | int = 0,
         user=None,
-        three_d=False,
-        autofree=False,
-        decode=False,
-    ):
+        three_d: bool = False,
+        autofree: bool = False,
+        decode: bool = False,
+    ) -> None:
         self.proc = STREAMPROC_PUSH
         self.setup_flag_mapping()
         flags = flags | self.flags_for(
@@ -304,13 +333,13 @@ class FileUserStream(BaseStream):
     def __init__(
         self,
         file_obj,
-        system=STREAMFILE_NOBUFFER,
-        flags=0,
-        three_d=False,
-        mono=False,
-        autofree=False,
-        decode=False,
-    ):
+        system: int = STREAMFILE_NOBUFFER,
+        flags: ChannelFlags | StreamFlags | int = 0,
+        three_d: bool = False,
+        mono: bool = False,
+        autofree: bool = False,
+        decode: bool = False,
+    ) -> None:
         self.file_obj = file_obj
         self.setup_flag_mapping()
         flags = flags | self.flags_for(

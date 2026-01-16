@@ -1,11 +1,53 @@
 import ctypes
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at
+from enum import IntFlag
 from functools import partial
 from logging import getLogger
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from . import config
+
+
+class DeviceFlags(IntFlag):
+    """Flags for BASS_Init device initialization."""
+
+    NONE = 0
+    BITS_8 = 1  # use 8 bit resolution, else 16 bit
+    MONO = 2  # use mono, else stereo
+    THREE_D = 4  # enable 3D functionality
+    REINIT = 128  # reinitialize device
+    LATENCY = 256  # calculate device latency (BASS_INFO struct)
+    CPSPEAKERS = 1024  # detect speakers via Windows control panel
+    SPEAKERS = 2048  # force enabling of speaker assignment
+    NOSPEAKER = 4096  # ignore speaker arrangement
+    DMIX = 8192  # use "dmix" (shared) output (Linux)
+    FREQ = 16384  # set device sample rate
+    STEREO = 32768  # limit output to stereo
+
+
+class DeviceInfoFlags(IntFlag):
+    """Device info status flags from BASS_DEVICEINFO."""
+
+    NONE = 0
+    ENABLED = 1  # device is enabled
+    DEFAULT = 2  # device is the system default
+    INIT = 4  # device is initialized
+    LOOPBACK = 8  # loopback device
+    DEFAULTCOM = 128  # device is the default communication device
+
+
+class DeviceCaps(IntFlag):
+    """Device capabilities (DSCAPS_xxx flags)."""
+
+    NONE = 0
+    CONTINUOUSRATE = 0x00000010  # supports all sample rates between min/maxrate
+    EMULDRIVER = 0x00000020  # device does NOT have hardware DirectSound support
+    CERTIFIED = 0x00000040  # device driver has been certified by Microsoft
+    SECONDARYMONO = 0x00000100  # mono
+    SECONDARYSTEREO = 0x00000200  # stereo
+    SECONDARY8BIT = 0x00000400  # 8 bit
+    SECONDARY16BIT = 0x00000800  # 16 bit
 from .external.pybass import (
     BASS_3DALG_DEFAULT,
     BASS_3DALG_FULL,
@@ -15,8 +57,6 @@ from .external.pybass import (
     BASS_CONFIG_DEV_DEFAULT,
     BASS_CONFIG_GVOL_STREAM,
     BASS_CONFIG_NET_PROXY,
-    BASS_DEVICE_3D,
-    BASS_DEVICE_ENABLED,
     BASS_DEVICEINFO,
     BASS_Free,
     BASS_Get3DFactors,
@@ -61,7 +101,7 @@ class Output(object):
     Args:
         device (int): Device to use, -1 = default device
         frequency (int): Output sample rate
-        flags (int): BASS_DEVICE_xxx flags
+        flags (DeviceFlags | int): Device initialization flags
         window (int): Window handle, if using DirectSound output
         clsid: Device identifier
     """
@@ -70,7 +110,7 @@ class Output(object):
         self,
         device: int = -1,
         frequency: int = 44100,
-        flags: int = 0,
+        flags: DeviceFlags | int = DeviceFlags.NONE,
         window: int = 0,
         clsid: Optional[Any] = None,
     ) -> None:
@@ -93,21 +133,21 @@ class Output(object):
         self,
         device: Optional[int] = None,
         frequency: Optional[int] = None,
-        flags: Optional[int] = None,
+        flags: Optional[DeviceFlags | int] = None,
         window: Optional[int] = None,
         clsid: Optional[Any] = None,
     ) -> None:
-        """
+        """Initialize the output device.
 
         Args:
-          device:  (Default value = None)
-          frequency:  (Default value = None)
-          flags:  (Default value = None)
-          window:  (Default value = None)
-          clsid:  (Default value = None)
+          device: Device index, -1 = default (Default value = None)
+          frequency: Sample rate (Default value = None)
+          flags: DeviceFlags for initialization (Default value = None)
+          window: Window handle (Default value = None)
+          clsid: Device class ID (Default value = None)
 
         Returns:
-
+            None
         """
         if device is None:
             device = self._device
@@ -237,7 +277,7 @@ class Output(object):
         info = BASS_DEVICEINFO()
         count = 1
         while BASS_GetDeviceInfo(count, ctypes.byref(info)):
-            if info.flags & BASS_DEVICE_ENABLED:
+            if info.flags & DeviceInfoFlags.ENABLED:
                 retrieved = info.name
                 if platform.system() == "Windows":
                     retrieved = retrieved.decode("mbcs")
@@ -286,13 +326,13 @@ class Output(object):
 
 
 class ThreeDOutput(Output):
-    """ """
+    """Output device with 3D audio support enabled."""
 
     def __init__(
         self,
         device: int = -1,
         frequency: int = 44100,
-        flags: int = BASS_DEVICE_3D,
+        flags: DeviceFlags | int = DeviceFlags.THREE_D,
         window: int = 0,
         clsid: Optional[Any] = None,
     ) -> None:

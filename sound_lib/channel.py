@@ -1,6 +1,8 @@
-from __future__ import absolute_import
+from ctypes import c_buffer, c_float, c_long, c_ulong, pointer, sizeof
 from typing import Any, Dict, List, Optional, Union
+
 from .external.pybass import (
+    BASS_3DVECTOR,
     BASS_ACTIVE_PAUSED,
     BASS_ACTIVE_PAUSED_DEVICE,
     BASS_ACTIVE_PLAYING,
@@ -10,6 +12,15 @@ from .external.pybass import (
     BASS_ATTRIB_FREQ,
     BASS_ATTRIB_PAN,
     BASS_ATTRIB_VOL,
+    BASS_CHANNELINFO,
+    BASS_LEVEL_MONO,
+    BASS_LEVEL_NOREMOVE,
+    BASS_LEVEL_RMS,
+    BASS_LEVEL_STEREO,
+    BASS_LEVEL_VOLPAN,
+    BASS_POS_BYTE,
+    BASS_POS_DECODE,
+    BASS_SAMPLE_LOOP,
     BASS_ChannelBytes2Seconds,
     BASS_ChannelFlags,
     BASS_ChannelFree,
@@ -42,19 +53,8 @@ from .external.pybass import (
     BASS_ChannelSlideAttribute,
     BASS_ChannelStop,
     BASS_ChannelUpdate,
-    BASS_CHANNELINFO,
-    BASS_LEVEL_MONO,
-    BASS_LEVEL_NOREMOVE,
-    BASS_LEVEL_RMS,
-    BASS_LEVEL_STEREO,
-    BASS_LEVEL_VOLPAN,
-    BASS_POS_BYTE,
-    BASS_POS_DECODE,
-    BASS_SAMPLE_LOOP,
-    BASS_3DVECTOR,
 )
 from .main import BassError, FlagObject, bass_call, bass_call_0, update_3d_system
-from ctypes import c_buffer, c_float, c_long, c_ulong, pointer, sizeof
 
 
 class Channel(FlagObject):
@@ -348,7 +348,9 @@ class Channel(FlagObject):
             attribute = self.attribute_mapping[attribute]
         return bass_call(BASS_ChannelSetAttribute, self.handle, attribute, value)
 
-    def get_attribute_ex(self, attribute: Union[str, int], size: Optional[int] = None) -> Optional[bytes]:
+    def get_attribute_ex(
+        self, attribute: Union[str, int], size: Optional[int] = None
+    ) -> Optional[bytes]:
         """Get extended attribute data of variable size.
 
         Args:
@@ -366,7 +368,7 @@ class Channel(FlagObject):
 
         # If size not provided, query it first
         if size is None:
-            size = bass_call_0(
+            size: int = bass_call_0(
                 BASS_ChannelGetAttributeEx, self.handle, attribute, None, 0
             )
             if size == 0:
@@ -382,7 +384,9 @@ class Channel(FlagObject):
 
         return buffer.raw[:actual_size]
 
-    def set_attribute_ex(self, attribute: Union[str, int], data: Union[bytes, Any]) -> Any:
+    def set_attribute_ex(
+        self, attribute: Union[str, int], data: Union[bytes, Any]
+    ) -> Any:
         """Set extended attribute with variable-size data.
 
         Args:
@@ -411,7 +415,9 @@ class Channel(FlagObject):
             BASS_ChannelSetAttributeEx, self.handle, attribute, buffer, size
         )
 
-    def slide_attribute(self, attribute: Union[str, int], value: float, time: float) -> Any:
+    def slide_attribute(
+        self, attribute: Union[str, int], value: float, time: float
+    ) -> Any:
         """Slides this channel's attribute from its current value to a new value.
 
         Args:
@@ -526,7 +532,9 @@ class Channel(FlagObject):
         # Convert to Python list
         return [levels_array[i] for i in range(num_levels)]
 
-    def get_rms_level(self, length: float = 0.02, mono: bool = False) -> Union[float, List[float]]:
+    def get_rms_level(
+        self, length: float = 0.02, mono: bool = False
+    ) -> Union[float, List[float]]:
         """Get RMS (Root Mean Square) level measurement.
 
         Args:
@@ -600,7 +608,13 @@ class Channel(FlagObject):
 
     @update_3d_system
     def set_3d_attributes(
-        self, mode: int = -1, min: float = 0.0, max: float = 0.0, iangle: int = -1, oangle: int = -1, outvol: float = -1
+        self,
+        mode: int = -1,
+        min: float = 0.0,
+        max: float = 0.0,
+        iangle: int = -1,
+        oangle: int = -1,
+        outvol: float = -1,
     ) -> Any:
         """Sets the 3D attributes of a sample, stream, or MOD music channel with 3D functionality.
 
@@ -650,7 +664,12 @@ class Channel(FlagObject):
         return answer
 
     @update_3d_system
-    def set_3d_position(self, position: Optional[Any] = None, orientation: Optional[Any] = None, velocity: Optional[Any] = None) -> Any:
+    def set_3d_position(
+        self,
+        position: Optional[Any] = None,
+        orientation: Optional[Any] = None,
+        velocity: Optional[Any] = None,
+    ) -> Any:
         """Sets the 3D position of a sample, stream, or MOD music channel with 3D functionality.
 
         Args:
@@ -671,7 +690,7 @@ class Channel(FlagObject):
             BASS_ChannelSet3DPosition, self.handle, position, orientation, velocity
         )
 
-    def set_link(self, handle: Union[int, 'Channel']) -> None:
+    def set_link(self, handle: Union[int, "Channel"]) -> None:
         """Links two MOD music or stream channels together.
 
         Args:
@@ -687,7 +706,7 @@ class Channel(FlagObject):
             handle = handle.handle
         bass_call(BASS_ChannelSetLink, self.handle, handle)
 
-    def remove_link(self, handle: Union[int, 'Channel']) -> Any:
+    def remove_link(self, handle: Union[int, "Channel"]) -> Any:
         """Removes a link between two MOD music or stream channels.
 
         Args:
@@ -703,12 +722,12 @@ class Channel(FlagObject):
             handle = handle.handle
         return bass_call(BASS_ChannelRemoveLink, self.handle, handle)
 
-    def __iadd__(self, other: 'Channel') -> 'Channel':
+    def __iadd__(self, other: "Channel") -> "Channel":
         """Convenience method to link this channel to another.  Calls set_link on the passed in item's handle"""
         self.set_link(other.handle)
         return self
 
-    def __isub__(self, other: 'Channel') -> 'Channel':
+    def __isub__(self, other: "Channel") -> "Channel":
         """Convenience method to unlink this channel from another.  Calls remove_link on the passed in item's handle"""
         self.remove_link(other.handle)
         return self

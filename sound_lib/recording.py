@@ -1,9 +1,12 @@
 import wave
 from ctypes import string_at
+from logging import getLogger
 
 from .channel import Channel
 from .external.pybass import BASS_RECORD_PAUSE, RECORDPROC, BASS_RecordStart
 from .main import bass_call
+
+logger = getLogger("sound_lib.recording")
 
 
 class Recording(Channel):
@@ -30,6 +33,7 @@ class Recording(Channel):
             BASS_RecordStart, frequency, channels, flags, self.callback, user
         )
         super(Recording, self).__init__(handle)
+        logger.info("Recording started: freq=%d, channels=%d, handle=%d", frequency, channels, handle)
 
     def free(self):
         """
@@ -55,6 +59,7 @@ class WaveRecording(Recording):
     def _setup_file(self):
         if not self.filename:
             raise ValueError("filename cannot be blank")
+        logger.debug("Setting up wave file: %s", self.filename)
         self.file = wave.open(self.filename, "w")
         self.file.setnchannels(self._channels)
         self.file.setsampwidth(2)
@@ -68,3 +73,4 @@ class WaveRecording(Recording):
     def stop(self, *args, **kwargs):
         super().stop(*args, **kwargs)
         self.file.close()
+        logger.info("Wave recording stopped: %s", self.filename)

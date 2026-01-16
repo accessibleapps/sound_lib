@@ -1,5 +1,7 @@
 from __future__ import absolute_import
+from logging import getLogger
 from typing import Any, Callable, Dict, TypeVar
+
 from .external.pybass import (
     BASS_Apply3D,
     BASS_ErrorGetCode,
@@ -39,6 +41,8 @@ from .external.pybass import (
     get_error_description,
 )
 from functools import update_wrapper
+
+logger = getLogger("sound_lib.main")
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -98,7 +102,9 @@ def bass_call(function: Callable[..., Any], *args: Any) -> Any:
     res = function(*args)
     if res == 0 or res == -1:
         code = BASS_ErrorGetCode()
-        raise BassError(code, get_error_description(code))
+        description = get_error_description(code)
+        logger.error("BASS call failed: %s (code %d)", description, code)
+        raise BassError(code, description)
     return res
 
 
@@ -116,7 +122,9 @@ def bass_call_0(function: Callable[..., Any], *args: Any) -> Any:
     res = function(*args)
     if res == -1:
         code = BASS_ErrorGetCode()
-        raise BassError(code, get_error_description(code))
+        description = get_error_description(code)
+        logger.error("BASS call failed: %s (code %d)", description, code)
+        raise BassError(code, description)
     return res
 
 

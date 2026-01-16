@@ -129,6 +129,7 @@ class Output(object):
         ):  # Bass wants default device set to 1 on linux
             device = 1
         bass_call(BASS_Init, device, frequency, flags, window, clsid)
+        logger.info("Output device initialized: device=%d, frequency=%d", device, frequency)
 
     def start(self) -> Any:
         """ """

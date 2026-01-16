@@ -1,10 +1,13 @@
 from __future__ import absolute_import
 
+from logging import getLogger
 
 from ..channel import Channel
 from ..external import pybass_fx
 from ..main import bass_call
 from ..stream import BaseStream
+
+logger = getLogger("sound_lib.effects.tempo")
 
 
 class Tempo(BaseStream):
@@ -36,6 +39,7 @@ class Tempo(BaseStream):
             channel = channel.handle
         handle = bass_call(pybass_fx.BASS_FX_TempoCreate, channel, flags)
         super(Tempo, self).__init__(handle)
+        logger.debug("Tempo stream created: handle=%d", handle)
         self.add_attributes_to_mapping(
             tempo=pybass_fx.BASS_ATTRIB_TEMPO,
             tempo_pitch=pybass_fx.BASS_ATTRIB_TEMPO_PITCH,
@@ -57,6 +61,7 @@ class Tempo(BaseStream):
         Returns:
 
         """
+        logger.debug("Setting tempo: %s", val)
         self.set_attribute("tempo", val)
 
     @property
@@ -74,6 +79,7 @@ class Tempo(BaseStream):
         Returns:
 
         """
+        logger.debug("Setting tempo_pitch: %s", val)
         self.set_attribute("tempo_pitch", val)
 
     @property
@@ -91,6 +97,7 @@ class Tempo(BaseStream):
         Returns:
 
         """
+        logger.debug("Setting tempo_freq: %s", val)
         self.set_attribute("tempo_freq", val)
 
     def setup_flag_mapping(self):

@@ -2,9 +2,12 @@ from __future__ import absolute_import
 
 import ctypes
 import string  # for the alphabet!
+from logging import getLogger
 
 from ..external import pybass
 from ..main import bass_call
+
+logger = getLogger("sound_lib.effects")
 
 
 class SoundEffect(object):
@@ -19,6 +22,7 @@ class SoundEffect(object):
         self.effect_type = type
         self.priority = priority
         self.handle = bass_call(pybass.BASS_ChannelSetFX, channel, type, priority)
+        logger.debug("Effect created: type=%d, handle=%d", type, self.handle)
 
     def get_parameters(self):
         """Retrieves the parameters of an effect."""
@@ -42,6 +46,7 @@ class SoundEffect(object):
         for p, v in parameters.items():
             setattr(params, p, v)
         bass_call(pybass.BASS_FXSetParameters, self.handle, ctypes.pointer(params))
+        logger.debug("Effect parameters set: handle=%d", self.handle)
 
     def __dir__(self):
         res = dir(self.__class__)

@@ -1,4 +1,5 @@
 from ctypes import c_buffer, c_float, c_long, c_ulong, pointer, sizeof
+from logging import getLogger
 from typing import Any, Dict, List, Optional, Union
 
 from .external.pybass import (
@@ -56,6 +57,8 @@ from .external.pybass import (
 )
 from .main import BassError, FlagObject, bass_call, bass_call_0, update_3d_system
 
+logger = getLogger("sound_lib.channel")
+
 
 class Channel(FlagObject):
     """A "channel" represents an audio stream that can be manipulated.
@@ -94,6 +97,7 @@ class Channel(FlagObject):
         Returns:
             bool: True on success, False otherwise.
         """
+        logger.debug("Playing channel: handle=%d, restart=%s", self.handle, restart)
         return bass_call(BASS_ChannelPlay, self.handle, restart)
 
     def play_blocking(self, restart: bool = False) -> None:
@@ -115,6 +119,7 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If this channel isn't currently playing, already paused, or is a decoding channel and thus not playable.
         """
+        logger.debug("Pausing channel: handle=%d", self.handle)
         return bass_call(BASS_ChannelPause, self.handle)
 
     def is_active(self) -> int:
@@ -204,6 +209,7 @@ class Channel(FlagObject):
 
     def stop(self) -> Any:
         """Stops a sample, stream, MOD music, or recording."""
+        logger.debug("Stopping channel: handle=%d", self.handle)
         return bass_call(BASS_ChannelStop, self.handle)
 
     def update(self, length: int = 0) -> Any:
@@ -260,6 +266,7 @@ class Channel(FlagObject):
         raises:
             sound_lib.main.BassError: If device is invalid, device hasn't been initialized, this channel is already using the requested device, the sample format is not supported by the device/drivers or there is insufficient memory.
         """
+        logger.info("Changing channel device: handle=%d, device=%d", self.handle, device)
         bass_call(BASS_ChannelSetDevice, self.handle, device)
 
     device = property(get_device, set_device)

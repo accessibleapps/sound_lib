@@ -1,7 +1,10 @@
-from typing import Optional
+from logging import getLogger
+from typing import Any, Optional
 
 from .external import pybass, pybassenc
 from .main import FlagObject, bass_call, bass_call_0
+
+logger = getLogger("sound_lib.encoder")
 
 
 class Encoder(FlagObject):
@@ -76,6 +79,7 @@ class Encoder(FlagObject):
             callback,
             user,
         )
+        logger.info("Encoder started: handle=%d", self.handle)
 
     def set_title(self, title=None, url=None):
         """
@@ -216,6 +220,7 @@ class Server:
             self._callback,
             user,
         )
+        logger.info("Encoder server started on port %s", port)
 
     def client_callback(self, handle, connect, client, headers, user):
         """
@@ -229,9 +234,6 @@ class Server:
         Returns:
             An integer 0 or 1 if the connection should be accepted
         """
-        if connect:
-            print("client connected")
-        else:
-            print("client disconnected")
-        print(headers)
+        logger.debug("Client %s", "connected" if connect else "disconnected")
+        logger.debug("Headers: %s", headers)
         return True

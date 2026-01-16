@@ -2,6 +2,7 @@ import ctypes
 import os
 import platform
 import sys
+from logging import getLogger
 
 from .channel import Channel
 from .external.pybass import (
@@ -30,6 +31,8 @@ from .external.pybass import (
 )
 from .main import bass_call, bass_call_0
 
+logger = getLogger("sound_lib.stream")
+
 try:
     convert_to_unicode = unicode
 except NameError:
@@ -53,6 +56,7 @@ class BaseStream(Channel):
 
     def free(self):
         """Frees a sample stream's resources, including any sync/DSP/FX it has."""
+        logger.debug("Freeing stream: handle=%d", self.handle)
         return bass_call(BASS_StreamFree, self.handle)
 
     def get_file_position(self, mode):
@@ -167,6 +171,7 @@ class FileStream(BaseStream):
 
         handle = bass_call(BASS_StreamCreateFile, mem, file, offset, length, flags)
         super(FileStream, self).__init__(handle)
+        logger.debug("FileStream created: file=%s, handle=%d", file, handle)
 
 
 class URLStream(BaseStream):
@@ -200,6 +205,7 @@ class URLStream(BaseStream):
             BASS_StreamCreateURL, url, offset, flags, self.downloadproc, user
         )
         super(URLStream, self).__init__(handle)
+        logger.debug("URLStream created: url=%s, handle=%d", url, handle)
 
 
 class PushStream(BaseStream):
@@ -222,6 +228,7 @@ class PushStream(BaseStream):
         )
         handle = bass_call(BASS_StreamCreate, freq, chans, flags, self.proc, user)
         super(PushStream, self).__init__(handle)
+        logger.debug("PushStream created: freq=%d, chans=%d, handle=%d", freq, chans, handle)
 
     def push(self, data):
         """
@@ -405,3 +412,4 @@ class FileUserStream(BaseStream):
             None,
         )
         super(FileUserStream, self).__init__(handle)
+        logger.debug("FileUserStream created: handle=%d", handle)

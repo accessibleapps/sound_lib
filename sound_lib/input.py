@@ -1,5 +1,6 @@
 import ctypes
 import platform
+from logging import getLogger
 from typing import Any, Callable, List, Optional
 
 from .external.pybass import (
@@ -24,6 +25,8 @@ if platform.system() == "Windows":
 from . import config
 from .main import bass_call, bass_call_0
 
+logger = getLogger("sound_lib.input")
+
 
 class Input(object):
     """Manages audio input devices for recording.
@@ -39,6 +42,7 @@ class Input(object):
         bass_call(BASS_RecordInit, device)
         self._device = device
         self.config = config.BassConfig()
+        logger.info("Recording input initialized: device=%d", device)
 
     def free(self) -> Any:
         """Frees all resources used by the recording device."""
@@ -62,6 +66,7 @@ class Input(object):
         """
         if device == self._device:
             return
+        logger.debug("Switching recording device from %d to %d", self._device, device)
         self.free()
         bass_call(BASS_RecordInit, device)
         self._device = device
@@ -157,6 +162,7 @@ class WASAPIInput(object):
             self.proc,
             None,
         )
+        logger.info("WASAPI input initialized: device=%d, freq=%d, channels=%d", device, frequency, channels)
 
     def free(self) -> Any:
         """Frees all resources used by the recording device."""

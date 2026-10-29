@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ctypes import c_buffer, c_float, c_long, c_ulong, pointer, sizeof
 from enum import IntEnum, IntFlag
 from logging import getLogger

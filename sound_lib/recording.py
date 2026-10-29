@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import wave
 from ctypes import string_at
 from enum import Enum, IntFlag

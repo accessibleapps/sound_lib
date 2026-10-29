@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import ctypes
 import platform
 from ctypes import c_char_p, c_float, pointer, string_at

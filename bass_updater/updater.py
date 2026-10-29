@@ -152,7 +152,7 @@ class BassUpdater:
         url = f"{FILES_BASE_URL}/{filename}"
         
         try:
-            return self.downloader.download_file(url, filename)
+            return self.downloader.download_file(url, Path(filename).name)
         except Exception as e:
             print(f"Failed to download {filename}: {e}")
             return None

@@ -29,10 +29,10 @@ BASS_LIBRARIES = {
     "bassenc": ("BASSenc", "bassenc24", True),
     "basswasapi": ("BASSWASAPI", "basswasapi24", False),  # Windows only
     "basswma": ("BASSWMA", "basswm24", False),  # Windows only
-    "bass_aac": ("BASS_AAC", "bass_aac24", False),  # Some platforms
+    "bass_aac": ("BASS_AAC", "z/2/bass_aac24", False),  # Some platforms
     "bass_alac": ("BASSALAC", "bassalac24", False),  # Some platforms  
-    "bass_fx": ("BASS FX", "bass_fx24", True),
-    "tags": ("Tags", "tags19", True)
+    "bass_fx": ("BASS FX", "z/0/bass_fx24", True),
+    "tags": ("Tags", "z/3/basstags", True)
 }
 
 # Platform mappings: (un4seen_suffix, our_directory, file_extensions)

@@ -17,7 +17,7 @@ def find_datafiles():
         file_ext = "*.dylib"
     else:
         file_ext = "*.so"
-    if platform.architecture()[0] == "32bit" or platform.system() == "Darwin":
+    if platform.architecture()[0] == "32bit":
         arch = "x86"
     else:
         arch = "x64"
